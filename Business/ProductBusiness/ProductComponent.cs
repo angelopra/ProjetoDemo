@@ -72,6 +72,29 @@ namespace Business.ProductBusiness
                 throw err;
             }
         }
+
+        public Product Update(ProductRequest request, int id)
+        {
+            try
+            {
+                Product response;
+
+                var obj = new Product();
+                obj.Id = id;
+                obj.Name = request.Name;
+                obj.Description = request.Description;
+                obj.Price = request.Price;
+                obj.Quantity = request.Quantity;
+                obj.Active = request.Active;
+                
+                response = _context.Update(obj);
+                return response;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
     }
 
 

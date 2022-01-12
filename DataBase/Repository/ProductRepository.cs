@@ -53,5 +53,19 @@ namespace DataBase.Repository
                 throw;
             }
         }
+
+        public Product Update(Product product)
+        {
+            try
+            {
+                this._context.Product.Update(product);
+                this._context.SaveChanges();
+                return product;
+            }
+            catch (Exception err)
+            {
+                throw;
+            }
+        }
     }
 }

@@ -35,6 +35,14 @@ namespace ProjetoDemo.Controllers
             return responseMethod;
         }
 
+        [HttpPut]
+        [Route("{id}")]
+        public Product Update(ProductRequest request, int id)
+        {
+            var responseMethod = this.ComponentCurrent.Update(request, id);
+            return responseMethod;
+        }
+
         [HttpDelete]
         [Route("{id}")]
         public IActionResult Remove(int id)

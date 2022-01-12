@@ -12,6 +12,7 @@ namespace Domain.Interfaces
     {
         int AddProduct(ProductRequest request);
         Product GetProductById(int id);
+        Product Update(ProductRequest request, int id);
         void Remove(int id);
     }
 }
