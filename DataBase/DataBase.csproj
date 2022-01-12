@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Class1.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Migrations\20220111181248_Initial.cs" />
+    <Compile Include="Migrations\20220111181248_Initial.Designer.cs" />
+    <Compile Include="Migrations\20220111204710_Update_Category.cs" />
+    <Compile Include="Migrations\20220111204710_Update_Category.Designer.cs" />
+    <Compile Include="Migrations\20220111204929_AddNameTable.cs" />
+    <Compile Include="Migrations\20220111204929_AddNameTable.Designer.cs" />
+    <Compile Include="Migrations\20220112023049_updateCategory.cs" />
+    <Compile Include="Migrations\20220112023049_updateCategory.Designer.cs" />
+    <Compile Include="Migrations\20220112031933_Adjusting_Category.cs" />
+    <Compile Include="Migrations\20220112031933_Adjusting_Category.Designer.cs" />
+    <Compile Include="Migrations\20220112140601_ChangeEntities.cs" />
+    <Compile Include="Migrations\20220112140601_ChangeEntities.Designer.cs" />
+    <Compile Include="Migrations\CoreDbContextModelSnapshot.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+</Project>

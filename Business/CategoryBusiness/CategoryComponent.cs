@@ -1,0 +1,98 @@
+﻿using Business.Base;
+using DataBase.Context;
+using DataBase.Repository;
+using Domain.Entities;
+using Domain.Interfaces;
+using Domain.Model.Request;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Business.CategoryBusiness
+{
+    public class CategoryComponent : BaseBusiness<ICategoryRepository>, ICategoryComponent
+    {
+        public CategoryComponent(ICategoryRepository context) : base(context)
+        {
+        }
+
+        public int AddCategory(CategoryRequest request)
+        {
+            try
+            {
+                var response = 0;
+
+                var obj = new Category();
+                obj.Name = request.Name;
+                obj.Active = request.Active;
+
+                response = this._context.AddCategory(obj);
+                return response;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+
+        public Category Update(CategoryRequest request, int id)
+        {
+            try
+            {
+                Category response = null;
+
+                var obj = new Category();
+                obj.Id = id;
+                obj.Name = request.Name;
+                obj.Active = request.Active;
+
+                response = this._context.Update(obj);
+                return response;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+
+        public void Remove(int id)
+        {
+            try
+            {
+                this._context.Remove(id);
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+
+        public Category GetCategoryById(int id)
+        {
+            try
+            {
+                var response = this._context.GetCategoryById(id);
+                return response;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+
+        public List<Category> GetCategorys(CategoryQueryRequest request)
+        {
+            try
+            {
+                var response = this._context.GetCategorys(request.IdCategories).ToList();
+                return response;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+    }
+}
