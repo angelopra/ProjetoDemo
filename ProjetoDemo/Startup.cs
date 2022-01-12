@@ -1,4 +1,5 @@
 using Business.CategoryBusiness;
+using Business.CustomerBusiness;
 using Business.ProductBusiness;
 using DataBase;
 using Domain.Interfaces;
@@ -34,6 +35,7 @@ namespace ProjetoDemo
 
             services.AddScoped<IProductComponent, ProductComponent>();
             services.AddScoped<ICategoryComponent, CategoryComponent>();
+            services.AddScoped<ICustomerComponent, CustomerComponent>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

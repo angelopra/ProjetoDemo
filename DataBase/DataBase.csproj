@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -27,6 +27,8 @@
     <Compile Include="Migrations\20220112031933_Adjusting_Category.Designer.cs" />
     <Compile Include="Migrations\20220112140601_ChangeEntities.cs" />
     <Compile Include="Migrations\20220112140601_ChangeEntities.Designer.cs" />
+    <Compile Include="Migrations\20220112195758_CustomerEntityAdded.cs" />
+    <Compile Include="Migrations\20220112195758_CustomerEntityAdded.Designer.cs" />
     <Compile Include="Migrations\CoreDbContextModelSnapshot.cs" />
   </ItemGroup>
 
