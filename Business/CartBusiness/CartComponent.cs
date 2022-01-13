@@ -13,7 +13,7 @@ namespace Business.CartBusiness
 {
     public class CartComponent : BaseBusiness<ICartRepository>, ICartComponent
     {
-        protected CartComponent(ICartRepository context) : base(context)
+        public CartComponent(ICartRepository context) : base(context)
         {
         }
 

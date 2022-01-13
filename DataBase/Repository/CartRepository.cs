@@ -9,9 +9,9 @@ using System.Linq;
 
 namespace DataBase.Repository
 {
-    internal class CartRepository : BaseRepository<CoreDbContext>, ICartRepository
+    public class CartRepository : BaseRepository<CoreDbContext>, ICartRepository
     {
-        protected CartRepository(CoreDbContext context) : base(context)
+        public CartRepository(CoreDbContext context) : base(context)
         {
         }
 
