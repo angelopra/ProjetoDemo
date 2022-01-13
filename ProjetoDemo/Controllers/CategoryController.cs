@@ -65,7 +65,7 @@ namespace ProjetoDemo.Controllers
             }
             catch (Exception err)
             {
-                return BadRequest(err.Message);
+                return NotFound(err.Message);
             }
         }
 

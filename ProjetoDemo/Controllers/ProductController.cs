@@ -51,10 +51,17 @@ namespace ProjetoDemo.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public Product Update(ProductRequest request, int id)
+        public IActionResult Update(ProductRequest request, int id)
         {
-            var responseMethod = this.ComponentCurrent.Update(request, id);
-            return responseMethod;
+            try
+            {
+                var responseMethod = this.ComponentCurrent.Update(request, id);
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
         }
 
         [HttpDelete]
@@ -68,7 +75,7 @@ namespace ProjetoDemo.Controllers
             }
             catch (Exception err)
             {
-                return BadRequest(err.Message);
+                return NotFound(err.Message);
             }
         }
     }
