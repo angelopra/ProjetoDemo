@@ -86,7 +86,13 @@ namespace Business.ProductBusiness
                 obj.Price = request.Price;
                 obj.Quantity = request.Quantity;
                 obj.Active = request.Active;
-                
+
+                var category = _categoryComponent.GetCategoryById(request.IdCategory);
+                if (category != null)
+                {
+                    obj.Category = category;
+                }
+
                 response = _context.Update(obj);
                 return response;
             }
