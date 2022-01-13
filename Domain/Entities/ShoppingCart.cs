@@ -8,5 +8,6 @@ namespace Domain.Entities
 {
     public class ShoppingCart
     {
+        public int Id { get; set; }
     }
 }
