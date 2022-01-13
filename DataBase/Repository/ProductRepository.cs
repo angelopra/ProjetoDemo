@@ -30,11 +30,25 @@ namespace DataBase.Repository
 
         public Product GetProductById(int id)
         {
-            Product product = this._context.Product
-                                .Where(c => c.Id == id)
-                                .Include(p => p.Category)
-                                .FirstOrDefault();
-            return product;
+            try
+            {
+                Product product = this._context.Product
+                                    .Where(c => c.Id == id)
+                                    .Include(p => p.Category)
+                                    .FirstOrDefault();
+                if (product != null)
+                {
+                    return product;
+                }
+                else
+                {
+                    throw new Exception("Product doesn't exist");
+                }
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
         }
 
         public void Remove(int id)
@@ -47,10 +61,14 @@ namespace DataBase.Repository
                     this._context.Product.Remove(product);
                     this._context.SaveChanges();
                 }
+                else
+                {
+                    throw new Exception("Product doesn't exist");
+                }
             }
             catch (Exception err)
             {
-                throw;
+                throw err;
             }
         }
     }

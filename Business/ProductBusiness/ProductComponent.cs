@@ -33,6 +33,11 @@ namespace Business.ProductBusiness
                 obj.Quantity = request.Quantity;
                 obj.Active = request.Active;
 
+                if (String.IsNullOrEmpty(obj.Name) || String.IsNullOrWhiteSpace(obj.Name))
+                {
+                    throw new Exception("Insert a name");
+                }
+
                 var category = _categoryComponent.GetCategoryById(request.IdCategory);
                 if(category != null)
                 {

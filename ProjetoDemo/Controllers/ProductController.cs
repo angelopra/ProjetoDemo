@@ -21,26 +21,47 @@ namespace ProjetoDemo.Controllers
         }
 
         [HttpPost]
-        public int Create(ProductRequest request)
+        public IActionResult Create(ProductRequest request)
         {
-            var responseMethod = this.ComponentCurrent.AddProduct(request);
-            return responseMethod;
+            try
+            {
+                var responseMethod = this.ComponentCurrent.AddProduct(request);
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
         }
 
         [HttpGet]
         [Route("{id}")]
-        public Product GetProductById(int id)
+        public IActionResult GetProductById(int id)
         {
-            var responseMethod = this.ComponentCurrent.GetProductById(id);
-            return responseMethod;
+            try
+            {
+                var responseMethod = this.ComponentCurrent.GetProductById(id);
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
         }
 
         [HttpDelete]
         [Route("{id}")]
         public IActionResult Remove(int id)
         {
-            this.ComponentCurrent.Remove(id);
-            return Ok();
+            try
+            {
+                this.ComponentCurrent.Remove(id);
+                return Ok();
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
         }
     }
 }

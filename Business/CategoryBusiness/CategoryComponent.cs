@@ -28,6 +28,11 @@ namespace Business.CategoryBusiness
                 obj.Name = request.Name;
                 obj.Active = request.Active;
 
+                if (String.IsNullOrEmpty(obj.Name) || String.IsNullOrWhiteSpace(obj.Name))
+                {
+                    throw new Exception("Insert a name");
+                }
+
                 response = this._context.AddCategory(obj);
                 return response;
             }
@@ -42,6 +47,11 @@ namespace Business.CategoryBusiness
             try
             {
                 Category response = null;
+
+                if (String.IsNullOrEmpty(request.Name) || String.IsNullOrWhiteSpace(request.Name))
+                {
+                    throw new Exception("Insert a name");
+                }
 
                 var obj = new Category();
                 obj.Id = id;
