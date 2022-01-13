@@ -3,6 +3,7 @@ using Domain.Interfaces;
 using System;
 using Domain.Model.Request;
 using Domain.Entities.Base;
+using Domain.Entities;
 
 namespace ProjetoDemo.Controllers.Base
 {
@@ -38,16 +39,23 @@ namespace ProjetoDemo.Controllers.Base
             }
             catch (Exception err)
             {
-                return BadRequest(err.Message);
+                return NotFound(err.Message);
             }
         }
 
         [HttpPut]
         [Route("{id}")]
-        public Cart Update(CartRequest request, int id)
+        public IActionResult Update(CartRequest request, int id)
         {
-            var responseMethod = this.ComponentCurrent.Update(request, id);
-            return responseMethod;
+            try
+            {
+                var responseMethod = this.ComponentCurrent.Update(request, id);
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
         }
 
         [HttpDelete]

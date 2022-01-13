@@ -1,6 +1,7 @@
 using Business.CategoryBusiness;
 using Business.CustomerBusiness;
 using Business.ProductBusiness;
+using Business.CartBusiness;
 using DataBase;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -36,6 +37,7 @@ namespace ProjetoDemo
             services.AddScoped<IProductComponent, ProductComponent>();
             services.AddScoped<ICategoryComponent, CategoryComponent>();
             services.AddScoped<ICustomerComponent, CustomerComponent>();
+            services.AddScoped<ICartComponent, CartComponent>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

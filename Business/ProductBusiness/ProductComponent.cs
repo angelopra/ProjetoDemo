@@ -41,7 +41,7 @@ namespace Business.ProductBusiness
                 var category = _categoryComponent.GetCategoryById(request.IdCategory);
                 if(category != null)
                 {
-                    obj.Category = category;
+                    obj.Category = category; // pq que aqui é um objeto category e não só o ID da categoria?
                 }
 
                 response = this._context.AddProduct(obj);

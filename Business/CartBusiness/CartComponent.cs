@@ -7,15 +7,14 @@ using System.Threading.Tasks;
 using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Entities.Base;
+using Domain.Entities;
 
 namespace Business.CartBusiness
 {
-    internal class CartComponent : BaseBusiness<ICartRepository>, ICartComponent
+    public class CartComponent : BaseBusiness<ICartRepository>, ICartComponent
     {
-        private ICartComponent _cartComponent;
-        protected CartComponent(ICartRepository context, ICartComponent cartComponent) : base(context)
+        protected CartComponent(ICartRepository context) : base(context)
         {
-            _component = cartComponent;
         }
 
         public int AddCart(CartRequest request)
@@ -29,6 +28,7 @@ namespace Business.CartBusiness
                 obj.IdCustomer = request.IdCustomer;
 
                 response = this._context.AddCart(obj);
+                return response;
             }
             catch (Exception err)
             {
@@ -38,17 +38,46 @@ namespace Business.CartBusiness
 
         public Cart GetCartById(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var response = this._context.GetCartById(id);
+                return response;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
         }
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                this._context.Remove(id);
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
         }
 
         public Cart Update(CartRequest request, int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Cart response;
+
+                var obj = new Cart();
+                obj.Active = request.Active;
+                obj.IdCustomer = request.IdCustomer;
+
+                response = this._context.Update(obj);
+                return response;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
         }
     }
 }
