@@ -4,6 +4,7 @@ using Domain.Model.Request;
 using Domain.Model.Response;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoDemo.Controllers.Base;
+using System;
 using System.Collections.Generic;
 
 namespace ProjetoDemo.Controllers
@@ -17,10 +18,17 @@ namespace ProjetoDemo.Controllers
         }
 
         [HttpPost]
-        public int Create(CategoryRequest request)
+        public IActionResult Create(CategoryRequest request)
         {
-            var responseMethod = this.ComponentCurrent.AddCategory(request);
-            return responseMethod;
+            try
+            {
+                var responseMethod = this.ComponentCurrent.AddCategory(request);
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
         }
 
         [HttpPost]
@@ -33,26 +41,47 @@ namespace ProjetoDemo.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public Category Update(CategoryRequest request, int id)
+        public IActionResult Update(CategoryRequest request, int id)
         {
-            var responseMethod = this.ComponentCurrent.Update(request, id);
-            return responseMethod;
+            try
+            {
+                var responseMethod = this.ComponentCurrent.Update(request, id);
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
         }
 
         [HttpDelete]
         [Route("{id}")]
         public IActionResult Remove(int id)
         {
-            this.ComponentCurrent.Remove(id);
-            return Ok();
+            try
+            {
+                this.ComponentCurrent.Remove(id);
+                return Ok();
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
         }
 
         [HttpGet]
         [Route("{id}")]
-        public Category GetCategoryById(int id)
+        public IActionResult GetCategoryById(int id)
         {
-            var responseMethod = this.ComponentCurrent.GetCategoryById(id);
-            return responseMethod;
+            try
+            {
+                var responseMethod = this.ComponentCurrent.GetCategoryById(id);
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Message);
+            }
         }
     }
 }

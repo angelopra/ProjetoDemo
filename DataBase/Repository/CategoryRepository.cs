@@ -33,8 +33,22 @@ namespace DataBase.Repository
 
         public Category GetCategoryById(int id)
         {
-            Category category = this._context.Category.Where(c => c.Id == id).FirstOrDefault();
-            return category;
+            try
+            {
+                Category category = this._context.Category.Where(c => c.Id == id).FirstOrDefault();
+                if (category != null)
+                {
+                    return category;
+                }
+                else
+                {
+                    throw new Exception("Category doesn't exist");
+                }
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
         }
 
         public IQueryable<Category> GetCategorys(List<int> requestList = null)
@@ -71,10 +85,14 @@ namespace DataBase.Repository
                     this._context.Category.Remove(category);
                     this._context.SaveChanges();
                 }
+                else
+                {
+                    throw new Exception("Category doesn't exist");
+                }
             }
             catch (Exception err)
             {
-                throw;
+                throw err;
             }
         }
     }
