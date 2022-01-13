@@ -9,21 +9,27 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Cart : EntityBase
+    public class CartItem : EntityBase
     {
         [Key]
         public int Id { get; set; }
 
         [Required]
-        public int IdCustomer { get; set; }
+        public int IdCart { get; set; }
 
-        [ForeignKey(nameof(IdCustomer))]
-        public Customer Customer { get; set; }
-
-        [Required]
-        public decimal Total { get; set; }
+        [ForeignKey(nameof(IdCart))]
+        public Cart Cart { get; set; }
 
         [Required]
-        public bool IsClosed { get; set; }
+        public int IdProduct { get; set; }
+
+        [ForeignKey(nameof(IdProduct))]
+        public Product Product { get; set; }
+
+        [Required]
+        public decimal UnitPrice { get; set; }
+
+        [Required]
+        public int Quantity { get; set; }
     }
 }
