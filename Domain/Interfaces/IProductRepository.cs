@@ -8,6 +8,8 @@ namespace Domain.Interfaces
 
         Product GetProductById(int id);
 
+        Product Update(Product request);
+
         void Remove(int id);
     }
 }

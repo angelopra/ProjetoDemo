@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IProductComponent
+    public interface ICustomerComponent
     {
-        int AddProduct(ProductRequest request);
-        Product GetProductById(int id);
-        Product Update(ProductRequest request, int id);
+        int AddCustomer(CustomerRequest request);
+        Customer GetCostumerById(int id);
+        Customer Update(CustomerRequest request, int id);
         void Remove(int id);
     }
 }

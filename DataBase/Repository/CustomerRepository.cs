@@ -2,23 +2,25 @@
 using DataBase.Repository.Base;
 using Domain.Entities;
 using Domain.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DataBase.Repository
 {
-    public class ProductRepository : BaseRepository<CoreDbContext>, IProductRepository
+    public class CustomerRepository : BaseRepository<CoreDbContext>, ICustomerRepository
     {
-        public ProductRepository(CoreDbContext context) : base(context)
+        public CustomerRepository(CoreDbContext context) : base(context)
         {
         }
 
-        public int AddProduct(Product request)
+        public int AddCustomer(Customer request)
         {
             try
             {
-                _context.Product.Add(request);
+                _context.Customer.Add(request);
                 _context.SaveChanges();
                 return request.Id;
             }
@@ -28,23 +30,20 @@ namespace DataBase.Repository
             }
         }
 
-        public Product GetProductById(int id)
+        public Customer GetCustomerById(int id)
         {
-            Product product = this._context.Product
-                                .Where(c => c.Id == id)
-                                .Include(p => p.Category)
-                                .FirstOrDefault();
-            return product;
+            Customer customer = this._context.Customer.Where(c => c.Id == id).FirstOrDefault();
+            return customer;
         }
 
         public void Remove(int id)
         {
             try
             {
-                var product = this._context.Product.Where(c => c.Id == id).FirstOrDefault();
-                if (product != null)
+                var customer = this._context.Customer.Where(c => c.Id == id).FirstOrDefault();
+                if (customer != null)
                 {
-                    this._context.Product.Remove(product);
+                    this._context.Customer.Remove(customer);
                     this._context.SaveChanges();
                 }
             }
@@ -54,13 +53,13 @@ namespace DataBase.Repository
             }
         }
 
-        public Product Update(Product product)
+        public Customer Update(Customer request)
         {
             try
             {
-                this._context.Product.Update(product);
+                this._context.Customer.Update(request);
                 this._context.SaveChanges();
-                return product;
+                return request;
             }
             catch (Exception err)
             {

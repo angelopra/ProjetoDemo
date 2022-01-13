@@ -17,6 +17,7 @@ namespace DataBase
 
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
         }
     }
 }

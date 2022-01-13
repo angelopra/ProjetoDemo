@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Domain.Model.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +7,14 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IProductComponent
+    public interface ICustomerRepository
     {
-        int AddProduct(ProductRequest request);
-        Product GetProductById(int id);
-        Product Update(ProductRequest request, int id);
+        int AddCustomer(Customer request);
+
+        Customer GetCustomerById(int id);
+
+        Customer Update(Customer request);
+
         void Remove(int id);
     }
 }

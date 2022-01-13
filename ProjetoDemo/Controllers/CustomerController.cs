@@ -1,43 +1,37 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoDemo.Controllers.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProjetoDemo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : BaseController<IProductComponent>
+    public class CustomerController : BaseController<ICustomerComponent>
     {
-        public ProductController([FromServices] IProductComponent contract) : base(contract)
+        public CustomerController([FromServices] ICustomerComponent contract) : base(contract)
         {
-
         }
 
         [HttpPost]
-        public int Create(ProductRequest request)
+        public int Create(CustomerRequest request)
         {
-            var responseMethod = this.ComponentCurrent.AddProduct(request);
+            var responseMethod = this.ComponentCurrent.AddCustomer(request);
             return responseMethod;
         }
 
         [HttpGet]
         [Route("{id}")]
-        public Product GetProductById(int id)
+        public Customer GetCostumerById(int id)
         {
-            var responseMethod = this.ComponentCurrent.GetProductById(id);
+            var responseMethod = this.ComponentCurrent.GetCostumerById(id);
             return responseMethod;
         }
 
         [HttpPut]
         [Route("{id}")]
-        public Product Update(ProductRequest request, int id)
+        public Customer Update(CustomerRequest request, int id)
         {
             var responseMethod = this.ComponentCurrent.Update(request, id);
             return responseMethod;
