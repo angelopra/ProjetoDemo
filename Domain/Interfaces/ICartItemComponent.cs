@@ -11,7 +11,7 @@ namespace Domain.Interfaces
     public interface ICartItemComponent
     {
         int AddCartItem(CartItemRequest request);
-        CartItem Update(CartItemRequest request, int idCart, int idProduct);
+        CartItem Update(CartItemUpdateRequest request, int idCart, int idProduct);
         void Remove(int idCart, int idProduct);
         CartItem GetCartItemById(int idCart, int idProduct);
     }

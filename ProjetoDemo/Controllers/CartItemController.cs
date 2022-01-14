@@ -44,7 +44,7 @@ namespace ProjetoDemo.Controllers
 
         [HttpPut]
         [Route("{idCart}/{idProduct}")]
-        public IActionResult Update(CartItemRequest request, int idCart, int idProduct)
+        public IActionResult Update(CartItemUpdateRequest request, int idCart, int idProduct)
         {
             try
             {

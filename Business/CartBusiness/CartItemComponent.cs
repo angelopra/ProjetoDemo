@@ -63,7 +63,7 @@ namespace Business.CartBusiness
             }
         }
 
-        public CartItem Update(CartItemRequest request, int idCart, int idProduct)
+        public CartItem Update(CartItemUpdateRequest request, int idCart, int idProduct)
         {
             try
             {
@@ -71,8 +71,8 @@ namespace Business.CartBusiness
 
                 var obj = new CartItem();
                 obj.Active = request.Active;
-                obj.IdCart = request.IdCart;
-                obj.IdProduct = request.IdProduct;
+                obj.IdCart = idCart;
+                obj.IdProduct = idProduct;
                 obj.UnitPrice = request.UnitPrice;
                 obj.Quantity = request.Quantity;
 
