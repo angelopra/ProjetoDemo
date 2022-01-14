@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using Domain.Model.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,26 +64,37 @@ namespace Business.CartBusiness
             }
         }
 
-        public CartItem Update(CartItemUpdateRequest request, int idCart, int idProduct)
+        public CartItemModelResponse Update(CartItemUpdateRequest request, int idCart, int idProduct)
         {
             try
             {
-                CartItem response;
+                CartItemModelResponse response;
 
-                var obj = new CartItem();
-                obj.Active = request.Active;
-                obj.IdCart = idCart;
-                obj.IdProduct = idProduct;
-                obj.UnitPrice = request.UnitPrice;
-                obj.Quantity = request.Quantity;
+                var cartItem = CartItemByIdProductAndByIdCart(idCart, idProduct);
+                cartItem.Quantity = request.Quantity;
+                cartItem.UnitPrice = request.UnitPrice;
 
-                response = _context.Update(obj);
+                var responseDataBase = _context.Update(cartItem);
+
+                response = new CartItemModelResponse();
+                response.Id = responseDataBase.Id;
+                response.Quantity = responseDataBase.Quantity;
+                response.UnitPrice = responseDataBase.UnitPrice;
+                response.IdCart = responseDataBase.IdCart;
+                response.IdProduct = responseDataBase.IdProduct;
+
                 return response;
             }
             catch (Exception err)
             {
                 throw err;
             }
+        }
+
+        private CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct)
+        {
+            var response = _context.CartItemByIdProductAndByIdCart(idCart, idProduct);
+            return response;
         }
     }
 }

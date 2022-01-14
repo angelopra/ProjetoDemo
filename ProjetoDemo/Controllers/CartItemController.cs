@@ -29,7 +29,7 @@ namespace ProjetoDemo.Controllers
 
         [HttpGet]
         [Route("{idCart}/{idProduct}")]
-        public IActionResult GetCartItemById(int idCart, int idProduct)
+        public IActionResult GetCartItemsById(int idCart, int idProduct) // trocar isso aqui por uma lista de produtos
         {
             try
             {
@@ -44,7 +44,7 @@ namespace ProjetoDemo.Controllers
 
         [HttpPut]
         [Route("{idCart}/{idProduct}")]
-        public IActionResult Update(CartItemUpdateRequest request, int idCart, int idProduct)
+        public IActionResult Update([FromBody]CartItemUpdateRequest request, int idCart, int idProduct)
         {
             try
             {

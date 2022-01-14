@@ -2,6 +2,7 @@
 using DataBase.Repository.Base;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,6 +85,14 @@ namespace DataBase.Repository
             {
                 throw err;
             }
+        }
+
+        public CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct)
+        {
+            var response = _context.CartItem.Where(c => c.IdCart == idCart && c.IdProduct == idProduct)
+                    .Include(n => n.Cart)
+                    .FirstOrDefault();
+            return response;
         }
     }
 }
