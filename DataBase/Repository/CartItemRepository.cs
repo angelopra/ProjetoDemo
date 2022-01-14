@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace DataBase.Repository
 {
-    internal class CartItemRepository : BaseRepository<CoreDbContext>, ICartItemRepository
+    public class CartItemRepository : BaseRepository<CoreDbContext>, ICartItemRepository
     {
-        protected CartItemRepository(CoreDbContext context) : base(context)
+        public CartItemRepository(CoreDbContext context) : base(context)
         {
         }
 
@@ -20,6 +20,7 @@ namespace DataBase.Repository
         {
             try
             {
+                //Cart referredCart = _context.Cart.Where(c => c.Id == request.IdCart);
                 _context.CartItem.Add(request);
                 _context.SaveChanges();
                 return request.Id;

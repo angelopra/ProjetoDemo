@@ -38,6 +38,7 @@ namespace ProjetoDemo
             services.AddScoped<ICategoryComponent, CategoryComponent>();
             services.AddScoped<ICustomerComponent, CustomerComponent>();
             services.AddScoped<ICartComponent, CartComponent>();
+            services.AddScoped<ICartItemComponent, CartItemComponent>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

@@ -31,6 +31,8 @@
     <Compile Include="Migrations\20220112195758_CustomerEntityAdded.Designer.cs" />
     <Compile Include="Migrations\20220113202355_CartEntities.cs" />
     <Compile Include="Migrations\20220113202355_CartEntities.Designer.cs" />
+    <Compile Include="Migrations\20220114175433_CartUpdatedNames.cs" />
+    <Compile Include="Migrations\20220114175433_CartUpdatedNames.Designer.cs" />
     <Compile Include="Migrations\CoreDbContextModelSnapshot.cs" />
   </ItemGroup>
 

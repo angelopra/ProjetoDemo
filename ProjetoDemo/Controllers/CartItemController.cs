@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjetoDemo.Controllers.Base;
-using Microsoft.AspNetCore.Mvc;
 using Domain.Interfaces;
 using System;
 using Domain.Model.Request;
@@ -30,7 +29,7 @@ namespace ProjetoDemo.Controllers
 
         [HttpGet]
         [Route("{idCart}/{idProduct}")]
-        public IActionResult GetCartById(int idCart, int idProduct)
+        public IActionResult GetCartItemById(int idCart, int idProduct)
         {
             try
             {
