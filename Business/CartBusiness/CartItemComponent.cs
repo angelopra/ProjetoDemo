@@ -21,17 +21,26 @@ namespace Business.CartBusiness
         {
             try
             {
-                var response = 0;
+                if(CartItemExists(request))
+                {
+                    // se o cartItem já existir eu preciso pegar ele e aumentar a quantidade em 1
 
-                var obj = new CartItem();
-                obj.Active = request.Active;
-                obj.IdCart = request.IdCart;
-                obj.IdProduct = request.IdProduct;
-                obj.UnitPrice = request.UnitPrice;
-                obj.Quantity = request.Quantity;
+                    return 0;
+                }
+                else
+                {
+                    var response = 0;
 
-                response = _context.AddCartItem(obj);
-                return response;
+                    var obj = new CartItem();
+                    obj.Active = request.Active;
+                    obj.IdCart = request.IdCart;
+                    obj.IdProduct = request.IdProduct;
+                    obj.UnitPrice = request.UnitPrice;
+                    obj.Quantity = request.Quantity;
+
+                    response = _context.AddCartItem(obj);
+                    return response;
+                }
             }
             catch (Exception err)
             {
@@ -95,6 +104,11 @@ namespace Business.CartBusiness
         {
             var response = _context.CartItemByIdProductAndByIdCart(idCart, idProduct);
             return response;
+        }
+
+        public bool CartItemExists(CartItemRequest cartItem)
+        {
+            return _context.CartItemExists(cartItem);
         }
     }
 }

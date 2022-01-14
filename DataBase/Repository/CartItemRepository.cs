@@ -2,6 +2,7 @@
 using DataBase.Repository.Base;
 using Domain.Entities;
 using Domain.Interfaces;
+using Domain.Model.Request;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -93,6 +94,19 @@ namespace DataBase.Repository
                     .Include(n => n.Cart)
                     .FirstOrDefault();
             return response;
+        }
+
+        public bool CartItemExists(CartItemRequest cartItem)
+        {
+            List<CartItem> cartItems = _context.CartItem.Where(c => c.IdCart == cartItem.IdCart).ToList();
+            foreach(CartItem item in cartItems)
+            {
+                if(item.IdProduct == cartItem.IdProduct)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

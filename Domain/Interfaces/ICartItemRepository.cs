@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Model.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,6 @@ namespace Domain.Interfaces
 
         void Remove(int idCart, int idProduct);
         CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct);
+        bool CartItemExists(CartItemRequest cartItem);
     }
 }
