@@ -70,6 +70,37 @@ namespace DataBase.Repository
             }
         }
 
+        public int RemoveAllItems(int id)
+        {
+            try
+            {
+                // if the cart with the given id exists, remove all of its products
+                if (_context.Cart.Where(c => c.Id == id).FirstOrDefault() != null)
+                {
+                    var numberDeleted = 0;  
+
+                    List<CartItem> cartItems = _context.CartItem.Where(c => c.IdCart == id).ToList();
+                    foreach(CartItem cartItem in cartItems)
+                    {
+                        _context.CartItem.Remove(cartItem);
+                        numberDeleted++;
+                    }
+                    _context.SaveChanges();
+                
+                    return numberDeleted;
+                }
+                else
+                {
+                    throw new Exception("Cart not found");
+                }
+
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+
         public Cart Update(Cart request)
         {
             try

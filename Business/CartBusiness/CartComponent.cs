@@ -61,6 +61,19 @@ namespace Business.CartBusiness
             }
         }
 
+        public int RemoveAllItems(int id)
+        {
+            try
+            {
+                var numberDeleted = _context.RemoveAllItems(id);
+                return numberDeleted;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+
         public Cart Update(CartRequest request, int id)
         {
             try

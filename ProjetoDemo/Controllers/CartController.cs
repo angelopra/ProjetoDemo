@@ -73,5 +73,20 @@ namespace ProjetoDemo.Controllers.Base
             }
         }
 
+        [HttpDelete]
+        [Route("/reset/{id}")]
+        public IActionResult RemoveAllItems(int id)
+        {
+            try
+            {
+                var numberDeleted = ComponentCurrent.RemoveAllItems(id);
+                return Ok(numberDeleted);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
+
     }
 }
