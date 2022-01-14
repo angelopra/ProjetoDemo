@@ -15,7 +15,7 @@ namespace ProjetoDemo.Controllers.Base
         }
 
         [HttpPost]
-        public IActionResult Create(CartRequest request)
+        public IActionResult Create([FromBody]CartRequest request)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace ProjetoDemo.Controllers.Base
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update(CartRequest request, int id)
+        public IActionResult Update([FromBody]CartRequest request, int id)
         {
             try
             {

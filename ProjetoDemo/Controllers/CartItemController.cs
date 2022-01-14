@@ -14,7 +14,7 @@ namespace ProjetoDemo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CartItemRequest request)
+        public IActionResult Create([FromBody]CartItemRequest request)
         {
             try
             {
