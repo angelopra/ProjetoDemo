@@ -28,12 +28,12 @@ namespace ProjetoDemo.Controllers
         }
 
         [HttpGet]
-        [Route("{idCart}/{idProduct}")]
-        public IActionResult GetCartItemsById(int idCart, int idProduct) // trocar isso aqui por uma lista de produtos
+        [Route("{idCart}")]
+        public IActionResult GetCartItemsByCartId(int idCart) // trocar isso aqui por uma lista de produtos
         {
             try
             {
-                var responseMethod = ComponentCurrent.GetCartItemById(idCart, idProduct);
+                var responseMethod = ComponentCurrent.GetCartItemsByCartId(idCart);
                 return Ok(responseMethod);
             }
             catch (Exception err)

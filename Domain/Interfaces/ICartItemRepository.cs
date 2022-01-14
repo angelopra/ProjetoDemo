@@ -11,7 +11,7 @@ namespace Domain.Interfaces
     {
         int AddCartItem(CartItem request);
 
-        CartItem GetCartItemById(int idCart, int idProduct);
+        IEnumerable<CartItem> GetCartItemsByCartId(int idCart);
 
         CartItem Update(CartItem request);
 

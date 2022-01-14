@@ -39,11 +39,11 @@ namespace Business.CartBusiness
             }
         }
 
-        public CartItem GetCartItemById(int idCart, int idProduct)
+        public IEnumerable<CartItem> GetCartItemsByCartId(int idCart)
         {
             try
             {
-                var response = _context.GetCartItemById(idCart, idProduct);
+                var response = _context.GetCartItemsByCartId(idCart);
                 return response;
             }
             catch (Exception err)

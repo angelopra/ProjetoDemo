@@ -32,18 +32,18 @@ namespace DataBase.Repository
             }
         }
 
-        public CartItem GetCartItemById(int idCart, int idProduct)
+        public IEnumerable<CartItem> GetCartItemsByCartId(int idCart)
         {
             try
             {
-                CartItem cartItem = _context.CartItem.Where(c => c.IdCart == idCart && c.IdProduct == idProduct).FirstOrDefault();
-                if (cartItem != null)
+                var cartItems = _context.CartItem.Where(c => c.IdCart == idCart).ToList();
+                if (cartItems != null)
                 {
-                    return cartItem;
+                    return cartItems;
                 }
                 else
                 {
-                    throw new Exception("Cart Item not found");
+                    throw new Exception("Card was not found or there is no item in the cart");
                 }
             }
             catch (Exception err)
