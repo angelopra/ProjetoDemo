@@ -68,10 +68,11 @@ namespace Business.CartBusiness
                 Cart response;
 
                 var obj = new Cart();
+                obj.Id = id;
                 obj.Active = request.Active;
                 obj.IdCustomer = request.IdCustomer;
 
-                response = this._context.Update(obj);
+                response = _context.Update(obj);
                 return response;
             }
             catch (Exception err)
