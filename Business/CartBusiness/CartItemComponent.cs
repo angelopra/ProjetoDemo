@@ -17,7 +17,7 @@ namespace Business.CartBusiness
         {
         }
 
-        public int AddCartItem(CartItemRequest request) // talvez mudar isso aqui pra retornar o CartItemModelResponse (retornar o objeto inteiro)
+        public int AddCartItem(CartItemRequest request) // talvez mudar isso aqui pra retornar o CartItemModelResponse (retornar o objeto inteiro pra facilitar a vida do front end pq ele n precisaria fazer um get)
         {
             try
             {
@@ -47,11 +47,14 @@ namespace Business.CartBusiness
             }
         }
 
-        public CartItem GetCartItemById(int idCart, int idProduct)
+        public CartItemModelResponse GetCartItemById(int idCart, int idProduct)
         {
             try
             {
-                var response = _context.GetCartItemById(idCart, idProduct);
+                var responseDataBase = _context.GetCartItemById(idCart, idProduct);
+
+                CartItemModelResponse response = CartItemMapper(responseDataBase);
+
                 return response;
             }
             catch (Exception err)
