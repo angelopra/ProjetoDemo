@@ -16,5 +16,6 @@ namespace Domain.Interfaces
         void Remove(int idCart, int idProduct);
         CartItem GetCartItemById(int idCart, int idProduct);
         bool CartItemExists(CartItemRequest cartItem);
+        int IncreaseCartItem(CartItemRequest cartItem);
     }
 }

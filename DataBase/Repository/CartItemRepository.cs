@@ -3,6 +3,7 @@ using DataBase.Repository.Base;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using Domain.Model.Response;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace DataBase.Repository
         {
         }
 
-        public int AddCartItem(CartItem request)
+        public CartItemModelResponse AddCartItem(CartItem request)
         {
             try
             {
@@ -98,15 +99,38 @@ namespace DataBase.Repository
 
         public bool CartItemExists(CartItemRequest cartItem)
         {
-            List<CartItem> cartItems = _context.CartItem.Where(c => c.IdCart == cartItem.IdCart).ToList();
-            foreach(CartItem item in cartItems)
+            try
             {
-                if(item.IdProduct == cartItem.IdProduct)
+                List<CartItem> cartItems = _context.CartItem.Where(c => c.IdCart == cartItem.IdCart).ToList();
+                foreach(CartItem item in cartItems)
                 {
-                    return true;
+                    if(item.IdProduct == cartItem.IdProduct)
+                    {
+                        return true;
+                    }
                 }
+                return false;
             }
-            return false;
+            catch(Exception err)
+            {
+                throw err;
+            }
+
+        }
+
+        public CartItemModelResponse IncreaseCartItem(CartItemRequest cartItem) // incrementa a quantidade de produtos e retorna o id do CartItem
+        {   
+            try
+            {
+                var item = CartItemByIdProductAndByIdCart(cartItem.IdCart, cartItem.IdProduct);
+                item.Quantity++;
+
+                return item.Id;
+            }
+            catch(Exception err)
+            {
+                throw err;
+            }
         }
     }
 }

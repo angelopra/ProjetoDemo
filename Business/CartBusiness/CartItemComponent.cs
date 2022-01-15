@@ -17,15 +17,14 @@ namespace Business.CartBusiness
         {
         }
 
-        public int AddCartItem(CartItemRequest request)
+        public CartItemModelResponse AddCartItem(CartItemRequest request) // mudar isso aqui pra retornar o CartItemModelResponse (retornar o objeto inteiro)
         {
             try
             {
                 if(CartItemExists(request))
                 {
-                    // se o cartItem já existir eu preciso pegar ele e aumentar a quantidade em 1
-
-                    return 0;
+                    var id = IncreaseCartItem(request);
+                    return id;
                 }
                 else
                 {
@@ -99,6 +98,17 @@ namespace Business.CartBusiness
                 throw err;
             }
         }
+        private CartItemModelResponse CartItemMapper(CartRequest request)
+        {
+            CartItemModelResponse response;
+
+            response = new CartItemModelResponse();
+            response.Id = request.Id;
+            response.Quantity = request.Quantity;
+            response.UnitPrice = request.UnitPrice;
+            response.IdCart = request.IdCart;
+            response.IdProduct = request.IdProduct;
+        }
 
         private CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct)
         {
@@ -109,6 +119,11 @@ namespace Business.CartBusiness
         public bool CartItemExists(CartItemRequest cartItem)
         {
             return _context.CartItemExists(cartItem);
+        }
+
+        public CartItemModelResponse IncreaseCartItem(CartItemRequest cartItem)
+        {
+            return _context.IncreaseCartItem(cartItem);
         }
     }
 }
