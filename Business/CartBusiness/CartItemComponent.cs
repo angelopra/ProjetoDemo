@@ -17,7 +17,7 @@ namespace Business.CartBusiness
         {
         }
 
-        public CartItemModelResponse AddCartItem(CartItemRequest request) // mudar isso aqui pra retornar o CartItemModelResponse (retornar o objeto inteiro)
+        public int AddCartItem(CartItemRequest request) // talvez mudar isso aqui pra retornar o CartItemModelResponse (retornar o objeto inteiro)
         {
             try
             {
@@ -76,7 +76,6 @@ namespace Business.CartBusiness
         {
             try
             {
-                CartItemModelResponse response;
 
                 var cartItem = CartItemByIdProductAndByIdCart(idCart, idProduct);
                 cartItem.Quantity = request.Quantity;
@@ -84,12 +83,7 @@ namespace Business.CartBusiness
 
                 var responseDataBase = _context.Update(cartItem);
 
-                response = new CartItemModelResponse();
-                response.Id = responseDataBase.Id;
-                response.Quantity = responseDataBase.Quantity;
-                response.UnitPrice = responseDataBase.UnitPrice;
-                response.IdCart = responseDataBase.IdCart;
-                response.IdProduct = responseDataBase.IdProduct;
+                CartItemModelResponse response = CartItemMapper(responseDataBase);
 
                 return response;
             }
@@ -98,7 +92,7 @@ namespace Business.CartBusiness
                 throw err;
             }
         }
-        private CartItemModelResponse CartItemMapper(CartRequest request)
+        private CartItemModelResponse CartItemMapper(CartItem request)
         {
             CartItemModelResponse response;
 
@@ -108,6 +102,8 @@ namespace Business.CartBusiness
             response.UnitPrice = request.UnitPrice;
             response.IdCart = request.IdCart;
             response.IdProduct = request.IdProduct;
+
+            return response;
         }
 
         private CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct)
@@ -121,7 +117,7 @@ namespace Business.CartBusiness
             return _context.CartItemExists(cartItem);
         }
 
-        public CartItemModelResponse IncreaseCartItem(CartItemRequest cartItem)
+        public int IncreaseCartItem(CartItemRequest cartItem)
         {
             return _context.IncreaseCartItem(cartItem);
         }

@@ -19,11 +19,10 @@ namespace DataBase.Repository
         {
         }
 
-        public CartItemModelResponse AddCartItem(CartItem request)
+        public int AddCartItem(CartItem request)
         {
             try
             {
-                //Cart referredCart = _context.Cart.Where(c => c.Id == request.IdCart);
                 _context.CartItem.Add(request);
                 _context.SaveChanges();
                 return request.Id;
@@ -118,7 +117,7 @@ namespace DataBase.Repository
 
         }
 
-        public CartItemModelResponse IncreaseCartItem(CartItemRequest cartItem) // incrementa a quantidade de produtos e retorna o id do CartItem
+        public int IncreaseCartItem(CartItemRequest cartItem) // incrementa a quantidade de produtos e retorna o id do CartItem
         {   
             try
             {
