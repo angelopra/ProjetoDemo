@@ -4,6 +4,7 @@ using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Model.Response;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace Business.CartBusiness
         {
         }
 
-        public int AddCartItem(CartItemRequest request) // talvez mudar isso aqui pra retornar o CartItemModelResponse (retornar o objeto inteiro pra facilitar a vida do front end pq ele n precisaria fazer um get)
+        public int AddCartItem(CartItemRequest request) // talvez mudar isso aqui pra retornar o CartItemModelResponse ou o CartItem (retornar o objeto inteiro pra facilitar a vida do front end pq ele n precisaria fazer um get)
         {
             try
             {
@@ -47,14 +48,31 @@ namespace Business.CartBusiness
             }
         }
 
-        public CartItemModelResponse GetCartItemById(int idCart, int idProduct)
+        public CartItemModelResponse GetCartItem(int idCart, int idProduct)
         {
             try
             {
-                var responseDataBase = _context.GetCartItemById(idCart, idProduct);
+                var item = CartItemByIdProductAndByIdCart(idCart, idProduct);
+                var response = CartItemMapper(item);
+                return response;
+            }
+            catch(Exception err)
+            {
+                throw err;
+            }
+        }
 
-                CartItemModelResponse response = CartItemMapper(responseDataBase);
+        public IEnumerable GetCartItems(int idCart)
+        {
+            try
+            {
+                var responseDataBase = _context.GetCartItems(idCart);
+                List<CartItemModelResponse> response = new List<CartItemModelResponse>();
 
+                foreach(CartItem item in responseDataBase)
+                {
+                    response.Add(CartItemMapper(item));
+                }
                 return response;
             }
             catch (Exception err)
@@ -95,7 +113,8 @@ namespace Business.CartBusiness
                 throw err;
             }
         }
-        private CartItemModelResponse CartItemMapper(CartItem request)
+        
+        public CartItemModelResponse CartItemMapper(CartItem request)
         {
             CartItemModelResponse response;
 
@@ -115,12 +134,12 @@ namespace Business.CartBusiness
             return response;
         }
 
-        public bool CartItemExists(CartItemRequest cartItem)
+        private bool CartItemExists(CartItemRequest cartItem)
         {
             return _context.CartItemExists(cartItem);
         }
 
-        public int IncreaseCartItem(CartItemRequest cartItem)
+        private int IncreaseCartItem(CartItemRequest cartItem)
         {
             return _context.IncreaseCartItem(cartItem);
         }

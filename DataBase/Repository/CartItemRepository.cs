@@ -6,6 +6,7 @@ using Domain.Model.Request;
 using Domain.Model.Response;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,18 +34,18 @@ namespace DataBase.Repository
             }
         }
 
-        public CartItem GetCartItemById(int idCart, int idProduct)
+        public IEnumerable GetCartItems(int idCart)
         {
             try
             {
-                CartItem cartItem = _context.CartItem.Where(c => c.IdCart == idCart && c.IdProduct == idProduct).FirstOrDefault();
-                if (cartItem != null)
+                if(CartExists(idCart))
                 {
-                    return cartItem;
+                    List<CartItem> items = _context.CartItem.Where(c => c.IdCart == idCart).ToList();
+                    return items;
                 }
                 else
                 {
-                    throw new Exception("Cart Item not found");
+                    throw new Exception("Cart doesn't exists");
                 }
             }
             catch (Exception err)
@@ -96,18 +97,32 @@ namespace DataBase.Repository
             return response;
         }
 
+        private bool CartExists(int id)
+        {
+            try
+            {
+                var item = _context.Cart.Where(c => id == c.Id).FirstOrDefault();
+                if(item == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception err)
+            {
+                throw err;
+
+            }
+        }
+
         public bool CartItemExists(CartItemRequest cartItem)
         {
             try
             {
-                List<CartItem> cartItems = _context.CartItem.Where(c => c.IdCart == cartItem.IdCart).ToList();
-                foreach(CartItem item in cartItems)
-                {
-                    if(item.IdProduct == cartItem.IdProduct)
-                    {
-                        return true;
-                    }
-                }
+                var item = _context.CartItem.Where(c => c.IdCart == cartItem.IdCart && c.IdProduct == cartItem.IdProduct).FirstOrDefault();
+                if (item != null)
+                    return true;
+
                 return false;
             }
             catch(Exception err)

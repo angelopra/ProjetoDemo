@@ -2,6 +2,7 @@
 using Domain.Model.Request;
 using Domain.Model.Response;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,8 +15,7 @@ namespace Domain.Interfaces
         int AddCartItem(CartItemRequest request);
         CartItemModelResponse Update(CartItemUpdateRequest request, int idCart, int idProduct);
         void Remove(int idCart, int idProduct);
-        CartItemModelResponse GetCartItemById(int idCart, int idProduct);
-        bool CartItemExists(CartItemRequest cartItem);
-        int IncreaseCartItem(CartItemRequest cartItem);
+        CartItemModelResponse GetCartItem(int idCart, int idProduct);
+        IEnumerable GetCartItems(int idCart);
     }
 }

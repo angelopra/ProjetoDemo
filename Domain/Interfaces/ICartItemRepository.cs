@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Model.Request;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Domain.Interfaces
     {
         int AddCartItem(CartItem request);
 
-        CartItem GetCartItemById(int idCart, int idProduct);
+        IEnumerable GetCartItems(int idCart);
 
         CartItem Update(CartItem request);
 
