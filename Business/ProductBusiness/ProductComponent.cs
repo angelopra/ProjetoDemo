@@ -26,12 +26,7 @@ namespace Business.ProductBusiness
             {
                 var response = 0;
 
-                var obj = new Product();
-                obj.Name = request.Name;
-                obj.Description = request.Description;
-                obj.Price = request.Price;
-                obj.Quantity = request.Quantity;
-                obj.Active = request.Active;
+                var obj = MappingEntity<Product>(request);
 
                 if (String.IsNullOrEmpty(obj.Name) || String.IsNullOrWhiteSpace(obj.Name))
                 {

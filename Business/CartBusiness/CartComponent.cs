@@ -66,6 +66,10 @@ namespace Business.CartBusiness
             try
             {
                 var numberDeleted = _context.RemoveAllItems(id);
+                var cart = _context.GetCartById(id);
+                cart.Total = 0;
+                _context.Update(cart);
+
                 return numberDeleted;
             }
             catch (Exception err)

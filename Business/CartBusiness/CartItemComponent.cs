@@ -24,7 +24,14 @@ namespace Business.CartBusiness
             {
                 if(CartItemExists(request))
                 {
-                    var item = CartItemMapper(IncreaseCartItem(request));
+                    var cart = _context.GetCartById(request.IdCart);
+                    cart.Total += request.UnitPrice * request.Quantity;
+                    _context.UpdateCart(cart);
+
+                    var increasedItem = IncreaseCartItem(request);
+                    increasedItem = _context.Update(increasedItem);
+
+                    var item = CartItemMapper(increasedItem);
                     return item;
                 }
                 else
@@ -39,6 +46,7 @@ namespace Business.CartBusiness
                     var cart = _context.GetCartById(obj.IdCart);
                     cart.Total += obj.UnitPrice * obj.Quantity;
                     _context.UpdateCart(cart);
+
                     var response = CartItemMapper(_context.AddCartItem(obj));
                     return response;
                 }
@@ -104,8 +112,16 @@ namespace Business.CartBusiness
         {
             try
             {
-
+                var cart = _context.GetCartById(idCart);
                 var cartItem = CartItemByIdProductAndByIdCart(idCart, idProduct);
+
+                decimal initialTotal = cartItem.Quantity * cartItem.UnitPrice;
+                decimal finalTotal = request.Quantity * request.UnitPrice;
+                decimal difference = finalTotal - initialTotal;
+
+                cart.Total += difference;
+                _context.UpdateCart(cart);
+
                 cartItem.Quantity = request.Quantity;
                 cartItem.UnitPrice = request.UnitPrice;
 
