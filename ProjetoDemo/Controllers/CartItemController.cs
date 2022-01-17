@@ -43,7 +43,6 @@ namespace ProjetoDemo.Controllers
             {
                 return NotFound(err.Message);
             }
-            
         }
 
         [HttpPut]

@@ -30,6 +30,10 @@ namespace Business.CartBusiness
                 obj.UnitPrice = request.UnitPrice;
                 obj.Quantity = request.Quantity;
 
+                var cart = _context.GetCartById(obj.IdCart);
+                cart.Total += obj.UnitPrice * obj.Quantity;
+                _context.UpdateCart(cart);
+
                 response = _context.AddCartItem(obj);
                 return response;
             }
@@ -56,6 +60,12 @@ namespace Business.CartBusiness
         {
             try
             {
+                var cart = _context.GetCartById(idCart);
+                var cartItem = CartItemByIdProductAndByIdCart(idCart, idProduct);
+
+                cart.Total -= cartItem.UnitPrice * cartItem.Quantity;
+                _context.UpdateCart(cart);
+
                 _context.Remove(idCart, idProduct);
             }
             catch (Exception err)

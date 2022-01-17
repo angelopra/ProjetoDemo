@@ -94,5 +94,38 @@ namespace DataBase.Repository
                     .FirstOrDefault();
             return response;
         }
+
+        public Cart GetCartById(int id)
+        {
+            try
+            {
+                Cart cart = _context.Cart.Where(c => c.Id == id).FirstOrDefault();
+                if (cart != null)
+                {
+                    return cart;
+                }
+                else
+                {
+                    throw new Exception("Cart not found");
+                }
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+
+        public void UpdateCart(Cart cart)
+        {
+            try
+            {
+                _context.Cart.Update(cart);
+                _context.SaveChanges();
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
     }
 }
