@@ -21,7 +21,6 @@ namespace DataBase.Repository
         {
             try
             {
-                //Cart referredCart = _context.Cart.Where(c => c.Id == request.IdCart);
                 _context.CartItem.Add(request);
                 _context.SaveChanges();
                 return request.Id;
@@ -32,14 +31,15 @@ namespace DataBase.Repository
             }
         }
 
-        public IEnumerable<CartItem> GetCartItemsByCartId(int idCart)
+        public List<CartItem> GetCartItemsByCartId(int idCart)
         {
             try
             {
-                var cartItems = _context.CartItem.Where(c => c.IdCart == idCart).ToList();
-                if (cartItems != null)
+                var cartItemsEntities = _context.CartItem.Where(c => c.IdCart == idCart).ToList();
+
+                if (cartItemsEntities != null)
                 {
-                    return cartItems;
+                    return cartItemsEntities;
                 }
                 else
                 {

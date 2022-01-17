@@ -3,6 +3,9 @@ using ProjetoDemo.Controllers.Base;
 using Domain.Interfaces;
 using System;
 using Domain.Model.Request;
+using System.Collections.Generic;
+using Domain.Model.Response;
+using Domain.Entities;
 
 namespace ProjetoDemo.Controllers
 {
@@ -29,7 +32,7 @@ namespace ProjetoDemo.Controllers
 
         [HttpGet]
         [Route("{idCart}")]
-        public IActionResult GetCartItemsByCartId(int idCart) // trocar isso aqui por uma lista de produtos
+        public ActionResult<List<CartItem>> GetCartItemsByCartId(int idCart)
         {
             try
             {
@@ -40,6 +43,7 @@ namespace ProjetoDemo.Controllers
             {
                 return NotFound(err.Message);
             }
+            
         }
 
         [HttpPut]

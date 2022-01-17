@@ -39,7 +39,7 @@ namespace Business.CartBusiness
             }
         }
 
-        public IEnumerable<CartItem> GetCartItemsByCartId(int idCart)
+        public List<CartItem> GetCartItemsByCartId(int idCart)
         {
             try
             {

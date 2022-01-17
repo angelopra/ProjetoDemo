@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Model.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,8 @@ namespace Domain.Interfaces
     public interface ICartItemRepository
     {
         int AddCartItem(CartItem request);
-
-        IEnumerable<CartItem> GetCartItemsByCartId(int idCart);
-
+        List<CartItem> GetCartItemsByCartId(int idCart);
         CartItem Update(CartItem request);
-
         void Remove(int idCart, int idProduct);
         CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct);
     }
