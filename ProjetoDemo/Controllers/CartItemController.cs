@@ -32,12 +32,27 @@ namespace ProjetoDemo.Controllers
 
         [HttpGet]
         [Route("{idCart}")]
-        public ActionResult<List<CartItem>> GetCartItemsByCartId(int idCart)
+        public IActionResult GetCartItens(int idCart)
         {
             try
             {
-                var responseMethod = ComponentCurrent.GetCartItemsByCartId(idCart);
-                return Ok(responseMethod);
+                var response = ComponentCurrent.GetCartItens(idCart);
+                return Ok(response);
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("{idCart}/{idProduct}")]
+        public IActionResult GetCartItem(int idCart, int idProduct)
+        {
+            try
+            {
+                var response = ComponentCurrent.GetCartItem(idCart, idProduct);
+                return Ok(response);
             }
             catch (Exception err)
             {

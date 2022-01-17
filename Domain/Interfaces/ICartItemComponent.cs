@@ -2,6 +2,7 @@
 using Domain.Model.Request;
 using Domain.Model.Response;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +12,10 @@ namespace Domain.Interfaces
 {
     public interface ICartItemComponent
     {
-        int AddCartItem(CartItemRequest request);
+        CartItemModelResponse AddCartItem(CartItemRequest request);
         CartItemModelResponse Update(CartItemUpdateRequest request, int idCart, int idProduct);
         void Remove(int idCart, int idProduct);
-        List<CartItem> GetCartItemsByCartId(int idCart);
+        CartItemModelResponse GetCartItem(int idCart, int idProduct);
+        IEnumerable GetCartItens(int idCart);
     }
 }

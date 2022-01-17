@@ -4,6 +4,7 @@ using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Model.Response;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,25 +18,30 @@ namespace Business.CartBusiness
         {
         }
 
-        public int AddCartItem(CartItemRequest request)
+        public CartItemModelResponse AddCartItem(CartItemRequest request) // talvez mudar isso aqui pra retornar o CartItemModelResponse ou o CartItem (retornar o objeto inteiro pra facilitar a vida do front end pq ele n precisaria fazer um get)
         {
             try
             {
-                var response = 0;
+                if(CartItemExists(request))
+                {
+                    var item = CartItemMapper(IncreaseCartItem(request));
+                    return item;
+                }
+                else
+                {
+                    var obj = new CartItem();
+                    obj.Active = request.Active;
+                    obj.IdCart = request.IdCart;
+                    obj.IdProduct = request.IdProduct;
+                    obj.UnitPrice = request.UnitPrice;
+                    obj.Quantity = request.Quantity;
 
-                var obj = new CartItem();
-                obj.Active = request.Active;
-                obj.IdCart = request.IdCart;
-                obj.IdProduct = request.IdProduct;
-                obj.UnitPrice = request.UnitPrice;
-                obj.Quantity = request.Quantity;
-
-                var cart = _context.GetCartById(obj.IdCart);
-                cart.Total += obj.UnitPrice * obj.Quantity;
-                _context.UpdateCart(cart);
-
-                response = _context.AddCartItem(obj);
-                return response;
+                    var cart = _context.GetCartById(obj.IdCart);
+                    cart.Total += obj.UnitPrice * obj.Quantity;
+                    _context.UpdateCart(cart);
+                    var response = CartItemMapper(_context.AddCartItem(obj));
+                    return response;
+                }
             }
             catch (Exception err)
             {
@@ -43,11 +49,31 @@ namespace Business.CartBusiness
             }
         }
 
-        public List<CartItem> GetCartItemsByCartId(int idCart)
+        public CartItemModelResponse GetCartItem(int idCart, int idProduct)
         {
             try
             {
-                var response = _context.GetCartItemsByCartId(idCart);
+                var item = CartItemByIdProductAndByIdCart(idCart, idProduct);
+                var response = CartItemMapper(item);
+                return response;
+            }
+            catch(Exception err)
+            {
+                throw err;
+            }
+        }
+
+        public IEnumerable GetCartItens(int idCart)
+        {
+            try
+            {
+                var responseDataBase = _context.GetCartItens(idCart);
+                List<CartItemModelResponse> response = new List<CartItemModelResponse>();
+
+                foreach(CartItem item in responseDataBase)
+                {
+                    response.Add(CartItemMapper(item));
+                }
                 return response;
             }
             catch (Exception err)
@@ -78,7 +104,6 @@ namespace Business.CartBusiness
         {
             try
             {
-                CartItemModelResponse response;
 
                 var cartItem = CartItemByIdProductAndByIdCart(idCart, idProduct);
                 cartItem.Quantity = request.Quantity;
@@ -86,12 +111,7 @@ namespace Business.CartBusiness
 
                 var responseDataBase = _context.Update(cartItem);
 
-                response = new CartItemModelResponse();
-                response.Id = responseDataBase.Id;
-                response.Quantity = responseDataBase.Quantity;
-                response.UnitPrice = responseDataBase.UnitPrice;
-                response.IdCart = responseDataBase.IdCart;
-                response.IdProduct = responseDataBase.IdProduct;
+                CartItemModelResponse response = CartItemMapper(responseDataBase);
 
                 return response;
             }
@@ -100,11 +120,35 @@ namespace Business.CartBusiness
                 throw err;
             }
         }
+        
+        private CartItemModelResponse CartItemMapper(CartItem request)
+        {
+            CartItemModelResponse response;
+
+            response = new CartItemModelResponse();
+            response.Id = request.Id;
+            response.Quantity = request.Quantity;
+            response.UnitPrice = request.UnitPrice;
+            response.IdCart = request.IdCart;
+            response.IdProduct = request.IdProduct;
+
+            return response;
+        }
 
         private CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct)
         {
             var response = _context.CartItemByIdProductAndByIdCart(idCart, idProduct);
             return response;
+        }
+
+        private bool CartItemExists(CartItemRequest cartItem)
+        {
+            return _context.CartItemExists(cartItem);
+        }
+
+        private CartItem IncreaseCartItem(CartItemRequest cartItem)
+        {
+            return _context.IncreaseCartItem(cartItem);
         }
     }
 }

@@ -17,5 +17,6 @@ namespace Domain.Interfaces
         Cart Update(Cart request);
 
         void Remove(int id);
+        int RemoveAllItems(int id);
     }
 }

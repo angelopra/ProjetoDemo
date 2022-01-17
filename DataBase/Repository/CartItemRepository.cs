@@ -2,8 +2,11 @@
 using DataBase.Repository.Base;
 using Domain.Entities;
 using Domain.Interfaces;
+using Domain.Model.Request;
+using Domain.Model.Response;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,13 +20,13 @@ namespace DataBase.Repository
         {
         }
 
-        public int AddCartItem(CartItem request)
+        public CartItem AddCartItem(CartItem request)
         {
             try
             {
                 _context.CartItem.Add(request);
                 _context.SaveChanges();
-                return request.Id;
+                return request;
             }
             catch (Exception err)
             {
@@ -31,19 +34,18 @@ namespace DataBase.Repository
             }
         }
 
-        public List<CartItem> GetCartItemsByCartId(int idCart)
+        public IEnumerable GetCartItens(int idCart)
         {
             try
             {
-                var cartItemsEntities = _context.CartItem.Where(c => c.IdCart == idCart).ToList();
-
-                if (cartItemsEntities != null)
+                if(CartExists(idCart))
                 {
-                    return cartItemsEntities;
+                    List<CartItem> items = _context.CartItem.Where(c => c.IdCart == idCart).ToList();
+                    return items;
                 }
                 else
                 {
-                    throw new Exception("Card was not found or there is no item in the cart");
+                    throw new Exception("Cart doesn't exists");
                 }
             }
             catch (Exception err)
@@ -93,6 +95,56 @@ namespace DataBase.Repository
                     .Include(n => n.Cart)
                     .FirstOrDefault();
             return response;
+        }
+
+        private bool CartExists(int id)
+        {
+            try
+            {
+                var item = _context.Cart.Where(c => id == c.Id).FirstOrDefault();
+                if(item == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception err)
+            {
+                throw err;
+
+            }
+        }
+
+        public bool CartItemExists(CartItemRequest cartItem)
+        {
+            try
+            {
+                var item = _context.CartItem.Where(c => c.IdCart == cartItem.IdCart && c.IdProduct == cartItem.IdProduct).FirstOrDefault();
+                if (item != null)
+                    return true;
+
+                return false;
+            }
+            catch(Exception err)
+            {
+                throw err;
+            }
+
+        }
+
+        public CartItem IncreaseCartItem(CartItemRequest cartItem) // incrementa a quantidade de produtos e retorna o id do CartItem
+        {   
+            try
+            {
+                var item = CartItemByIdProductAndByIdCart(cartItem.IdCart, cartItem.IdProduct);
+                item.Quantity += cartItem.Quantity;
+
+                return item;
+            }
+            catch(Exception err)
+            {
+                throw err;
+            }
         }
 
         public Cart GetCartById(int id)
