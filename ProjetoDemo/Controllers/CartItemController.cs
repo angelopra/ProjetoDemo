@@ -29,11 +29,11 @@ namespace ProjetoDemo.Controllers
 
         [HttpGet]
         [Route("{idCart}")]
-        public IActionResult GetCartItems(int idCart)
+        public IActionResult GetCartItens(int idCart)
         {
             try
             {
-                var response = ComponentCurrent.GetCartItems(idCart);
+                var response = ComponentCurrent.GetCartItens(idCart);
                 return Ok(response);
             }
             catch (Exception err)

@@ -20,13 +20,13 @@ namespace DataBase.Repository
         {
         }
 
-        public int AddCartItem(CartItem request)
+        public CartItem AddCartItem(CartItem request)
         {
             try
             {
                 _context.CartItem.Add(request);
                 _context.SaveChanges();
-                return request.Id;
+                return request;
             }
             catch (Exception err)
             {
@@ -34,7 +34,7 @@ namespace DataBase.Repository
             }
         }
 
-        public IEnumerable GetCartItems(int idCart)
+        public IEnumerable GetCartItens(int idCart)
         {
             try
             {
@@ -132,14 +132,14 @@ namespace DataBase.Repository
 
         }
 
-        public int IncreaseCartItem(CartItemRequest cartItem) // incrementa a quantidade de produtos e retorna o id do CartItem
+        public CartItem IncreaseCartItem(CartItemRequest cartItem) // incrementa a quantidade de produtos e retorna o id do CartItem
         {   
             try
             {
                 var item = CartItemByIdProductAndByIdCart(cartItem.IdCart, cartItem.IdProduct);
-                item.Quantity++;
+                item.Quantity += cartItem.Quantity;
 
-                return item.Id;
+                return item;
             }
             catch(Exception err)
             {
