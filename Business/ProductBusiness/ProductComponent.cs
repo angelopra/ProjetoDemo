@@ -4,6 +4,7 @@ using DataBase.Repository;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using Domain.Validators;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace Business.ProductBusiness
     {
         private ICategoryComponent _categoryComponent;
         private readonly IValidator<ProductRequest> _validator;
+        private List<ValidateError> errors;
         public ProductComponent(IProductRepository context, ICategoryComponent categoryComponent, IValidator<ProductRequest> validator)
             : base(context)
         {
@@ -28,10 +30,12 @@ namespace Business.ProductBusiness
         {
             try
             {
-                if (!_validator.Validate(request).IsValid)
+                errors = ValidadeProductRequest(request);
+                if (errors != null)
                 {
-                    throw new Exception("sus");
+                    throw new Exception();
                 }
+
                 var response = 0;
 
                 var obj = MappingEntity<Product>(request);
@@ -44,14 +48,15 @@ namespace Business.ProductBusiness
                 var category = _categoryComponent.GetCategoryById(request.IdCategory);
                 if(category != null)
                 {
-                    obj.Category = category; // pq que aqui é um objeto category e não só o ID da categoria?
+                    obj.Category = category;
                 }
 
                 response = this._context.AddProduct(obj);
                 return response;
             }
-            catch
+            catch (Exception err)
             {
+                MapperException(err, errors);
                 throw;
             }
         }
@@ -83,21 +88,19 @@ namespace Business.ProductBusiness
 
         public Product Update(ProductRequest request, int id)
         {
+            List<ValidateError> errors = null;
             try
             {
-                if (!_validator.Validate(request).IsValid)
+                errors = ValidadeProductRequest(request);
+                if (errors != null)
                 {
-                    throw new Exception("sus");
+                    throw new Exception();
                 }
+
                 Product response;
 
-                var obj = new Product();
+                var obj = MappingEntity<Product>(request);
                 obj.Id = id;
-                obj.Name = request.Name;
-                obj.Description = request.Description;
-                obj.Price = request.Price;
-                obj.Quantity = request.Quantity;
-                obj.Active = request.Active;
 
                 var category = _categoryComponent.GetCategoryById(request.IdCategory);
                 if (category != null)
@@ -108,12 +111,29 @@ namespace Business.ProductBusiness
                 response = _context.Update(obj);
                 return response;
             }
-            catch
+            catch (Exception err)
             {
+                MapperException(err, errors);
                 throw;
             }
         }
+
+        private List<ValidateError> ValidadeProductRequest(ProductRequest request)
+        {
+            errors = null;
+            var validate = _validator.Validate(request);
+            if (!validate.IsValid)
+            {
+                errors = new List<ValidateError>();
+                foreach (var failure in validate.Errors)
+                {
+                    var error = new ValidateError();
+                    error.PropertyName = failure.PropertyName;
+                    error.Error = failure.ErrorMessage;
+                    errors.Add(error);
+                }
+            }
+            return errors;
+        }
     }
-
-
 }

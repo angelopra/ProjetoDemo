@@ -17,7 +17,7 @@ namespace Domain.Validators
             RuleFor(p => p.IdCategory).NotNull().GreaterThanOrEqualTo(0);
             RuleFor(p => p.Name).NotNull().Length(3, 30);
             RuleFor(p => p.Price).NotNull().GreaterThanOrEqualTo(0);
-            RuleFor(p => p.Quantity).NotNull().GreaterThanOrEqualTo(0);
+            RuleFor(p => p.Quantity).NotNull().GreaterThanOrEqualTo(0).WithMessage("Enter a positive value.");
         }
     }
 }

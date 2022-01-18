@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using Domain.Validators;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Business.CustomerBusiness
     public class CustomerComponent : BaseBusiness<ICustomerRepository>, ICustomerComponent
     {
         private readonly IValidator<CustomerRequest> _validator;
+        private List<ValidateError> errors = null;
         public CustomerComponent(ICustomerRepository context, IValidator<CustomerRequest> validator) : base(context)
         {
             _validator = validator;
@@ -23,22 +25,22 @@ namespace Business.CustomerBusiness
         {
             try
             {
-                if (!_validator.Validate(request).IsValid)
+                errors = ValidadeCustomerRequest(request);
+                if (errors != null)
                 {
-                    throw new Exception("sus");
+                    throw new Exception();
                 }
+                
                 var response = 0;
 
-                var obj = new Customer();
-                obj.Name = request.Name;
-                obj.Email = request.Email;
-                obj.Active = request.Active;
+                var obj = MappingEntity<Customer>(request);
 
                 response = this._context.AddCustomer(obj);
                 return response;
             }
-            catch
+            catch (Exception err)
             {
+                MapperException(err, errors);
                 throw;
             }
         }
@@ -72,25 +74,43 @@ namespace Business.CustomerBusiness
         {
             try
             {
-                if (!_validator.Validate(request).IsValid)
+                errors = ValidadeCustomerRequest(request);
+                if (errors != null)
                 {
-                    throw new Exception("sus");
+                    throw new Exception();
                 }
+
                 Customer response;
 
-                var obj = new Customer();
+                var obj = MappingEntity<Customer>(request);
                 obj.Id = id;
-                obj.Name = request.Name;
-                obj.Email = request.Email;
-                obj.Active = request.Active;
 
-                response = this._context.Update(obj);
+                response = _context.Update(obj);
                 return response;
             }
-            catch
+            catch (Exception err)
             {
+                MapperException(err, errors);
                 throw;
             }
+        }
+
+        private List<ValidateError> ValidadeCustomerRequest(CustomerRequest request)
+        {
+            errors = null;
+            var validate = _validator.Validate(request);
+            if (!validate.IsValid)
+            {
+                errors = new List<ValidateError>();
+                foreach (var failure in validate.Errors)
+                {
+                    var error = new ValidateError();
+                    error.PropertyName = failure.PropertyName;
+                    error.Error = failure.ErrorMessage;
+                    errors.Add(error);
+                }
+            }
+            return errors;
         }
     }
 }

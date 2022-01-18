@@ -25,7 +25,7 @@ namespace ProjetoDemo.Controllers
             }
             catch (Exception err)
             {
-                return BadRequest(err.Message);
+                return BadRequest(err.Data);
             }
         }
 
@@ -55,7 +55,7 @@ namespace ProjetoDemo.Controllers
             }
             catch (Exception err)
             {
-                return BadRequest(err.Message);
+                return BadRequest(err.Data);
             }
         }
 

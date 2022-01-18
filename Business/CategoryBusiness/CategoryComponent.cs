@@ -4,6 +4,7 @@ using DataBase.Repository;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using Domain.Validators;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Business.CategoryBusiness
     public class CategoryComponent : BaseBusiness<ICategoryRepository>, ICategoryComponent
     {
         private readonly IValidator<CategoryRequest> _validator;
+        private List<ValidateError> errors = null;
         public CategoryComponent(ICategoryRepository context, IValidator<CategoryRequest> validator) : base(context)
         {
             _validator = validator;
@@ -25,15 +27,15 @@ namespace Business.CategoryBusiness
         {
             try
             {
-                if (!_validator.Validate(request).IsValid)
+                errors = ValidadeCategoryRequest(request);
+                if (errors != null)
                 {
-                    throw new Exception("sus");
+                    throw new Exception();
                 }
+
                 var response = 0;
 
-                var obj = new Category();
-                obj.Name = request.Name;
-                obj.Active = request.Active;
+                var obj = MappingEntity<Category>(request);
 
                 if (String.IsNullOrEmpty(obj.Name) || String.IsNullOrWhiteSpace(obj.Name))
                 {
@@ -43,8 +45,9 @@ namespace Business.CategoryBusiness
                 response = this._context.AddCategory(obj);
                 return response;
             }
-            catch
+            catch (Exception err)
             {
+                MapperException(err, errors);
                 throw;
             }
         }
@@ -53,10 +56,12 @@ namespace Business.CategoryBusiness
         {
             try
             {
-                if (!_validator.Validate(request).IsValid)
+                errors = ValidadeCategoryRequest(request);
+                if (errors != null)
                 {
-                    throw new Exception("sus");
+                    throw new Exception();
                 }
+
                 Category response = null;
 
                 if (String.IsNullOrEmpty(request.Name) || String.IsNullOrWhiteSpace(request.Name))
@@ -64,16 +69,15 @@ namespace Business.CategoryBusiness
                     throw new Exception("Insert a name");
                 }
 
-                var obj = new Category();
+                var obj = MappingEntity<Category>(request);
                 obj.Id = id;
-                obj.Name = request.Name;
-                obj.Active = request.Active;
 
-                response = this._context.Update(obj);
+                response = _context.Update(obj);
                 return response;
             }
-            catch
+            catch (Exception err)
             {
+                MapperException(err, errors);
                 throw;
             }
         }
@@ -82,7 +86,7 @@ namespace Business.CategoryBusiness
         {
             try
             {
-                this._context.Remove(id);
+                _context.Remove(id);
             }
             catch (Exception err)
             {
@@ -94,7 +98,7 @@ namespace Business.CategoryBusiness
         {
             try
             {
-                var response = this._context.GetCategoryById(id);
+                var response = _context.GetCategoryById(id);
                 return response;
             }
             catch (Exception err)
@@ -107,13 +111,31 @@ namespace Business.CategoryBusiness
         {
             try
             {
-                var response = this._context.GetCategorys(request.IdCategories).ToList();
+                var response = _context.GetCategorys(request.IdCategories).ToList();
                 return response;
             }
             catch (Exception err)
             {
                 throw err;
             }
+        }
+
+        private List<ValidateError> ValidadeCategoryRequest(CategoryRequest request)
+        {
+            errors = null;
+            var validate = _validator.Validate(request);
+            if (!validate.IsValid)
+            {
+                errors = new List<ValidateError>();
+                foreach (var failure in validate.Errors)
+                {
+                    var error = new ValidateError();
+                    error.PropertyName = failure.PropertyName;
+                    error.Error = failure.ErrorMessage;
+                    errors.Add(error);
+                }
+            }
+            return errors;
         }
     }
 }
