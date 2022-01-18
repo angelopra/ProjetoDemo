@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Model.Response;
+using FluentValidation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,15 +15,25 @@ namespace Business.CartBusiness
 {
     public class CartItemComponent : BaseBusiness<ICartItemRepository>, ICartItemComponent
     {
-        public CartItemComponent(ICartItemRepository context) : base(context)
+        private readonly IValidator<CartItemRequest> _validator;
+        private readonly IValidator<CartItemUpdateRequest> _updateValidator;
+
+        public CartItemComponent(ICartItemRepository context, IValidator<CartItemRequest> validator, IValidator<CartItemUpdateRequest> updateValidator)
+            : base(context)
         {
+            _validator = validator;
+            _updateValidator = updateValidator;
         }
 
-        public CartItemModelResponse AddCartItem(CartItemRequest request) // talvez mudar isso aqui pra retornar o CartItemModelResponse ou o CartItem (retornar o objeto inteiro pra facilitar a vida do front end pq ele n precisaria fazer um get)
+        public CartItemModelResponse AddCartItem(CartItemRequest request)
         {
             try
             {
-                if(CartItemExists(request))
+                if (!_validator.Validate(request).IsValid)
+                {
+                    throw new Exception("sus");
+                }
+                if (CartItemExists(request))
                 {
                     var cart = _context.GetCartById(request.IdCart);
                     cart.Total += request.UnitPrice * request.Quantity;
@@ -51,9 +62,9 @@ namespace Business.CartBusiness
                     return response;
                 }
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
@@ -112,6 +123,11 @@ namespace Business.CartBusiness
         {
             try
             {
+                if (!_updateValidator.Validate(request).IsValid)
+                {
+                    throw new Exception("sus");
+                }
+
                 var cart = _context.GetCartById(idCart);
                 var cartItem = CartItemByIdProductAndByIdCart(idCart, idProduct);
 
@@ -131,9 +147,9 @@ namespace Business.CartBusiness
 
                 return response;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
         

@@ -4,6 +4,7 @@ using DataBase.Repository;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,15 +16,22 @@ namespace Business.ProductBusiness
     public class ProductComponent : BaseBusiness<IProductRepository>, IProductComponent
     {
         private ICategoryComponent _categoryComponent;
-        public ProductComponent(IProductRepository context, ICategoryComponent categoryComponent) : base(context)
+        private readonly IValidator<ProductRequest> _validator;
+        public ProductComponent(IProductRepository context, ICategoryComponent categoryComponent, IValidator<ProductRequest> validator)
+            : base(context)
         {
             _categoryComponent = categoryComponent;
+            _validator = validator;
         }
 
         public int AddProduct(ProductRequest request)
         {
             try
             {
+                if (!_validator.Validate(request).IsValid)
+                {
+                    throw new Exception("sus");
+                }
                 var response = 0;
 
                 var obj = MappingEntity<Product>(request);
@@ -42,9 +50,9 @@ namespace Business.ProductBusiness
                 response = this._context.AddProduct(obj);
                 return response;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
@@ -77,6 +85,10 @@ namespace Business.ProductBusiness
         {
             try
             {
+                if (!_validator.Validate(request).IsValid)
+                {
+                    throw new Exception("sus");
+                }
                 Product response;
 
                 var obj = new Product();
@@ -96,9 +108,9 @@ namespace Business.ProductBusiness
                 response = _context.Update(obj);
                 return response;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
     }

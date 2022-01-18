@@ -8,19 +8,27 @@ using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Entities.Base;
 using Domain.Entities;
+using FluentValidation;
 
 namespace Business.CartBusiness
 {
     public class CartComponent : BaseBusiness<ICartRepository>, ICartComponent
     {
-        public CartComponent(ICartRepository context) : base(context)
+        private readonly IValidator<CartRequest> _validator;
+        public CartComponent(ICartRepository context, IValidator<CartRequest> validator) : base(context)
         {
+            _validator = validator;
         }
 
         public int AddCart(CartRequest request)
         {
             try
             {
+                if (!_validator.Validate(request).IsValid)
+                {
+                    throw new Exception("sus");
+                }
+
                 var response = 0;
 
                 var obj = new Cart();
@@ -30,9 +38,9 @@ namespace Business.CartBusiness
                 response = this._context.AddCart(obj);
                 return response;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
@@ -82,6 +90,11 @@ namespace Business.CartBusiness
         {
             try
             {
+                if (!_validator.Validate(request).IsValid)
+                {
+                    throw new Exception("sus");
+                }
+
                 Cart response;
 
                 var obj = new Cart();
@@ -92,9 +105,9 @@ namespace Business.CartBusiness
                 response = _context.Update(obj);
                 return response;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
     }

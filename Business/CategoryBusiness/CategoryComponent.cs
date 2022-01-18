@@ -4,6 +4,7 @@ using DataBase.Repository;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +15,20 @@ namespace Business.CategoryBusiness
 {
     public class CategoryComponent : BaseBusiness<ICategoryRepository>, ICategoryComponent
     {
-        public CategoryComponent(ICategoryRepository context) : base(context)
+        private readonly IValidator<CategoryRequest> _validator;
+        public CategoryComponent(ICategoryRepository context, IValidator<CategoryRequest> validator) : base(context)
         {
+            _validator = validator;
         }
 
         public int AddCategory(CategoryRequest request)
         {
             try
             {
+                if (!_validator.Validate(request).IsValid)
+                {
+                    throw new Exception("sus");
+                }
                 var response = 0;
 
                 var obj = new Category();
@@ -36,9 +43,9 @@ namespace Business.CategoryBusiness
                 response = this._context.AddCategory(obj);
                 return response;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
@@ -46,6 +53,10 @@ namespace Business.CategoryBusiness
         {
             try
             {
+                if (!_validator.Validate(request).IsValid)
+                {
+                    throw new Exception("sus");
+                }
                 Category response = null;
 
                 if (String.IsNullOrEmpty(request.Name) || String.IsNullOrWhiteSpace(request.Name))
@@ -61,9 +72,9 @@ namespace Business.CategoryBusiness
                 response = this._context.Update(obj);
                 return response;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 

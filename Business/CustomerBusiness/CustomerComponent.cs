@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +13,20 @@ namespace Business.CustomerBusiness
 {
     public class CustomerComponent : BaseBusiness<ICustomerRepository>, ICustomerComponent
     {
-        public CustomerComponent(ICustomerRepository context) : base(context)
+        private readonly IValidator<CustomerRequest> _validator;
+        public CustomerComponent(ICustomerRepository context, IValidator<CustomerRequest> validator) : base(context)
         {
+            _validator = validator;
         }
 
         public int AddCustomer(CustomerRequest request)
         {
             try
             {
+                if (!_validator.Validate(request).IsValid)
+                {
+                    throw new Exception("sus");
+                }
                 var response = 0;
 
                 var obj = new Customer();
@@ -30,9 +37,9 @@ namespace Business.CustomerBusiness
                 response = this._context.AddCustomer(obj);
                 return response;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
@@ -65,6 +72,10 @@ namespace Business.CustomerBusiness
         {
             try
             {
+                if (!_validator.Validate(request).IsValid)
+                {
+                    throw new Exception("sus");
+                }
                 Customer response;
 
                 var obj = new Customer();
@@ -76,9 +87,9 @@ namespace Business.CustomerBusiness
                 response = this._context.Update(obj);
                 return response;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
     }
