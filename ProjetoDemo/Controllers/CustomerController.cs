@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoDemo.Controllers.Base;
 using System;
@@ -41,6 +42,23 @@ namespace ProjetoDemo.Controllers
             catch (Exception err)
             {
                 return NotFound(err.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("/login")]
+        public IActionResult Login([FromBody]CustomerLoginRequest customer)
+        {
+            try
+            {
+                var token = ComponentCurrent.Login(customer);
+                return Ok();
+            }
+            catch (Exception err)
+            {
+
+                return BadRequest(err);
             }
         }
 

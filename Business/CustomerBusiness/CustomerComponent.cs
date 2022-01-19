@@ -3,10 +3,13 @@ using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
 using System;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Model.Response;
 
 namespace Business.CustomerBusiness
 {
@@ -22,10 +25,17 @@ namespace Business.CustomerBusiness
             {
                 var response = 0;
 
-                var obj = new Customer();
-                obj.Name = request.Name;
-                obj.Email = request.Email;
-                obj.Active = request.Active;
+                var obj = MappingEntity<Customer>(request);
+                
+                if (_context.EmailExist(obj))
+                {
+                    throw new Exception("email is already in use");
+                }
+
+                Byte[] saltByte = GenerateSalt();
+
+                obj.Hash = HashPassword(request.password, saltByte);
+                obj.Salt = Convert.ToBase64String(saltByte);
 
                 response = this._context.AddCustomer(obj);
                 return response;
@@ -36,19 +46,59 @@ namespace Business.CustomerBusiness
             }
         }
 
-        public Customer GetCostumerById(int id)
+        public CustomerResponse GetCostumerById(int id)
         {
             try
             {
                 var response = this._context.GetCustomerById(id);
-                return response;
+                var customerResponse = MappingEntity<CustomerResponse>(response);
+                return customerResponse;
             }
             catch (Exception err)
             {
                 throw err;
             }
         }
+        public CustomerResponse Login(CustomerLoginRequest request)
+        {
+            try
+            {
+                // busco o id pelo email do customer para depois fazer um mapeamento do request para o tipo Customer
+                // após isso busco o Salt do user com o id buscado e uso ele pra fazer o hashing da password que o usuário inseriu
+                var requestMapped = MappingEntity<CustomerRequest>(request);
+                Customer customerDB = _context.GetCustomerByCustomerRequest(requestMapped);
 
+                var customerMapped = MappingEntity<Customer>(request);
+                customerMapped.Id = customerDB.Id;
+
+                customerMapped.Salt = customerDB.Salt;
+
+                byte[] salt = Encoding.ASCII.GetBytes(customerMapped.Salt);
+
+                customerMapped.Hash = HashPassword(request.password, salt);
+
+
+                if (customerMapped.Hash == customerDB.Hash)
+                {
+                    var customerResponse = MappingEntity<CustomerResponse>(customerMapped);
+
+                    Cart cart = new Cart();
+                    cart.IdCustomer = customerResponse.Id;
+                    cart.Active = true;
+                    var idCart = _context.AddCart(cart);
+
+                    customerResponse.IdCart = idCart;
+
+                    return customerResponse;
+                }
+                throw new Exception("wrong password");
+            }
+            catch (Exception err)
+            {
+
+                throw err;
+            }
+        }
         public void Remove(int id)
         {
             try
@@ -61,25 +111,47 @@ namespace Business.CustomerBusiness
             }
         }
 
-        public Customer Update(CustomerRequest request, int id)
+        public CustomerResponse Update(CustomerRequest request, int id)
         {
             try
             {
                 Customer response;
 
-                var obj = new Customer();
+                var obj = MappingEntity<Customer>(request);
                 obj.Id = id;
-                obj.Name = request.Name;
-                obj.Email = request.Email;
-                obj.Active = request.Active;
 
                 response = this._context.Update(obj);
-                return response;
+
+                var customerResponse = MappingEntity<CustomerResponse>(response);
+                return customerResponse;
             }
             catch (Exception err)
             {
                 throw err;
             }
+        }
+
+        private String HashPassword(String password, Byte[] salt)
+        {
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: password,
+            salt: salt,
+            prf: KeyDerivationPrf.HMACSHA256,
+            iterationCount: 100000,
+            numBytesRequested: 256 / 8));
+
+            return hashed;
+        }
+
+        private Byte[] GenerateSalt()
+        {
+            byte[] salt = new byte[128 / 8];
+            using (var rngCsp = new RNGCryptoServiceProvider())
+            {
+                rngCsp.GetNonZeroBytes(salt);
+            }
+            //Convert.ToBase64String(salt)
+            return salt;
         }
     }
 }

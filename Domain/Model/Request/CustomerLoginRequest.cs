@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Model.Request
 {
-    public class CustomerRequest : BaseRequest
+    public class CustomerLoginRequest : BaseRequest
     {
-        public string Name { get; set; }
         public string Email { get; set; }
         public string password { get; set; }
     }

@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Model.Request;
+using Domain.Model.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,9 @@ namespace Domain.Interfaces
     public interface ICustomerComponent
     {
         int AddCustomer(CustomerRequest request);
-        Customer GetCostumerById(int id);
-        Customer Update(CustomerRequest request, int id);
+        CustomerResponse Login(CustomerLoginRequest request);
+        CustomerResponse GetCostumerById(int id);
+        CustomerResponse Update(CustomerRequest request, int id);
         void Remove(int id);
     }
 }
