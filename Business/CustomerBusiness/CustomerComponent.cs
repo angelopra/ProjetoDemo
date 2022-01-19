@@ -18,10 +18,13 @@ namespace Business.CustomerBusiness
     public class CustomerComponent : BaseBusiness<ICustomerRepository>, ICustomerComponent
     {
         private readonly IValidator<CustomerRequest> _validator;
+        private readonly IValidator<CustomerLoginRequest> _validatorLogin;
         private List<ValidateError> errors = null;
-        public CustomerComponent(ICustomerRepository context, IValidator<CustomerRequest> validator) : base(context)
+        private List<ValidateError> loginErrors = null;
+        public CustomerComponent(ICustomerRepository context, IValidator<CustomerRequest> validator, IValidator<CustomerLoginRequest> validator_login) : base(context)
         {
             _validator = validator;
+            _validatorLogin = validator_login;
         }
 
         public int AddCustomer(CustomerRequest request)
@@ -77,6 +80,11 @@ namespace Business.CustomerBusiness
             {
                 // busco o id pelo email do customer para depois fazer um mapeamento do request para o tipo Customer
                 // após isso busco o Salt do user com o id buscado e uso ele pra fazer o hashing da password que o usuário inseriu
+                loginErrors = ValidadeCustomerLoginRequest(request);
+                if (errors != null)
+                {
+                    throw new Exception();
+                }
                 var requestMapped = MappingEntity<CustomerRequest>(request);
                 Customer customerDB = _context.GetCustomerByCustomerRequest(requestMapped);
 
@@ -107,8 +115,8 @@ namespace Business.CustomerBusiness
             }
             catch (Exception err)
             {
-
-                throw err;
+                MapperException(err, errors);
+                throw; throw err;
             }
         }
         public void Remove(int id)
@@ -166,6 +174,23 @@ namespace Business.CustomerBusiness
                 }
             }
             return errors;
+        }
+        private List<ValidateError> ValidadeCustomerLoginRequest(CustomerLoginRequest request)
+        {
+            loginErrors = null;
+            var validate = _validatorLogin.Validate(request);
+            if (!validate.IsValid)
+            {
+                loginErrors = new List<ValidateError>();
+                foreach (var failure in validate.Errors)
+                {
+                    var error = new ValidateError();
+                    error.PropertyName = failure.PropertyName;
+                    error.Error = failure.ErrorMessage;
+                    loginErrors.Add(error);
+                }
+            }
+            return loginErrors;
         }
 
         private String HashPassword(String password, Byte[] salt)
