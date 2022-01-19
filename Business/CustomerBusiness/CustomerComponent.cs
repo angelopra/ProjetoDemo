@@ -2,6 +2,8 @@
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using Domain.Validators;
+using FluentValidation;
 using System;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -15,14 +17,23 @@ namespace Business.CustomerBusiness
 {
     public class CustomerComponent : BaseBusiness<ICustomerRepository>, ICustomerComponent
     {
-        public CustomerComponent(ICustomerRepository context) : base(context)
+        private readonly IValidator<CustomerRequest> _validator;
+        private List<ValidateError> errors = null;
+        public CustomerComponent(ICustomerRepository context, IValidator<CustomerRequest> validator) : base(context)
         {
+            _validator = validator;
         }
 
         public int AddCustomer(CustomerRequest request)
         {
             try
             {
+                errors = ValidadeCustomerRequest(request);
+                if (errors != null)
+                {
+                    throw new Exception();
+                }
+                
                 var response = 0;
 
                 var obj = MappingEntity<Customer>(request);
@@ -42,7 +53,8 @@ namespace Business.CustomerBusiness
             }
             catch (Exception err)
             {
-                throw err;
+                MapperException(err, errors);
+                throw;
             }
         }
 
@@ -115,6 +127,12 @@ namespace Business.CustomerBusiness
         {
             try
             {
+                errors = ValidadeCustomerRequest(request);
+                if (errors != null)
+                {
+                    throw new Exception();
+                }
+
                 Customer response;
 
                 var obj = MappingEntity<Customer>(request);
@@ -127,8 +145,27 @@ namespace Business.CustomerBusiness
             }
             catch (Exception err)
             {
-                throw err;
+                MapperException(err, errors);
+                throw;
             }
+        }
+
+        private List<ValidateError> ValidadeCustomerRequest(CustomerRequest request)
+        {
+            errors = null;
+            var validate = _validator.Validate(request);
+            if (!validate.IsValid)
+            {
+                errors = new List<ValidateError>();
+                foreach (var failure in validate.Errors)
+                {
+                    var error = new ValidateError();
+                    error.PropertyName = failure.PropertyName;
+                    error.Error = failure.ErrorMessage;
+                    errors.Add(error);
+                }
+            }
+            return errors;
         }
 
         private String HashPassword(String password, Byte[] salt)

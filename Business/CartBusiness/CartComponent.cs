@@ -8,31 +8,41 @@ using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Entities.Base;
 using Domain.Entities;
+using FluentValidation;
+using Domain.Validators;
 
 namespace Business.CartBusiness
 {
     public class CartComponent : BaseBusiness<ICartRepository>, ICartComponent
     {
-        public CartComponent(ICartRepository context) : base(context)
+        private readonly IValidator<CartRequest> _validator;
+        private List<ValidateError> errors;
+        public CartComponent(ICartRepository context, IValidator<CartRequest> validator) : base(context)
         {
+            _validator = validator;
         }
 
         public int AddCart(CartRequest request)
         {
             try
             {
+                errors = ValidadeCartRequest(request);
+                if (errors != null)
+                {
+                    throw new Exception();
+                }
+
                 var response = 0;
 
-                var obj = new Cart();
-                obj.Active = request.Active;
-                obj.IdCustomer = request.IdCustomer;
+                var obj = MappingEntity<Cart>(request);
 
                 response = this._context.AddCart(obj);
                 return response;
             }
             catch (Exception err)
             {
-                throw err;
+                MapperException(err, errors);
+                throw;
             }
         }
 
@@ -82,20 +92,43 @@ namespace Business.CartBusiness
         {
             try
             {
+                errors = ValidadeCartRequest(request);
+                if (errors != null)
+                {
+                    throw new Exception();
+                }
+
                 Cart response;
 
-                var obj = new Cart();
+                var obj = MappingEntity<Cart>(request);
                 obj.Id = id;
-                obj.Active = request.Active;
-                obj.IdCustomer = request.IdCustomer;
 
                 response = _context.Update(obj);
                 return response;
             }
             catch (Exception err)
             {
-                throw err;
+                MapperException(err, errors);
+                throw;
             }
+        }
+
+        private List<ValidateError> ValidadeCartRequest(CartRequest request)
+        {
+            errors = null;
+            var validate = _validator.Validate(request);
+            if (!validate.IsValid)
+            {
+                errors = new List<ValidateError>();
+                foreach (var failure in validate.Errors)
+                {
+                    var error = new ValidateError();
+                    error.PropertyName = failure.PropertyName;
+                    error.Error = failure.ErrorMessage;
+                    errors.Add(error);
+                }
+            }
+            return errors;
         }
     }
 }

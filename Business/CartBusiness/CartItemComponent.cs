@@ -3,6 +3,8 @@ using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Model.Response;
+using Domain.Validators;
+using FluentValidation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,46 +16,51 @@ namespace Business.CartBusiness
 {
     public class CartItemComponent : BaseBusiness<ICartItemRepository>, ICartItemComponent
     {
-        public CartItemComponent(ICartItemRepository context) : base(context)
+        private readonly IValidator<CartItemRequest> _validator;
+        private readonly IValidator<CartItemUpdateRequest> _updateValidator;
+        private List<ValidateError> errors;
+        private List<ValidateError> updateErrors;
+
+        public CartItemComponent(ICartItemRepository context, IValidator<CartItemRequest> validator, IValidator<CartItemUpdateRequest> updateValidator)
+            : base(context)
         {
+            _validator = validator;
+            _updateValidator = updateValidator;
         }
 
-        public CartItemModelResponse AddCartItem(CartItemRequest request) // talvez mudar isso aqui pra retornar o CartItemModelResponse ou o CartItem (retornar o objeto inteiro pra facilitar a vida do front end pq ele n precisaria fazer um get)
+        public CartItemModelResponse AddCartItem(CartItemRequest request)
         {
             try
             {
-                if(CartItemExists(request))
+                errors = ValidadeCartItemRequest(request);
+                if (errors != null)
                 {
-                    var cart = _context.GetCartById(request.IdCart);
-                    cart.Total += request.UnitPrice * request.Quantity;
-                    _context.UpdateCart(cart);
+                    throw new Exception();
+                }
 
-                    var increasedItem = IncreaseCartItem(request);
-                    increasedItem = _context.Update(increasedItem);
+                CartItem obj;
 
-                    var item = CartItemMapper(increasedItem);
-                    return item;
+                // Updating correspondent cart Total value
+                var cart = _context.GetCartById(request.IdCart);
+                cart.Total += request.UnitPrice * request.Quantity;
+                _context.UpdateCart(cart);
+
+                if (CartItemExists(request))
+                {
+                    obj = IncreaseCartItem(request);
+                    obj = _context.Update(obj);
                 }
                 else
                 {
-                    var obj = new CartItem();
-                    obj.Active = request.Active;
-                    obj.IdCart = request.IdCart;
-                    obj.IdProduct = request.IdProduct;
-                    obj.UnitPrice = request.UnitPrice;
-                    obj.Quantity = request.Quantity;
-
-                    var cart = _context.GetCartById(obj.IdCart);
-                    cart.Total += obj.UnitPrice * obj.Quantity;
-                    _context.UpdateCart(cart);
-
-                    var response = CartItemMapper(_context.AddCartItem(obj));
-                    return response;
+                    obj = MappingEntity<CartItem>(request);
+                    obj = _context.AddCartItem(obj);
                 }
+                return CartItemMapper(obj);
             }
             catch (Exception err)
             {
-                throw err;
+                MapperException(err, errors);
+                throw;
             }
         }
 
@@ -94,9 +101,10 @@ namespace Business.CartBusiness
         {
             try
             {
-                var cart = _context.GetCartById(idCart);
                 var cartItem = CartItemByIdProductAndByIdCart(idCart, idProduct);
 
+                // Updating correspondent cart Total value
+                var cart = _context.GetCartById(idCart);
                 cart.Total -= cartItem.UnitPrice * cartItem.Quantity;
                 _context.UpdateCart(cart);
 
@@ -112,13 +120,18 @@ namespace Business.CartBusiness
         {
             try
             {
-                var cart = _context.GetCartById(idCart);
+                updateErrors = ValidadeCartItemUpdateRequest(request);
+                if (updateErrors != null)
+                {
+                    throw new Exception();
+                }
                 var cartItem = CartItemByIdProductAndByIdCart(idCart, idProduct);
 
+                // Updating correspondent cart Total value
+                var cart = _context.GetCartById(idCart);
                 decimal initialTotal = cartItem.Quantity * cartItem.UnitPrice;
                 decimal finalTotal = request.Quantity * request.UnitPrice;
                 decimal difference = finalTotal - initialTotal;
-
                 cart.Total += difference;
                 _context.UpdateCart(cart);
 
@@ -133,7 +146,8 @@ namespace Business.CartBusiness
             }
             catch (Exception err)
             {
-                throw err;
+                MapperException(err, updateErrors);
+                throw;
             }
         }
         
@@ -165,6 +179,41 @@ namespace Business.CartBusiness
         private CartItem IncreaseCartItem(CartItemRequest cartItem)
         {
             return _context.IncreaseCartItem(cartItem);
+        }
+
+        private List<ValidateError> ValidadeCartItemRequest(CartItemRequest request)
+        {
+            errors = null;
+            var validate = _validator.Validate(request);
+            if (!validate.IsValid)
+            {
+                errors = new List<ValidateError>();
+                foreach (var failure in validate.Errors)
+                {
+                    var error = new ValidateError();
+                    error.PropertyName = failure.PropertyName;
+                    error.Error = failure.ErrorMessage;
+                    errors.Add(error);
+                }
+            }
+            return errors;
+        }
+        private List<ValidateError> ValidadeCartItemUpdateRequest(CartItemUpdateRequest request)
+        {
+            updateErrors = null;
+            var validate = _updateValidator.Validate(request);
+            if (!validate.IsValid)
+            {
+                updateErrors = new List<ValidateError>();
+                foreach (var failure in validate.Errors)
+                {
+                    var error = new ValidateError();
+                    error.PropertyName = failure.PropertyName;
+                    error.Error = failure.ErrorMessage;
+                    updateErrors.Add(error);
+                }
+            }
+            return updateErrors;
         }
     }
 }

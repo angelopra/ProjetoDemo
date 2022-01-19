@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Domain.Validators;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,5 +78,31 @@ namespace Business.Base
             }
         }
         #endregion
+
+        public Exception MapperException(Exception exception, List<ValidateError> errors = null)
+        {
+            exception.Data.Add("Success", false);
+            if (errors != null)
+            {
+                foreach (var error in errors)
+                {
+                    var exists = exception.Data.Contains(error.PropertyName);
+                    if (!exists)
+                    {
+                        exception.Data.Add(error.PropertyName, error.Error);
+                    }
+                    else
+                    {
+                        exception.Data[error.PropertyName] += $", {error.Error}";
+                    }
+                }
+            }
+            else
+            {
+                exception.Data.Add("Message", exception.Message);
+            }
+
+            return exception;
+        }
     }
 }

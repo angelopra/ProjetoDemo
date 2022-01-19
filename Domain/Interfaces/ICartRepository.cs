@@ -11,11 +11,8 @@ namespace Domain.Interfaces
     public interface ICartRepository
     {
         int AddCart(Cart request);
-
         Cart GetCartById(int id);
-
         Cart Update(Cart request);
-
         void Remove(int id);
         int RemoveAllItems(int id);
     }
