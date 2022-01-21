@@ -81,7 +81,7 @@ namespace Business.CustomerBusiness
                 // busco o id pelo email do customer para depois fazer um mapeamento do request para o tipo Customer
                 // após isso busco o Salt do user com o id buscado e uso ele pra fazer o hashing da password que o usuário inseriu
                 loginErrors = ValidadeCustomerLoginRequest(request);
-                if (errors != null)
+                if (loginErrors != null)
                 {
                     throw new Exception();
                 }
@@ -116,7 +116,7 @@ namespace Business.CustomerBusiness
             catch (Exception err)
             {
                 MapperException(err, errors);
-                throw; throw err;
+                throw;
             }
         }
         public void Remove(int id)
