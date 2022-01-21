@@ -93,7 +93,7 @@ namespace Business.CustomerBusiness
 
                 customerMapped.Salt = customerDB.Salt;
 
-                byte[] salt = Encoding.ASCII.GetBytes(customerMapped.Salt);
+                byte[] salt = Convert.FromBase64String(customerMapped.Salt);
 
                 customerMapped.Hash = HashPassword(request.password, salt);
 
