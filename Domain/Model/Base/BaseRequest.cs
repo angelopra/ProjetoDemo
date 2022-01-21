@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Model.Base
 {
-    public class ShoppingCart
+    public class BaseRequest
     {
-        public int Id { get; set; }
+        public bool Active { get; set; }
     }
 }

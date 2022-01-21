@@ -1,6 +1,7 @@
 using Business.CategoryBusiness;
 using Business.CustomerBusiness;
 using Business.ProductBusiness;
+using Business.CartBusiness;
 using DataBase;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +17,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain.Validators;
+using Domain.Model.Request;
+using FluentValidation;
 
 namespace ProjetoDemo
 {
@@ -33,9 +37,20 @@ namespace ProjetoDemo
         {
             services.AddDataBaseModule(Configuration);
 
+            // Entities DI
             services.AddScoped<IProductComponent, ProductComponent>();
             services.AddScoped<ICategoryComponent, CategoryComponent>();
             services.AddScoped<ICustomerComponent, CustomerComponent>();
+            services.AddScoped<ICartComponent, CartComponent>();
+            services.AddScoped<ICartItemComponent, CartItemComponent>();
+
+            // Validators DI
+            services.AddScoped<IValidator<CartItemUpdateRequest>, CartItemUpdateValidator>();
+            services.AddScoped<IValidator<CartItemRequest>, CartItemValidator>();
+            services.AddScoped<IValidator<CartRequest>, CartValidator>();
+            services.AddScoped<IValidator<CategoryRequest>, CategoryValidator>();
+            services.AddScoped<IValidator<CustomerRequest>, CustomerValidator>();
+            services.AddScoped<IValidator<ProductRequest>, ProductValidator>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

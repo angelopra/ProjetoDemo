@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Domain.Model.Base;
+using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Model.Request
 {
-    public class CategoryRequest
+    public class CategoryRequest : BaseRequest
     {
         public string Name { get; set; }
-        public bool Active { get; set; }
     }
 }

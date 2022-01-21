@@ -1,8 +1,10 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoDemo.Controllers.Base;
+using System;
 
 namespace ProjetoDemo.Controllers
 {
@@ -15,34 +17,79 @@ namespace ProjetoDemo.Controllers
         }
 
         [HttpPost]
-        public int Create(CustomerRequest request)
+        public IActionResult Create(CustomerRequest request)
         {
-            var responseMethod = this.ComponentCurrent.AddCustomer(request);
-            return responseMethod;
+            try
+            {
+                var responseMethod = this.ComponentCurrent.AddCustomer(request);
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Data);
+            }
         }
 
         [HttpGet]
         [Route("{id}")]
-        public Customer GetCostumerById(int id)
+        public IActionResult GetCostumerById(int id)
         {
-            var responseMethod = this.ComponentCurrent.GetCostumerById(id);
-            return responseMethod;
+            try
+            {
+                var responseMethod = this.ComponentCurrent.GetCostumerById(id);
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("/login")]
+        public IActionResult Login([FromBody]CustomerLoginRequest customer)
+        {
+            try
+            {
+                var token = ComponentCurrent.Login(customer);
+                return Ok();
+            }
+            catch (Exception err)
+            {
+
+                return BadRequest(err);
+            }
         }
 
         [HttpPut]
         [Route("{id}")]
-        public Customer Update(CustomerRequest request, int id)
+        public IActionResult Update(CustomerRequest request, int id)
         {
-            var responseMethod = this.ComponentCurrent.Update(request, id);
-            return responseMethod;
+            try
+            {
+                var responseMethod = this.ComponentCurrent.Update(request, id);
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Data);
+            }
         }
 
         [HttpDelete]
         [Route("{id}")]
         public IActionResult Remove(int id)
         {
-            this.ComponentCurrent.Remove(id);
-            return Ok();
+            try
+            {
+                this.ComponentCurrent.Remove(id);
+                return Ok();
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Message);
+            }
         }
     }
 }

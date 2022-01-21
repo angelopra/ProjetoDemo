@@ -2,30 +2,28 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Customer : EntityBase
+    public class Cart : EntityBase
     {
         [Key]
-        [JsonPropertyName("IdCustomer")]
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public int IdCustomer { get; set; }
+
+        [ForeignKey(nameof(IdCustomer))]
+        public Customer Customer { get; set; }
 
         [Required]
-        public string Email { get; set; }
+        public decimal Total { get; set; }
 
         [Required]
-        public string Hash { get; set; }
-
-        [Required]
-        public string Salt { get; set; }
-
+        public bool IsClosed { get; set; }
     }
 }

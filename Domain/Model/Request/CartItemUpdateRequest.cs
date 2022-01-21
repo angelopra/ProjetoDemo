@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Model.Request
 {
-    public class CustomerRequest : BaseRequest
+    public class CartItemUpdateRequest : BaseRequest
     {
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string password { get; set; }
+        public decimal UnitPrice { get; set; }
+        public int Quantity { get; set; }
     }
 }

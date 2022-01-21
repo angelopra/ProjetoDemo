@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Model.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Model.Request
 {
-    public class ProductRequest
+    public class ProductRequest : BaseRequest
     {
         public string Name { get; set; }
 
@@ -20,6 +21,5 @@ namespace Domain.Model.Request
 
         public int IdCategory { get; set; }
 
-        public bool Active { get; set; }
     }
 }

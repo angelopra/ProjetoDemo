@@ -71,7 +71,7 @@ namespace DataBase.Repository
             }
             catch (Exception err)
             {
-                throw;
+                throw err;
             }
         }
 

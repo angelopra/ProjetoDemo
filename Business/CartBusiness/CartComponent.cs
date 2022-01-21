@@ -1,36 +1,32 @@
-﻿using Business.Base;
-using DataBase.Context;
-using DataBase.Repository;
-using Domain.Entities;
-using Domain.Interfaces;
-using Domain.Model.Request;
-using Domain.Validators;
-using FluentValidation;
-using System;
+﻿using System;
+using Business.Base;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Interfaces;
+using Domain.Model.Request;
+using Domain.Entities.Base;
+using Domain.Entities;
+using FluentValidation;
+using Domain.Validators;
 
-namespace Business.ProductBusiness
+namespace Business.CartBusiness
 {
-    public class ProductComponent : BaseBusiness<IProductRepository>, IProductComponent
+    public class CartComponent : BaseBusiness<ICartRepository>, ICartComponent
     {
-        private ICategoryComponent _categoryComponent;
-        private readonly IValidator<ProductRequest> _validator;
+        private readonly IValidator<CartRequest> _validator;
         private List<ValidateError> errors;
-        public ProductComponent(IProductRepository context, ICategoryComponent categoryComponent, IValidator<ProductRequest> validator)
-            : base(context)
+        public CartComponent(ICartRepository context, IValidator<CartRequest> validator) : base(context)
         {
-            _categoryComponent = categoryComponent;
             _validator = validator;
         }
 
-        public int AddProduct(ProductRequest request)
+        public int AddCart(CartRequest request)
         {
             try
             {
-                errors = ValidadeProductRequest(request);
+                errors = ValidadeCartRequest(request);
                 if (errors != null)
                 {
                     throw new Exception();
@@ -38,20 +34,9 @@ namespace Business.ProductBusiness
 
                 var response = 0;
 
-                var obj = MappingEntity<Product>(request);
+                var obj = MappingEntity<Cart>(request);
 
-                if (String.IsNullOrEmpty(obj.Name) || String.IsNullOrWhiteSpace(obj.Name))
-                {
-                    throw new Exception("Insert a name");
-                }
-
-                var category = _categoryComponent.GetCategoryById(request.IdCategory);
-                if(category != null)
-                {
-                    obj.Category = category;
-                }
-
-                response = this._context.AddProduct(obj);
+                response = this._context.AddCart(obj);
                 return response;
             }
             catch (Exception err)
@@ -61,11 +46,11 @@ namespace Business.ProductBusiness
             }
         }
 
-        public Product GetProductById(int id)
+        public Cart GetCartById(int id)
         {
             try
             {
-                var response = this._context.GetProductById(id);
+                var response = this._context.GetCartById(id);
                 return response;
             }
             catch (Exception err)
@@ -86,27 +71,37 @@ namespace Business.ProductBusiness
             }
         }
 
-        public Product Update(ProductRequest request, int id)
+        public int RemoveAllItems(int id)
         {
-            List<ValidateError> errors = null;
             try
             {
-                errors = ValidadeProductRequest(request);
+                var numberDeleted = _context.RemoveAllItems(id);
+                var cart = _context.GetCartById(id);
+                cart.Total = 0;
+                _context.Update(cart);
+
+                return numberDeleted;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+
+        public Cart Update(CartRequest request, int id)
+        {
+            try
+            {
+                errors = ValidadeCartRequest(request);
                 if (errors != null)
                 {
                     throw new Exception();
                 }
 
-                Product response;
+                Cart response;
 
-                var obj = MappingEntity<Product>(request);
+                var obj = MappingEntity<Cart>(request);
                 obj.Id = id;
-
-                var category = _categoryComponent.GetCategoryById(request.IdCategory);
-                if (category != null)
-                {
-                    obj.Category = category;
-                }
 
                 response = _context.Update(obj);
                 return response;
@@ -118,7 +113,7 @@ namespace Business.ProductBusiness
             }
         }
 
-        private List<ValidateError> ValidadeProductRequest(ProductRequest request)
+        private List<ValidateError> ValidadeCartRequest(CartRequest request)
         {
             errors = null;
             var validate = _validator.Validate(request);

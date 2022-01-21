@@ -1,31 +1,25 @@
-﻿using Domain.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 using Domain.Interfaces;
-using Domain.Model.Request;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using ProjetoDemo.Controllers.Base;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Domain.Model.Request;
+using Domain.Entities.Base;
+using Domain.Entities;
 
-namespace ProjetoDemo.Controllers
+namespace ProjetoDemo.Controllers.Base
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class ProductController : BaseController<IProductComponent>
+    public class CartController : BaseController<ICartComponent>
     {
-        public ProductController([FromServices] IProductComponent contract) : base(contract)
+        public CartController([FromServices] ICartComponent contract) : base(contract)
         {
-
         }
 
         [HttpPost]
-        public IActionResult Create(ProductRequest request)
+        public IActionResult Create([FromBody]CartRequest request)
         {
             try
             {
-                var responseMethod = this.ComponentCurrent.AddProduct(request);
+                var responseMethod = this.ComponentCurrent.AddCart(request);
                 return Ok(responseMethod);
             }
             catch (Exception err)
@@ -36,22 +30,22 @@ namespace ProjetoDemo.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetProductById(int id)
+        public IActionResult GetCartById(int id)
         {
             try
             {
-                var responseMethod = this.ComponentCurrent.GetProductById(id);
+                var responseMethod = this.ComponentCurrent.GetCartById(id);
                 return Ok(responseMethod);
             }
             catch (Exception err)
             {
-                return BadRequest(err.Message);
+                return NotFound(err.Message);
             }
         }
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update(ProductRequest request, int id)
+        public IActionResult Update([FromBody]CartRequest request, int id)
         {
             try
             {
@@ -75,8 +69,24 @@ namespace ProjetoDemo.Controllers
             }
             catch (Exception err)
             {
-                return NotFound(err.Message);
+                return BadRequest(err.Message);
             }
         }
+
+        [HttpDelete]
+        [Route("/reset/{id}")]
+        public IActionResult RemoveAllItems(int id)
+        {
+            try
+            {
+                var numberDeleted = ComponentCurrent.RemoveAllItems(id);
+                return Ok(numberDeleted);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
+
     }
 }

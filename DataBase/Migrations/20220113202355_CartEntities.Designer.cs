@@ -4,14 +4,16 @@ using DataBase.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataBase.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220113202355_CartEntities")]
+    partial class CartEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,13 +60,13 @@ namespace DataBase.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreateUTC")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdCart")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdProduct")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -75,9 +77,9 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdCart");
+                    b.HasIndex("CartId");
 
-                    b.HasIndex("IdProduct");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("CartItem");
                 });
@@ -121,15 +123,7 @@ namespace DataBase.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Hash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Salt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -189,13 +183,13 @@ namespace DataBase.Migrations
                 {
                     b.HasOne("Domain.Entities.Cart", "Cart")
                         .WithMany()
-                        .HasForeignKey("IdCart")
+                        .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("IdProduct")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
