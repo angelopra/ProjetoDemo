@@ -13,7 +13,7 @@ namespace Domain.Validators
         public CustomerLoginValidator()
         {
             RuleFor(cus => cus.Active).NotNull();
-            RuleFor(cus => cus.password).NotNull();
+            RuleFor(cus => cus.password).NotNull().Length(7, 30);
             RuleFor(cus => cus.Email).NotNull().EmailAddress();
         }
     }
