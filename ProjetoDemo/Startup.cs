@@ -50,6 +50,7 @@ namespace ProjetoDemo
             services.AddScoped<IValidator<CartRequest>, CartValidator>();
             services.AddScoped<IValidator<CategoryRequest>, CategoryValidator>();
             services.AddScoped<IValidator<CustomerRequest>, CustomerValidator>();
+            services.AddScoped<IValidator<CustomerLoginRequest>, CustomerLoginValidator>();
             services.AddScoped<IValidator<ProductRequest>, ProductValidator>();
 
             services.AddControllers();

@@ -44,11 +44,11 @@ namespace DataBase.Repository
                 throw err;
             }
         }
-        public Customer GetCustomerByCustomerRequest(CustomerRequest request)
+        public Customer GetCustomerByCustomerEmail(string email)
         {
             try
             {
-                var customer = _context.Customer.Where(c => c.Email == request.Email).FirstOrDefault();
+                var customer = _context.Customer.Where(c => c.Email == email).FirstOrDefault();
                 return customer;
             }
             catch (Exception err)

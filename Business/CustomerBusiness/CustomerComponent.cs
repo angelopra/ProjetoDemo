@@ -21,7 +21,8 @@ namespace Business.CustomerBusiness
         private readonly IValidator<CustomerLoginRequest> _validatorLogin;
         private List<ValidateError> errors = null;
         private List<ValidateError> loginErrors = null;
-        public CustomerComponent(ICustomerRepository context, IValidator<CustomerRequest> validator, IValidator<CustomerLoginRequest> validator_login) : base(context)
+        public CustomerComponent(ICustomerRepository context, IValidator<CustomerRequest> validator, IValidator<CustomerLoginRequest> validator_login)
+            : base(context)
         {
             _validator = validator;
             _validatorLogin = validator_login;
@@ -81,12 +82,12 @@ namespace Business.CustomerBusiness
                 // busco o id pelo email do customer para depois fazer um mapeamento do request para o tipo Customer
                 // após isso busco o Salt do user com o id buscado e uso ele pra fazer o hashing da password que o usuário inseriu
                 loginErrors = ValidadeCustomerLoginRequest(request);
-                if (errors != null)
+                if (loginErrors != null)
                 {
                     throw new Exception();
                 }
                 var requestMapped = MappingEntity<CustomerRequest>(request);
-                Customer customerDB = _context.GetCustomerByCustomerRequest(requestMapped);
+                Customer customerDB = _context.GetCustomerByCustomerEmail(requestMapped.Email);
 
                 var customerMapped = MappingEntity<Customer>(request);
                 customerMapped.Id = customerDB.Id;
@@ -116,7 +117,7 @@ namespace Business.CustomerBusiness
             catch (Exception err)
             {
                 MapperException(err, errors);
-                throw; throw err;
+                throw;
             }
         }
         public void Remove(int id)

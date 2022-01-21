@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Validators
 {
-    internal class CustomerLoginValidator : AbstractValidator<CustomerLoginRequest>
+    public class CustomerLoginValidator : AbstractValidator<CustomerLoginRequest>
     {
         public CustomerLoginValidator()
         {

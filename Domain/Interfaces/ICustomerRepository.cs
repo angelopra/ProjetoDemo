@@ -13,7 +13,7 @@ namespace Domain.Interfaces
         int AddCustomer(Customer request);
 
         Customer GetCustomerById(int id);
-        Customer GetCustomerByCustomerRequest(CustomerRequest request);
+        Customer GetCustomerByCustomerEmail(string email);
         Customer Update(Customer request);
         int AddCart(Cart request);
         bool EmailExist(Customer obj);
