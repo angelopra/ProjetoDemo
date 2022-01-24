@@ -55,7 +55,7 @@ namespace Business.CartBusiness
                     obj = MappingEntity<CartItem>(request);
                     obj = _context.AddCartItem(obj);
                 }
-                return CartItemMapper(obj);
+                return MappingEntity<CartItemModelResponse>(obj); 
             }
             catch (Exception err)
             {
@@ -69,7 +69,7 @@ namespace Business.CartBusiness
             try
             {
                 var item = CartItemByIdProductAndByIdCart(idCart, idProduct);
-                var response = CartItemMapper(item);
+                var response = MappingEntity<CartItemModelResponse>(item);
                 return response;
             }
             catch(Exception err)
@@ -87,7 +87,7 @@ namespace Business.CartBusiness
 
                 foreach(CartItem item in responseDataBase)
                 {
-                    response.Add(CartItemMapper(item));
+                    response.Add(MappingEntity<CartItemModelResponse>(item));
                 }
                 return response;
             }
@@ -140,7 +140,7 @@ namespace Business.CartBusiness
 
                 var responseDataBase = _context.Update(cartItem);
 
-                CartItemModelResponse response = CartItemMapper(responseDataBase);
+                CartItemModelResponse response = MappingEntity<CartItemModelResponse>(responseDataBase); 
 
                 return response;
             }
@@ -150,21 +150,6 @@ namespace Business.CartBusiness
                 throw;
             }
         }
-        
-        private CartItemModelResponse CartItemMapper(CartItem request)
-        {
-            CartItemModelResponse response;
-
-            response = new CartItemModelResponse();
-            response.Id = request.Id;
-            response.Quantity = request.Quantity;
-            response.UnitPrice = request.UnitPrice;
-            response.IdCart = request.IdCart;
-            response.IdProduct = request.IdProduct;
-
-            return response;
-        }
-
         private CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct)
         {
             var response = _context.CartItemByIdProductAndByIdCart(idCart, idProduct);

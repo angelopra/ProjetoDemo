@@ -10,6 +10,7 @@ using Domain.Entities.Base;
 using Domain.Entities;
 using FluentValidation;
 using Domain.Validators;
+using Domain.Model.Response;
 
 namespace Business.CartBusiness
 {
@@ -46,12 +47,13 @@ namespace Business.CartBusiness
             }
         }
 
-        public Cart GetCartById(int id)
+        public CartResponse GetCartById(int id)
         {
             try
             {
                 var response = this._context.GetCartById(id);
-                return response;
+                var mappedResponse = MappingEntity<CartResponse>(response);
+                return mappedResponse;
             }
             catch (Exception err)
             {
@@ -88,7 +90,7 @@ namespace Business.CartBusiness
             }
         }
 
-        public Cart Update(CartRequest request, int id)
+        public CartResponse Update(CartRequest request, int id)
         {
             try
             {
@@ -104,7 +106,8 @@ namespace Business.CartBusiness
                 obj.Id = id;
 
                 response = _context.Update(obj);
-                return response;
+                var mappedResponse = MappingEntity<CartResponse>(response);
+                return mappedResponse;
             }
             catch (Exception err)
             {

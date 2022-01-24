@@ -9,5 +9,6 @@ namespace Domain.Model.Request
     public class CategoryRequest : BaseRequest
     {
         public string Name { get; set; }
+
     }
 }

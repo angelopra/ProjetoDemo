@@ -53,7 +53,7 @@ namespace ProjetoDemo.Controllers
             try
             {
                 var token = ComponentCurrent.Login(customer);
-                return Ok();
+                return Ok(token);
             }
             catch (Exception err)
             {

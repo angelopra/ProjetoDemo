@@ -6,15 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities.Base;
 using Domain.Entities;
+using Domain.Model.Response;
 
 namespace Domain.Interfaces
 {
     public interface ICartComponent
     {
         int AddCart(CartRequest request);
-        Cart Update(CartRequest request, int id);
+        CartResponse Update(CartRequest request, int id);
         void Remove(int id);
-        Cart GetCartById(int id);
+        CartResponse GetCartById(int id);
         int RemoveAllItems(int id);
     }
 }
