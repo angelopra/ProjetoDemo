@@ -35,6 +35,12 @@
     <Compile Include="Migrations\20220114175433_CartUpdatedNames.Designer.cs" />
     <Compile Include="Migrations\20220118192959_passwordProperty.cs" />
     <Compile Include="Migrations\20220118192959_passwordProperty.Designer.cs" />
+    <Compile Include="Migrations\20220121221545_OrderEntity.cs" />
+    <Compile Include="Migrations\20220121221545_OrderEntity.Designer.cs" />
+    <Compile Include="Migrations\20220124194214_OrderDiscounts.cs" />
+    <Compile Include="Migrations\20220124194214_OrderDiscounts.Designer.cs" />
+    <Compile Include="Migrations\20220124200746_OrderSubtotal.cs" />
+    <Compile Include="Migrations\20220124200746_OrderSubtotal.Designer.cs" />
     <Compile Include="Migrations\CoreDbContextModelSnapshot.cs" />
   </ItemGroup>
 

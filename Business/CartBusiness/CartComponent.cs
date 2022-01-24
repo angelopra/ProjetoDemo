@@ -98,12 +98,12 @@ namespace Business.CartBusiness
                     throw new Exception();
                 }
 
-                Cart response;
+                var cart = _context.GetCartById(id);
+                cart.Active = request.Active;
+                cart.IdCustomer = request.IdCustomer;
+                cart.IsClosed = request.IsClosed;
+                var response = _context.Update(cart);
 
-                var obj = MappingEntity<Cart>(request);
-                obj.Id = id;
-
-                response = _context.Update(obj);
                 return response;
             }
             catch (Exception err)

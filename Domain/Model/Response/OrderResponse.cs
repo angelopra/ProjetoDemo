@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +13,10 @@ namespace Domain.Model.Response
         [JsonPropertyName("IdOrder")]
         public int Id { get; set; }
         public int IdCart { get; set; }
+        public List<CartItemModelResponse> Items { get; set; }
+        public decimal Subtotal { get; set; }
+        public decimal Discounts { get; set; }
         public decimal Total { get; set; }
-        public bool Concluded { get; set; }
-        public bool Active { get; set; }
         public DateTime CreateUTC { get; set; }
     }
 }

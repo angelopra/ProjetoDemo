@@ -21,6 +21,7 @@ namespace DataBase.Context
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Cart> Cart { get; set; }
         public virtual DbSet<CartItem> CartItem { get; set; }
+        public virtual DbSet<Order> Order { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

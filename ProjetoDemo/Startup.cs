@@ -2,6 +2,7 @@ using Business.CategoryBusiness;
 using Business.CustomerBusiness;
 using Business.ProductBusiness;
 using Business.CartBusiness;
+using Business.OrderBusiness;
 using DataBase;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -43,6 +44,7 @@ namespace ProjetoDemo
             services.AddScoped<ICustomerComponent, CustomerComponent>();
             services.AddScoped<ICartComponent, CartComponent>();
             services.AddScoped<ICartItemComponent, CartItemComponent>();
+            services.AddScoped<IOrderComponent, OrderComponent>();
 
             // Validators DI
             services.AddScoped<IValidator<CartItemUpdateRequest>, CartItemUpdateValidator>();
@@ -52,6 +54,7 @@ namespace ProjetoDemo
             services.AddScoped<IValidator<CustomerRequest>, CustomerValidator>();
             services.AddScoped<IValidator<CustomerLoginRequest>, CustomerLoginValidator>();
             services.AddScoped<IValidator<ProductRequest>, ProductValidator>();
+            services.AddScoped<IValidator<OrderRequest>, OrderValidator>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

@@ -129,6 +129,10 @@ namespace Business.CartBusiness
 
                 // Updating correspondent cart Total value
                 var cart = _context.GetCartById(idCart);
+                if (cart.IsClosed)
+                {
+                    throw new Exception("Cart is closed, cannot update");
+                }
                 decimal initialTotal = cartItem.Quantity * cartItem.UnitPrice;
                 decimal finalTotal = request.Quantity * request.UnitPrice;
                 decimal difference = finalTotal - initialTotal;

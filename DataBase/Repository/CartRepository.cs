@@ -109,9 +109,9 @@ namespace DataBase.Repository
                 this._context.SaveChanges();
                 return request;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw new Exception("Cart not found");
             }
         }
     }

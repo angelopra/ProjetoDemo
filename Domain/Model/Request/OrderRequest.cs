@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Model.Request
 {
-    public class OrderRequest : BaseRequest
+    public class OrderRequest
     {
         public int IdCart { get; set; }
-        public decimal Total { get; set; }
+        public decimal Discounts { get; set; }
     }
 }

@@ -34,13 +34,7 @@ namespace Business.CategoryBusiness
                 }
 
                 var response = 0;
-
                 var obj = MappingEntity<Category>(request);
-
-                if (String.IsNullOrEmpty(obj.Name) || String.IsNullOrWhiteSpace(obj.Name))
-                {
-                    throw new Exception("Insert a name");
-                }
 
                 response = this._context.AddCategory(obj);
                 return response;
