@@ -91,10 +91,22 @@ namespace DataBase.Repository
 
         public CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct)
         {
-            var response = _context.CartItem.Where(c => c.IdCart == idCart && c.IdProduct == idProduct)
-                    .Include(n => n.Cart)
-                    .FirstOrDefault();
-            return response;
+            try
+            {
+                var response = _context.CartItem.Where(c => c.IdCart == idCart && c.IdProduct == idProduct)
+                        .Include(n => n.Cart)
+                        .FirstOrDefault();
+                if (response == null)
+                {
+                    throw new Exception("cart or product doesn't exist");
+                }
+                return response;
+            }
+            catch (Exception err)
+            {
+
+                throw err;
+            }
         }
 
         private bool CartExists(int id)

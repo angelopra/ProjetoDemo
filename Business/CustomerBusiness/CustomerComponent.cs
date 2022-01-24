@@ -91,6 +91,7 @@ namespace Business.CustomerBusiness
 
                 var customerMapped = MappingEntity<Customer>(request);
                 customerMapped.Id = customerDB.Id;
+                customerMapped.Name = customerDB.Name;
 
                 customerMapped.Salt = customerDB.Salt;
 
