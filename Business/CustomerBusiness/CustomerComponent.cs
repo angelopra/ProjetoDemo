@@ -21,7 +21,8 @@ namespace Business.CustomerBusiness
         private readonly IValidator<CustomerLoginRequest> _validatorLogin;
         private List<ValidateError> errors = null;
         private List<ValidateError> loginErrors = null;
-        public CustomerComponent(ICustomerRepository context, IValidator<CustomerRequest> validator, IValidator<CustomerLoginRequest> validator_login) : base(context)
+        public CustomerComponent(ICustomerRepository context, IValidator<CustomerRequest> validator, IValidator<CustomerLoginRequest> validator_login)
+            : base(context)
         {
             _validator = validator;
             _validatorLogin = validator_login;
@@ -90,6 +91,7 @@ namespace Business.CustomerBusiness
 
                 var customerMapped = MappingEntity<Customer>(request);
                 customerMapped.Id = customerDB.Id;
+                customerMapped.Name = customerDB.Name;
 
                 customerMapped.Salt = customerDB.Salt;
 
