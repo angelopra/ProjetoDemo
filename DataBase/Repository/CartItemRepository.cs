@@ -144,7 +144,7 @@ namespace DataBase.Repository
 
         }
 
-        public CartItem IncreaseCartItem(CartItemRequest cartItem) // incrementa a quantidade de produtos e retorna o id do CartItem
+        public CartItem IncreaseCartItem(CartItemRequest cartItem)
         {   
             try
             {

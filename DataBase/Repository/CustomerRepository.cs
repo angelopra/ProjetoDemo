@@ -36,7 +36,14 @@ namespace DataBase.Repository
             try
             {
                 Customer customer = this._context.Customer.Where(c => c.Id == id).FirstOrDefault();
-                return customer;
+                if (customer != null)
+                {
+                    return customer;
+                }
+                else
+                {
+                    throw new Exception("Customer doesn't exist");
+                }
             }
             catch (Exception err)
             {
@@ -49,7 +56,14 @@ namespace DataBase.Repository
             try
             {
                 var customer = _context.Customer.Where(c => c.Email == request.Email).FirstOrDefault();
-                return customer;
+                if (customer != null)
+                {
+                    return customer;
+                }
+                else
+                {
+                    throw new Exception("Customer doesn't exist");
+                }
             }
             catch (Exception err)
             {
@@ -68,10 +82,14 @@ namespace DataBase.Repository
                     this._context.Customer.Remove(customer);
                     this._context.SaveChanges();
                 }
+                else
+                {
+                    throw new Exception("Customer doesn't exist");
+                }
             }
             catch (Exception err)
             {
-                throw;
+                throw err;
             }
         }
 
@@ -85,7 +103,7 @@ namespace DataBase.Repository
             }
             catch (Exception err)
             {
-                throw;
+                throw err;
             }
         }
 
