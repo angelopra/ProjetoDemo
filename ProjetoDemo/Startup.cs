@@ -64,7 +64,8 @@ namespace ProjetoDemo
             #region Autentication
             // Configurando a dependência para a classe de validação
             // de credenciais e geração de tokens
-            services.AddScoped<AuthenticationComponent>();
+            services.AddScoped<IAuthenticationComponent, AuthenticationComponent>();
+            services.AddScoped<IdentityInitializer>();
 
             var tokenConfigurations = new TokenConfiguration();
             new ConfigureFromConfigurationOptions<TokenConfiguration>(
@@ -114,7 +115,7 @@ namespace ProjetoDemo
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IdentityInitializer identityInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -129,6 +130,8 @@ namespace ProjetoDemo
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            identityInitializer.Initialize();
 
             app.UseEndpoints(endpoints =>
             {

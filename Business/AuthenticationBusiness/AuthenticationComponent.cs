@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace Business.AuthenticationBusiness
 {
-    public class AuthenticationComponent : BaseBusiness<IAuthenticationRepository>,  IAuthenticationComponent
+    public class AuthenticationComponent : BaseBusinessComon,  IAuthenticationComponent
     {
         private List<ValidateError> errors;
         private UserManager<AuthorizationUserDB> _userManager;
@@ -35,8 +35,7 @@ namespace Business.AuthenticationBusiness
             TokenConfiguration tokenConfigurations,
             RoleManager<IdentityRole> roleManager,
             SignInManager<AuthorizationUserDB> signInManager,
-            UserManager<AuthorizationUserDB> userManager, 
-            IAuthenticationRepository context) : base(context)
+            UserManager<AuthorizationUserDB> userManager)
         {
             _signInManager = signInManager;
             _signingConfigurations = signingConfigurations;
@@ -62,7 +61,7 @@ namespace Business.AuthenticationBusiness
                 if (userIdentity != null)
                 {
                     var makeLogin = _signInManager.CheckPasswordSignInAsync(userIdentity, request.Password, false).GetAwaiter().GetResult();
-                    if (makeLogin != null)
+                    if (makeLogin.Succeeded)
                     {
                         var getUserRole = _userManager.GetRolesAsync(userIdentity).GetAwaiter().GetResult();
                         userRole = getUserRole.FirstOrDefault();

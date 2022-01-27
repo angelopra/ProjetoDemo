@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ProjetoDemo.Controllers.Base
 {
-    [Authorize]
+    [Authorize("user")]
     [Route("api/[controller]")]
     public class CartController : BaseController<ICartComponent>
     {

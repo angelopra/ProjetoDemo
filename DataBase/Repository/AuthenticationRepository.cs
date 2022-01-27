@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DataBase.Repository
 {
-    public class AuthenticationRepository : BaseRepository<CoreDbContext>, IAuthenticationRepository
+    public class AuthenticationRepository : BaseRepository<AuthenticationContext>, IAuthenticationRepository
     {
-        public AuthenticationRepository(CoreDbContext context) : base(context)
+        public AuthenticationRepository(AuthenticationContext context) : base(context)
         {
         }
     }
