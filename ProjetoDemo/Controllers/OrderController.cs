@@ -1,11 +1,13 @@
 ﻿using Domain.Interfaces;
 using Domain.Model.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoDemo.Controllers.Base;
 using System;
 
 namespace ProjetoDemo.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : BaseController<IOrderComponent>

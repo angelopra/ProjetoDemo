@@ -2,6 +2,7 @@
 using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Model.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoDemo.Controllers.Base;
 using System;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 
 namespace ProjetoDemo.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : BaseController<ICategoryComponent>

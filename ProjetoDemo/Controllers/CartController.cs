@@ -4,9 +4,11 @@ using System;
 using Domain.Model.Request;
 using Domain.Entities.Base;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProjetoDemo.Controllers.Base
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class CartController : BaseController<ICartComponent>
     {

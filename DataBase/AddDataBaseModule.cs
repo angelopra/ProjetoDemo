@@ -1,6 +1,9 @@
 ﻿using DataBase.Context;
 using DataBase.Repository;
+using DataBase.Repository.Base;
+using Domain.Entities.Security;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +24,20 @@ namespace DataBase
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+
+            #region Autentication
+            // Ativando a utilização do ASP.NET Identity, a fim de
+            // permitir a recuperação de seus objetos via injeção de
+            // dependências
+            services.AddIdentity<AuthorizationUserDB, IdentityRole>()
+                .AddEntityFrameworkStores<AuthenticationContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddDbContext<AuthenticationContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            });
+            #endregion
         }
     }
 }

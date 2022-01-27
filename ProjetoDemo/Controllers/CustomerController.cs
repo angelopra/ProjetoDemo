@@ -8,6 +8,7 @@ using System;
 
 namespace ProjetoDemo.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerController : BaseController<ICustomerComponent>

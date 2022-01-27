@@ -1,11 +1,12 @@
 ﻿using Domain.Validators;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using FluentValidation.Results;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Business.Base
 {
@@ -79,6 +80,51 @@ namespace Business.Base
         }
         #endregion
 
+        #region errorHandling
+        public List<ValidateError> ValidateObj<T>(object request)
+        {
+            List<ValidateError> validateErrors = null;
+            Type typeObj = null;
+            Type validatorType = null;
+            dynamic objCurrent = null;
+            dynamic validator = null;
+
+            if (request != null)
+            {
+                validator = Activator.CreateInstance<T>();
+                validatorType = validator.GetType();
+
+                typeObj = request.GetType();
+                objCurrent = Convert.ChangeType(request, typeObj);
+
+                MethodInfo methodValidator = validatorType.GetMethods()
+                                                .Where(m => m.IsPublic
+                                                    && m.IsFinal == true
+                                                    && m.Name == "Validate")
+                                                .FirstOrDefault();
+
+                if (methodValidator != null)
+                {
+                    Object[] parameters = new Object[1];
+                    parameters[0] = objCurrent;
+
+                    var results = (ValidationResult)methodValidator.Invoke(validator, parameters);
+                    if (!results.IsValid)
+                    {
+                        validateErrors = new List<ValidateError>();
+                        foreach (var failure in results.Errors)
+                        {
+                            var error = new ValidateError();
+                            error.PropertyName = failure.PropertyName;
+                            error.Error = failure.ErrorMessage;
+                            validateErrors.Add(error);
+                        }
+                    }
+                }
+            }
+            return validateErrors;
+        }
+
         public Exception MapperException(Exception exception, List<ValidateError> errors = null)
         {
             exception.Data.Add("Success", false);
@@ -104,5 +150,6 @@ namespace Business.Base
 
             return exception;
         }
+        #endregion
     }
 }
