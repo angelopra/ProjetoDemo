@@ -46,17 +46,6 @@ namespace Business.AuthenticationBusiness
                 }
             }
 
-            //if (!_roleManager.RoleExistsAsync(_tokenConfigurations.AccessRole).Result)
-            //{
-            //    var resultado = _roleManager.CreateAsync(
-            //        new IdentityRole(_tokenConfigurations.AccessRole)).Result;
-            //    if (!resultado.Succeeded)
-            //    {
-            //        throw new Exception(
-            //            $"Erro durante a criação da role {_tokenConfigurations.AccessRole}.");
-            //    }
-            //}
-
             var userInitial = _userManager.FindByNameAsync("admin").GetAwaiter().GetResult();
             if (userInitial == null)
             {
