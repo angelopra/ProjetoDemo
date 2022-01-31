@@ -12,6 +12,7 @@ namespace ProjetoDemo.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
+    [ApiController]
     public class CartItemController : BaseController<ICartItemComponent>
     {
         public CartItemController([FromServices] ICartItemComponent contract) : base(contract)
