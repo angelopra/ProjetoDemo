@@ -94,7 +94,7 @@ namespace Business.OrderBusiness
 
                 foreach (Order order in responseDataBase)
                 {
-                    itemsModeled.Clear();
+                    itemsModeled = new List<CartItemModelResponse>();
                     items = _context.GetItemsByCartId(order.IdCart);
                     foreach (var item in items)
                     {
