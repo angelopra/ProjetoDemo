@@ -13,7 +13,7 @@ namespace Domain.Interfaces
     public interface ICartItemRepository
     {
         CartItem AddCartItem(CartItem request);
-        IEnumerable GetCartItens(int idCart);
+        IQueryable<CartItem> GetCartItens(int idCart);
         CartItem Update(CartItem request);
         void Remove(int idCart, int idProduct);
         CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct);
