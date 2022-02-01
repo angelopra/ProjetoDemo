@@ -1,5 +1,4 @@
 ﻿using Business.Base;
-using Business.Pagination;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
@@ -79,18 +78,17 @@ namespace Business.CartBusiness
             }
         }
 
-        public IEnumerable GetCartItens(int idCart, int? pageNumber)
+        public IEnumerable GetCartItens(int idCart)
         {
             try
             {
+                var responseDataBase = _context.GetCartItens(idCart);
                 List<CartItemModelResponse> response = new List<CartItemModelResponse>();
 
-                var paginatedItemList = PaginatedList<CartItem>.Create(_context.GetCartItens(idCart), pageNumber ?? 1, 10);
-                foreach (CartItem item in paginatedItemList)
+                foreach(CartItem item in responseDataBase)
                 {
                     response.Add(MappingEntity<CartItemModelResponse>(item));
                 }
-                
                 return response;
             }
             catch (Exception err)
