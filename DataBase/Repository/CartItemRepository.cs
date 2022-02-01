@@ -34,14 +34,17 @@ namespace DataBase.Repository
             }
         }
 
-        public IEnumerable GetCartItens(int idCart)
+        public IQueryable<CartItem> GetCartItens(int idCart)
         {
             try
             {
                 if(CartExists(idCart))
                 {
-                    List<CartItem> items = _context.CartItem.Where(c => c.IdCart == idCart).ToList();
-                    return items;
+                    //List<CartItem> items = _context.CartItem.Where(c => c.IdCart == idCart).ToList();
+                    var query = from c in _context.CartItem 
+                                where c.IdCart == idCart 
+                                select c;
+                    return query;
                 }
                 else
                 {
