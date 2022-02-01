@@ -85,5 +85,19 @@ namespace ProjetoDemo.Controllers
                 return NotFound(err.Message);
             }
         }
+
+        [HttpGet]
+        public IActionResult GetAllCategories()
+        {
+            try
+            {
+                var responseMethod = ComponentCurrent.GetAllCategories();
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Message);
+            }
+        }
     }
 }

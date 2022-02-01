@@ -101,6 +101,19 @@ namespace Business.CategoryBusiness
             }
         }
 
+        public List<Category> GetAllCategories()
+        {
+            try
+            {
+                var response = _context.GetAllCategories();
+                return response;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+
         public List<Category> GetCategorys(CategoryQueryRequest request)
         {
             try
