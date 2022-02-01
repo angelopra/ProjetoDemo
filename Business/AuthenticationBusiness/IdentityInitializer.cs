@@ -33,7 +33,8 @@ namespace Business.AuthenticationBusiness
         public void Initialize()
         {
             //List<IdentityResult> roles = new List<IdentityResult>();
-            foreach (PropertyInfo property in typeof(AccessRoles).GetProperties())
+            Type roles = typeof(AccessRoles);
+            foreach (var property in roles.GetProperties())
             {
                 if (!_roleManager.RoleExistsAsync(property.Name).Result)
                 {
