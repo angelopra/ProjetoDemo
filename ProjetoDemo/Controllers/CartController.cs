@@ -4,16 +4,20 @@ using System;
 using Domain.Model.Request;
 using Domain.Entities.Base;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProjetoDemo.Controllers.Base
 {
+    [Authorize(Roles = "Admin,User")]
     [Route("api/[controller]")]
+    [ApiController]
     public class CartController : BaseController<ICartComponent>
     {
         public CartController([FromServices] ICartComponent contract) : base(contract)
         {
         }
 
+        [Authorize(Roles = "User")]
         [HttpPost]
         public IActionResult Create([FromBody]CartRequest request)
         {

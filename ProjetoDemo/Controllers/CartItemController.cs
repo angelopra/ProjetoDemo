@@ -6,10 +6,13 @@ using Domain.Model.Request;
 using System.Collections.Generic;
 using Domain.Model.Response;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProjetoDemo.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
+    [ApiController]
     public class CartItemController : BaseController<ICartItemComponent>
     {
         public CartItemController([FromServices] ICartItemComponent contract) : base(contract)

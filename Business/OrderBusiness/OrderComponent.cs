@@ -89,11 +89,12 @@ namespace Business.OrderBusiness
                 var responseDataBase = _context.GetOrdersByCustomerId(customerId);
                 List<OrderResponse> response = new List<OrderResponse>();
                 List<CartItem> items = new List<CartItem>();
-                List<CartItemModelResponse> itemsModeled = new List<CartItemModelResponse>();
-                OrderResponse orderResponse = new OrderResponse();
+                List<CartItemModelResponse> itemsModeled;
+                OrderResponse orderResponse;
 
                 foreach (Order order in responseDataBase)
                 {
+                    itemsModeled = new List<CartItemModelResponse>();
                     items = _context.GetItemsByCartId(order.IdCart);
                     foreach (var item in items)
                     {

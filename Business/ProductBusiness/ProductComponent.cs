@@ -4,6 +4,7 @@ using DataBase.Repository;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using Domain.Model.Response;
 using Domain.Validators;
 using FluentValidation;
 using System;
@@ -74,6 +75,20 @@ namespace Business.ProductBusiness
             }
         }
 
+        public List<ProductListResponse> GetProductsByCategoryId(int categoryId)
+        {
+            try
+            {
+                var response = _context.GetProductsByCategoryId(categoryId);
+                var mappedResponse = MappingEntity<List<ProductListResponse>>(response);
+                return mappedResponse;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+
         public void Remove(int id)
         {
             try
@@ -135,5 +150,6 @@ namespace Business.ProductBusiness
             }
             return errors;
         }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoDemo.Controllers.Base;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace ProjetoDemo.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : BaseController<IProductComponent>
@@ -41,6 +43,21 @@ namespace ProjetoDemo.Controllers
             try
             {
                 var responseMethod = this.ComponentCurrent.GetProductById(id);
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("allProductsFromCategory/{categoryId}")]
+        public IActionResult GetProductsByCategoryId(int categoryId)
+        {
+            try
+            {
+                var responseMethod = ComponentCurrent.GetProductsByCategoryId(categoryId);
                 return Ok(responseMethod);
             }
             catch (Exception err)
