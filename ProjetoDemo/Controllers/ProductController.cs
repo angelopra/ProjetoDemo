@@ -51,6 +51,21 @@ namespace ProjetoDemo.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("allProductsFromCategory/{categoryId}")]
+        public IActionResult GetProductsByCategoryId(int categoryId)
+        {
+            try
+            {
+                var responseMethod = ComponentCurrent.GetProductsByCategoryId(categoryId);
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
+
         [HttpPut]
         [Route("{id}")]
         public IActionResult Update(ProductRequest request, int id)

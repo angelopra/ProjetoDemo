@@ -51,6 +51,19 @@ namespace DataBase.Repository
             }
         }
 
+        public List<Category> GetAllCategories()
+        {
+            try
+            {
+                var categories = _context.Category.ToList();
+                return categories;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+
         public IQueryable<Category> GetCategorys(List<int> requestList = null)
         {
             var response = this._context.Category.AsNoTracking();

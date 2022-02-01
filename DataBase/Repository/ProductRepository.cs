@@ -4,6 +4,7 @@ using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DataBase.Repository
@@ -44,6 +45,24 @@ namespace DataBase.Repository
                 {
                     throw new Exception("Product doesn't exist");
                 }
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+
+        public List<Product> GetProductsByCategoryId(int categoryId)
+        {
+            try
+            {
+                var products = _context.Product.Where(p => p.Category.Id == categoryId).ToList();
+                var category = _context.Category.Where(c => c.Id == categoryId).FirstOrDefault();
+                if (category == null)
+                {
+                    throw new Exception("Category doesn't exist");
+                }
+                return products;
             }
             catch (Exception err)
             {

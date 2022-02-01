@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Model.Request;
+using Domain.Model.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Domain.Interfaces
     {
         int AddProduct(ProductRequest request);
         Product GetProductById(int id);
+        List<ProductListResponse> GetProductsByCategoryId(int categoryId);
         Product Update(ProductRequest request, int id);
         void Remove(int id);
     }
