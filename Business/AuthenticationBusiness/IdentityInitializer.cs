@@ -1,6 +1,7 @@
 ﻿using DataBase.Repository.Base;
 using Domain.Entities;
 using Domain.Entities.Security;
+using Domain.Model.Request;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -45,19 +46,24 @@ namespace Business.AuthenticationBusiness
                     }
                 }
             }
+        }
 
-            var userInitial = _userManager.FindByNameAsync("admin").GetAwaiter().GetResult();
-            if (userInitial == null)
+        public void Create(UserCreateRequest request)
+        {
+            var userFound = _userManager.FindByNameAsync(request.UserName).GetAwaiter().GetResult();
+            if (userFound != null)
             {
-                CreateUser(
+                throw new Exception("Username already in use");
+            }
+            CreateUser(
                 new AuthorizationUserDB()
                 {
-                    UserName = "admin",
-                    Email = "teste@teste.com.br",
+                    UserName = request.UserName,
+                    Email = request.Email,
                     EmailConfirmed = true
-                }, "@Admin123", _tokenConfigurations.AccessRole);
-            }
+                }, request.Password, request.Role);
         }
+
         private void CreateUser(
             AuthorizationUserDB user,
             string password,
