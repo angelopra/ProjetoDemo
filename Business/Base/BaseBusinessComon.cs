@@ -142,5 +142,22 @@ namespace Business.Base
             return exception;
         }
         #endregion
+
+        public string EnumGetValue<T>(T value)
+        {
+            var enumType = typeof(T);
+            var values = System.Enum.GetValues(enumType);
+
+            foreach (var item in values)
+            {
+                if (item.ToString() == value.ToString())
+                {
+                    var name = System.Enum.Format(enumType, value, "g");
+
+                    return name;
+                }
+            }
+            return null;
+        }
     }
 }

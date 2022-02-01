@@ -11,6 +11,6 @@ namespace Domain.Interfaces
     public interface IAuthenticationComponent
     {
         TokenResponse ValidateCredentials(AuthenticationRequest request);
-        TokenResponse GenerateToken(AuthenticationRequest request, string userRole);
+        public UserCreateResponse Create(UserCreateRequest request);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Business.Base;
 using Domain.Entities.Security;
+using Domain.Enums;
 using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Model.Response;
@@ -85,7 +86,7 @@ namespace Business.AuthenticationBusiness
             }
             
         }
-        public TokenResponse GenerateToken(AuthenticationRequest request, string userRole)
+        private TokenResponse GenerateToken(AuthenticationRequest request, string userRole)
         {
             try
             {
@@ -124,6 +125,65 @@ namespace Business.AuthenticationBusiness
             catch (Exception err)
             {
                 err = MapperException(err);
+                throw err;
+            }
+        }
+
+        public UserCreateResponse Create(UserCreateRequest request)
+        {
+            try
+            {
+                var userFound = _userManager.FindByNameAsync(request.UserName).GetAwaiter().GetResult();
+                if (userFound != null)
+                {
+                    throw new Exception("Username already in use");
+                }
+                var user = CreateUser(
+                    new AuthorizationUserDB()
+                    {
+                        UserName = request.UserName,
+                        Email = request.Email,
+                        EmailConfirmed = true
+                    }, request.Password, EnumGetValue(request.Role));
+                var userMapped = MappingEntity<UserCreateResponse>(user);
+                return userMapped;
+            }
+            catch (Exception err)
+            {
+                err = MapperException(err);
+                throw err;
+            }
+            
+        }
+
+        private AuthorizationUserDB CreateUser(
+            AuthorizationUserDB user,
+            string password,
+            string initialRole = null)
+        {
+            try
+            {
+                if (_userManager.FindByNameAsync(user.UserName).Result == null)
+                {
+                    var resultado = _userManager
+                        .CreateAsync(user, password).Result;
+
+                    if (resultado.Succeeded &&
+                        !String.IsNullOrWhiteSpace(initialRole))
+                    {
+                        _userManager.AddToRoleAsync(user, initialRole).Wait();
+                    }
+                    else
+                    {
+                        var errors = String.Join(" ", resultado.Errors.Select(e => e.Description));
+                        throw new Exception(errors);
+                    }
+                }
+                return user;
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
         }

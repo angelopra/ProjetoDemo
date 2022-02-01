@@ -47,39 +47,5 @@ namespace Business.AuthenticationBusiness
                 }
             }
         }
-
-        public void Create(UserCreateRequest request)
-        {
-            var userFound = _userManager.FindByNameAsync(request.UserName).GetAwaiter().GetResult();
-            if (userFound != null)
-            {
-                throw new Exception("Username already in use");
-            }
-            CreateUser(
-                new AuthorizationUserDB()
-                {
-                    UserName = request.UserName,
-                    Email = request.Email,
-                    EmailConfirmed = true
-                }, request.Password, request.Role);
-        }
-
-        private void CreateUser(
-            AuthorizationUserDB user,
-            string password,
-            string initialRole = null)
-        {
-            if (_userManager.FindByNameAsync(user.UserName).Result == null)
-            {
-                var resultado = _userManager
-                    .CreateAsync(user, password).Result;
-
-                if (resultado.Succeeded &&
-                    !String.IsNullOrWhiteSpace(initialRole))
-                {
-                    _userManager.AddToRoleAsync(user, initialRole).Wait();
-                }
-            }
-        }
     }
 }
