@@ -10,7 +10,7 @@ namespace Domain.Interfaces
         Category Update(CategoryRequest request, int id);
         void Remove(int id);
         Category GetCategoryById(int id);
-        List<Category> GetAllCategories();
+        List<Category> GetAllCategories(int? pageNumber);
         List<Category> GetCategorys(CategoryQueryRequest request);
     }
 }

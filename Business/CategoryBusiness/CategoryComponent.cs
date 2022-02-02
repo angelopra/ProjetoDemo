@@ -1,4 +1,5 @@
 ﻿using Business.Base;
+using Business.Pagination;
 using DataBase.Context;
 using DataBase.Repository;
 using Domain.Entities;
@@ -101,12 +102,14 @@ namespace Business.CategoryBusiness
             }
         }
 
-        public List<Category> GetAllCategories()
+        public List<Category> GetAllCategories(int? pageNumber)
         {
             try
             {
-                var response = _context.GetAllCategories();
-                return response;
+                var paginatedItemList = PaginatedList<Category>.Create(_context.GetAllCategories(), pageNumber ?? 1, 2);
+
+                //var response = _context.GetAllCategories().ToList();
+                return paginatedItemList;
             }
             catch (Exception err)
             {

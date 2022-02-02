@@ -87,11 +87,12 @@ namespace ProjetoDemo.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllCategories()
+        [Route("allcategories/{pageNumber}")]
+        public IActionResult GetAllCategories(int? pageNumber)
         {
             try
             {
-                var responseMethod = ComponentCurrent.GetAllCategories();
+                var responseMethod = ComponentCurrent.GetAllCategories(pageNumber);
                 return Ok(responseMethod);
             }
             catch (Exception err)
