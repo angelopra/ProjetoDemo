@@ -34,7 +34,7 @@ namespace ProjetoDemo.Controllers
         }
 
         [HttpGet]
-        [Route("{idCart}/{pageNumber}")]
+        [Route("getitens/{idCart}/{pageNumber}")]
         public IActionResult GetCartItens(int idCart, int? pageNumber)
         {
             try

@@ -92,12 +92,11 @@ namespace DataBase.Repository
             }
         }
 
-        public IQueryable<CartItem> CartItemByIdProductAndByIdCart()
+        public IQueryable<CartItem> GetCartItem()
         {
             try
             {
-                var response = from c in _context.CartItem
-                               select c;
+                var response = _context.CartItem.AsNoTracking();
                 return response;
             }
             catch (Exception err)
@@ -122,38 +121,6 @@ namespace DataBase.Repository
             {
                 throw err;
 
-            }
-        }
-
-        public bool CartItemExists(CartItemRequest cartItem)
-        {
-            try
-            {
-                var item = _context.CartItem.Where(c => c.IdCart == cartItem.IdCart && c.IdProduct == cartItem.IdProduct).FirstOrDefault();
-                if (item != null)
-                    return true;
-
-                return false;
-            }
-            catch(Exception err)
-            {
-                throw err;
-            }
-
-        }
-
-        public CartItem IncreaseCartItem(CartItemRequest cartItem)
-        {   
-            try
-            {
-                var item = CartItemByIdProductAndByIdCart(cartItem.IdCart, cartItem.IdProduct);
-                item.Quantity += cartItem.Quantity;
-
-                return item;
-            }
-            catch(Exception err)
-            {
-                throw err;
             }
         }
 

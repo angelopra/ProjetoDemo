@@ -106,10 +106,7 @@ namespace Business.CategoryBusiness
         {
             try
             {
-                //var paginatedItemList = PaginatedList<Category>.Create(_context.GetAllCategories(), pageNumber ?? 1, 2);
                 var response = _context.GetAllCategories().Paginate<Category>(pageNumber, 2);
-
-                //var response = _context.GetAllCategories().ToList();
                 return response;
             }
             catch (Exception err)

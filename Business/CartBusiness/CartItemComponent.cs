@@ -71,8 +71,7 @@ namespace Business.CartBusiness
         {
             try
             {
-                var item = CartItemByIdProductAndByI
-                    dCart(idCart, idProduct);
+                var item = CartItemByIdProductAndByIdCart(idCart, idProduct);
                 var response = item.Map<CartItemModelResponse>();
                 return response;
             }
@@ -86,15 +85,7 @@ namespace Business.CartBusiness
         {
             try
             {
-                List<CartItemModelResponse> response = new List<CartItemModelResponse>();
-                var list = _context.GetCartItens(idCart);
-
-                //var paginatedItemList = PaginatedList<CartItem>.Create(_context.GetCartItens(idCart), pageNumber ?? 1, 2);
-
                 var paginatedItemList = _context.GetCartItens(idCart).Paginate<CartItem>(pageNumber, 2).Map<List<CartItemModelResponse>>();
-
-                //response = MappingEntity<List<CartItemModelResponse>>(paginatedItemList);
-                //response = paginatedItemList.Map<List<CartItemModelResponse>>();
 
                 return paginatedItemList;
             }
@@ -163,7 +154,7 @@ namespace Business.CartBusiness
         }
         private CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct)
         {
-            var query = _context.CartItemByIdProductAndByIdCart();
+            var query = _context.GetCartItem();
             var response = query.Where(c => c.IdCart == idCart && c.IdProduct == idProduct).Include(n => n.Cart).FirstOrDefault();
             if (response == null)
             {
@@ -174,12 +165,28 @@ namespace Business.CartBusiness
 
         private bool CartItemExists(CartItemRequest cartItem)
         {
-            return _context.CartItemExists(cartItem);
+            var query = _context.GetCartItem();
+
+            var item = query.Where(c => c.IdCart == cartItem.IdCart && c.IdProduct == cartItem.IdProduct).FirstOrDefault();
+            if (item != null)
+                return true;
+
+            return false;
         }
 
         private CartItem IncreaseCartItem(CartItemRequest cartItem)
         {
-            return _context.IncreaseCartItem(cartItem);
+            try
+            {
+                var item = CartItemByIdProductAndByIdCart(cartItem.IdCart, cartItem.IdProduct);
+                item.Quantity += cartItem.Quantity;
+                return item;
+            }
+            catch (Exception err)
+            {
+
+                throw err;
+            }
         }
 
         private List<ValidateError> ValidadeCartItemRequest(CartItemRequest request)
