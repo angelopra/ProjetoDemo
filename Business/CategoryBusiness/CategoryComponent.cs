@@ -35,7 +35,7 @@ namespace Business.CategoryBusiness
                 }
 
                 var response = 0;
-                var obj = MappingEntity<Category>(request);
+                var obj = request.Map<Category>();
 
                 response = this._context.AddCategory(obj);
                 return response;
@@ -64,7 +64,7 @@ namespace Business.CategoryBusiness
                     throw new Exception("Insert a name");
                 }
 
-                var obj = MappingEntity<Category>(request);
+                var obj = request.Map<Category>();
                 obj.Id = id;
 
                 response = _context.Update(obj);
@@ -106,10 +106,11 @@ namespace Business.CategoryBusiness
         {
             try
             {
-                var paginatedItemList = PaginatedList<Category>.Create(_context.GetAllCategories(), pageNumber ?? 1, 2);
+                //var paginatedItemList = PaginatedList<Category>.Create(_context.GetAllCategories(), pageNumber ?? 1, 2);
+                var response = _context.GetAllCategories().Paginate<Category>(pageNumber, 2);
 
                 //var response = _context.GetAllCategories().ToList();
-                return paginatedItemList;
+                return response;
             }
             catch (Exception err)
             {

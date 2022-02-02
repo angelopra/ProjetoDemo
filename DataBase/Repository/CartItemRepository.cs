@@ -92,17 +92,12 @@ namespace DataBase.Repository
             }
         }
 
-        public CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct)
+        public IQueryable<CartItem> CartItemByIdProductAndByIdCart()
         {
             try
             {
-                var response = _context.CartItem.Where(c => c.IdCart == idCart && c.IdProduct == idProduct)
-                        .Include(n => n.Cart)
-                        .FirstOrDefault();
-                if (response == null)
-                {
-                    throw new Exception("cart or product doesn't exist");
-                }
+                var response = from c in _context.CartItem
+                               select c;
                 return response;
             }
             catch (Exception err)

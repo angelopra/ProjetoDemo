@@ -55,8 +55,8 @@ namespace DataBase.Repository
         {
             try
             {
-                var query = from c in _context.Category
-                            select c;
+                //var query = from c in _context.Category select c;
+                var query = _context.Category.AsNoTracking();
                 //_context.Category.ToList();
                 return query;
             }

@@ -1,11 +1,13 @@
 ﻿using Business.Base;
 using Business.Pagination;
+using DataBase.Repository;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Model.Response;
 using Domain.Validators;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -53,10 +55,10 @@ namespace Business.CartBusiness
                 }
                 else
                 {
-                    obj = MappingEntity<CartItem>(request);
+                    obj = request.Map<CartItem>();
                     obj = _context.AddCartItem(obj);
                 }
-                return MappingEntity<CartItemModelResponse>(obj); 
+                return obj.Map<CartItemModelResponse>();
             }
             catch (Exception err)
             {
@@ -69,11 +71,12 @@ namespace Business.CartBusiness
         {
             try
             {
-                var item = CartItemByIdProductAndByIdCart(idCart, idProduct);
-                var response = MappingEntity<CartItemModelResponse>(item);
+                var item = CartItemByIdProductAndByI
+                    dCart(idCart, idProduct);
+                var response = item.Map<CartItemModelResponse>();
                 return response;
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 throw err;
             }
@@ -84,14 +87,16 @@ namespace Business.CartBusiness
             try
             {
                 List<CartItemModelResponse> response = new List<CartItemModelResponse>();
+                var list = _context.GetCartItens(idCart);
 
-                var paginatedItemList = PaginatedList<CartItem>.Create(_context.GetCartItens(idCart), pageNumber ?? 1, 10);
-                foreach (CartItem item in paginatedItemList)
-                {
-                    response.Add(MappingEntity<CartItemModelResponse>(item));
-                }
-                
-                return response;
+                //var paginatedItemList = PaginatedList<CartItem>.Create(_context.GetCartItens(idCart), pageNumber ?? 1, 2);
+
+                var paginatedItemList = _context.GetCartItens(idCart).Paginate<CartItem>(pageNumber, 2).Map<List<CartItemModelResponse>>();
+
+                //response = MappingEntity<List<CartItemModelResponse>>(paginatedItemList);
+                //response = paginatedItemList.Map<List<CartItemModelResponse>>();
+
+                return paginatedItemList;
             }
             catch (Exception err)
             {
@@ -146,7 +151,7 @@ namespace Business.CartBusiness
 
                 var responseDataBase = _context.Update(cartItem);
 
-                CartItemModelResponse response = MappingEntity<CartItemModelResponse>(responseDataBase); 
+                CartItemModelResponse response = responseDataBase.Map<CartItemModelResponse>();
 
                 return response;
             }
@@ -158,7 +163,12 @@ namespace Business.CartBusiness
         }
         private CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct)
         {
-            var response = _context.CartItemByIdProductAndByIdCart(idCart, idProduct);
+            var query = _context.CartItemByIdProductAndByIdCart();
+            var response = query.Where(c => c.IdCart == idCart && c.IdProduct == idProduct).Include(n => n.Cart).FirstOrDefault();
+            if (response == null)
+            {
+                throw new Exception("cart or product doesn't exist");
+            }
             return response;
         }
 
