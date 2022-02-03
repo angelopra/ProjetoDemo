@@ -102,11 +102,11 @@ namespace Business.CategoryBusiness
             }
         }
 
-        public List<Category> GetAllCategories(int? pageNumber)
+        public List<Category> GetAllCategories(int? pageNumber, int? pageSize)
         {
             try
             {
-                var response = _context.GetAllCategories().Paginate<Category>(pageNumber, 2);
+                var response = _context.GetAllCategories().Paginate(pageNumber, pageSize);
                 return response;
             }
             catch (Exception err)

@@ -75,13 +75,13 @@ namespace Business.ProductBusiness
             }
         }
 
-        public List<ProductListResponse> GetProductsByCategoryId(int categoryId)
+        public List<ProductListResponse> GetProductsByCategoryId(int categoryId, int? pageNumber, int? pageSize)
         {
             try
             {
-                var response = _context.GetProductsByCategoryId(categoryId);
-                var mappedResponse = MappingEntity<List<ProductListResponse>>(response);
-                return mappedResponse;
+                var response = _context.GetProductsByCategoryId(categoryId)
+                    .Paginate(pageNumber, pageSize).Map<List<ProductListResponse>>();
+                return response;
             }
             catch (Exception err)
             {

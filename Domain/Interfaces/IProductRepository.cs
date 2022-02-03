@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Domain.Interfaces
 {
@@ -9,7 +10,7 @@ namespace Domain.Interfaces
 
         Product GetProductById(int id);
 
-        public List<Product> GetProductsByCategoryId(int categoryId);
+        public IQueryable<Product> GetProductsByCategoryId(int categoryId);
 
         Product Update(Product request);
 

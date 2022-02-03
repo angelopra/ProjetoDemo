@@ -70,9 +70,9 @@ namespace Business.Base
             }
         }
 
-        public static PaginatedList<T> Paginate<T>(this IQueryable<T> obj, int? pageNumber, int itemsPerPage)
+        public static PaginatedList<T> Paginate<T>(this IQueryable<T> obj, int? pageNumber, int? itemsPerPage)
         {
-            var list = PaginatedList<T>.Create(obj, pageNumber ?? 1, itemsPerPage);
+            var list = PaginatedList<T>.Create(obj, pageNumber ?? 1, itemsPerPage ?? 100);
             return list;
         }
     }

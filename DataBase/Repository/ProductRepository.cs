@@ -52,11 +52,11 @@ namespace DataBase.Repository
             }
         }
 
-        public List<Product> GetProductsByCategoryId(int categoryId)
+        public IQueryable<Product> GetProductsByCategoryId(int categoryId)
         {
             try
             {
-                var products = _context.Product.Where(p => p.Category.Id == categoryId).ToList();
+                var products = _context.Product.Where(p => p.Category.Id == categoryId);
                 var category = _context.Category.Where(c => c.Id == categoryId).FirstOrDefault();
                 if (category == null)
                 {

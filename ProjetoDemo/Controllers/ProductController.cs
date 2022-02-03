@@ -53,16 +53,16 @@ namespace ProjetoDemo.Controllers
 
         [HttpGet]
         [Route("allProductsFromCategory/{categoryId}")]
-        public IActionResult GetProductsByCategoryId(int categoryId)
+        public IActionResult GetProductsByCategoryId(int categoryId, int? pageNumber, int? pageSize)
         {
             try
             {
-                var responseMethod = ComponentCurrent.GetProductsByCategoryId(categoryId);
+                var responseMethod = ComponentCurrent.GetProductsByCategoryId(categoryId, pageNumber, pageSize);
                 return Ok(responseMethod);
             }
             catch (Exception err)
             {
-                return BadRequest(err.Message);
+                return NotFound(err.Message);
             }
         }
 
