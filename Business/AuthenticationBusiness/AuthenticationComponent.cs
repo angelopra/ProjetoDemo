@@ -145,7 +145,7 @@ namespace Business.AuthenticationBusiness
                         Email = request.Email,
                         EmailConfirmed = true
                     }, request.Password, EnumGetValue(request.Role));
-                var userMapped = MappingEntity<UserCreateResponse>(user);
+                var userMapped =  user.Map<UserCreateResponse>();
                 return userMapped;
             }
             catch (Exception err)
