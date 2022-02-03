@@ -85,7 +85,7 @@ namespace Business.CartBusiness
         {
             try
             {
-                var paginatedItemList = _context.GetCartItens(idCart).Paginate<CartItem>(pageNumber, 2).Map<List<CartItemModelResponse>>();
+                var paginatedItemList = _context.GetCartItens(idCart).Paginate(pageNumber, 2).Map<List<CartItemModelResponse>>();
 
                 return paginatedItemList;
             }
@@ -154,20 +154,14 @@ namespace Business.CartBusiness
         }
         private CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct)
         {
-            var query = _context.GetCartItem();
-            var response = query.Where(c => c.IdCart == idCart && c.IdProduct == idProduct).Include(n => n.Cart).FirstOrDefault();
-            if (response == null)
-            {
-                throw new Exception("cart or product doesn't exist");
-            }
+            var response = _context.GetCartItem(idCart, idProduct);
+            
             return response;
         }
 
         private bool CartItemExists(CartItemRequest cartItem)
         {
-            var query = _context.GetCartItem();
-
-            var item = query.Where(c => c.IdCart == cartItem.IdCart && c.IdProduct == cartItem.IdProduct).FirstOrDefault();
+            var item = _context.GetCartItem(cartItem.IdCart, cartItem.IdProduct);
             if (item != null)
                 return true;
 
@@ -180,6 +174,7 @@ namespace Business.CartBusiness
             {
                 var item = CartItemByIdProductAndByIdCart(cartItem.IdCart, cartItem.IdProduct);
                 item.Quantity += cartItem.Quantity;
+
                 return item;
             }
             catch (Exception err)

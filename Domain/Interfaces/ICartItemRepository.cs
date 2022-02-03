@@ -16,7 +16,7 @@ namespace Domain.Interfaces
         IQueryable<CartItem> GetCartItens(int idCart);
         CartItem Update(CartItem request);
         void Remove(int idCart, int idProduct);
-        IQueryable<CartItem> GetCartItem();
+        CartItem GetCartItem(int idCart, int idProduct);
         Cart GetCartById(int idCart);
         void UpdateCart(Cart cart);
     }

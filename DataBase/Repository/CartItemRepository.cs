@@ -92,11 +92,15 @@ namespace DataBase.Repository
             }
         }
 
-        public IQueryable<CartItem> GetCartItem()
+        public CartItem GetCartItem(int idCart, int idProduct)
         {
             try
             {
-                var response = _context.CartItem.AsNoTracking();
+                var response = _context.CartItem.Where(c => c.IdCart == idCart && c.IdProduct == idProduct).Include(n => n.Cart).FirstOrDefault();
+                if (response == null)
+                {
+                    throw new Exception("cart or product doesn't exist");
+                }
                 return response;
             }
             catch (Exception err)
