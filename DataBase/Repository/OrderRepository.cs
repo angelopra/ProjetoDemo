@@ -24,9 +24,9 @@ namespace DataBase.Repository
                 _context.SaveChanges();
                 return order;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
@@ -35,18 +35,15 @@ namespace DataBase.Repository
             try
             {
                 Cart cart = _context.Cart.Where(c => c.Id == idCart).FirstOrDefault();
-                if(cart != null)
-                {
-                    return cart;
-                }
-                else
+                if(cart == null)
                 {
                     throw new Exception("Cart not found");
                 }
+                return cart;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
@@ -55,14 +52,11 @@ namespace DataBase.Repository
             try
             {
                 Order order = _context.Order.Where(o => o.Id == id).FirstOrDefault();
-                if (order != null)
-                {
-                    return order;
-                }
-                else
+                if (order == null)
                 {
                     throw new Exception("Order not found");
                 }
+                return order;
             }
             catch (Exception err)
             {
@@ -70,22 +64,22 @@ namespace DataBase.Repository
             }
         }
 
-        public List<Order> GetOrdersByCustomerId(int customerId)
+        public IQueryable<Order> GetCustomerOrders(int customerId)
         {
             try
             {
                 var carts = _context.Cart.Where(c => c.IdCustomer == customerId).ToList();
-                List<Order> orders = new List<Order>();
+                var orders = new List<Order>();
                 foreach (var cart in carts)
                 {
                     orders.Add(_context.Order.Where(o => o.IdCart == cart.Id).FirstOrDefault());
                 }
 
-                return orders;
+                return (IQueryable<Order>)orders;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
@@ -96,9 +90,9 @@ namespace DataBase.Repository
                 var cartItems = _context.CartItem.Where(ci => ci.IdCart == idCart).ToList();
                 return cartItems;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
@@ -107,19 +101,16 @@ namespace DataBase.Repository
             try
             {
                 var order = _context.Order.Where(o => o.Id == orderId).FirstOrDefault();
-                if (order != null)
+                if (order == null)
                 {
-                    _context.Order.Remove(order);
-                    _context.SaveChanges();
+                    throw new Exception("Order not found");
                 }
-                else
-                {
-                    throw new Exception("Cart Item not found");
-                }
+                _context.Order.Remove(order);
+                _context.SaveChanges();
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
@@ -130,9 +121,9 @@ namespace DataBase.Repository
                 _context.Cart.Update(cart);
                 _context.SaveChanges();
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
     }

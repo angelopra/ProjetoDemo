@@ -33,20 +33,18 @@ namespace Business.OrderBusiness
                 }
 
                 var obj = MappingEntity<Order>(request);
+
+                // Getting cart info
                 var cartTotal = _context.GetCartById(request.IdCart).Total;
                 obj.Subtotal = cartTotal;
                 obj.Total = cartTotal - request.Discounts;
+
                 var order = _context.CreateOrder(obj);
 
-                var response = MappingEntity<OrderResponse>(order);
+                var response = order.Map<OrderResponse>();
                 var items = _context.GetItemsByCartId(request.IdCart);
-                List<CartItemModelResponse> itemsModeled = new List<CartItemModelResponse>();
 
-                foreach (var item in items)
-                {
-                    itemsModeled.Add(MappingEntity<CartItemModelResponse>(item));
-                }
-                response.Items = itemsModeled;
+                response.Items = items.Map<List<CartItemModelResponse>>();
 
                 CloseCart(request.IdCart);
 
@@ -65,50 +63,40 @@ namespace Business.OrderBusiness
             {
                 var order = _context.GetOrderById(id);
                 var items = _context.GetItemsByCartId(order.IdCart);
-                var response = MappingEntity<OrderResponse>(order);
-                List<CartItemModelResponse> itemsModeled = new List<CartItemModelResponse>();
+                var response = order.Map<OrderResponse>();
 
-                foreach (var item in items)
-                {
-                    itemsModeled.Add(MappingEntity<CartItemModelResponse>(item));
-                }
-                response.Items = itemsModeled;
+                response.Items = items.Map<List<CartItemModelResponse>>();
 
                 return response;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
-        public List<OrderResponse> GetOrdersByCustomerId(int customerId)
+        public List<OrderResponse> GetCustomerOrders(int customerId)
         {
             try
             {
-                var responseDataBase = _context.GetOrdersByCustomerId(customerId);
-                List<OrderResponse> response = new List<OrderResponse>();
-                List<CartItem> items = new List<CartItem>();
-                List<CartItemModelResponse> itemsModeled;
+                var responseDataBase = _context.GetCustomerOrders(customerId);
+                var response = new List<OrderResponse>();
+                List<CartItem> items;
                 OrderResponse orderResponse;
 
                 foreach (Order order in responseDataBase)
                 {
-                    itemsModeled = new List<CartItemModelResponse>();
+                    items = new List<CartItem>();
+                    orderResponse = order.Map<OrderResponse>();
                     items = _context.GetItemsByCartId(order.IdCart);
-                    foreach (var item in items)
-                    {
-                        itemsModeled.Add(MappingEntity<CartItemModelResponse>(item));
-                    }
-                    orderResponse = MappingEntity<OrderResponse>(order);
-                    orderResponse.Items = itemsModeled;
+                    orderResponse.Items = items.Map<List<CartItemModelResponse>>();
                     response.Add(orderResponse);
                 }
                 return response;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
@@ -118,9 +106,9 @@ namespace Business.OrderBusiness
             {
                 _context.RemoveOrder(orderId);
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 

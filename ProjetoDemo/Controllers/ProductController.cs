@@ -27,7 +27,7 @@ namespace ProjetoDemo.Controllers
         {
             try
             {
-                var responseMethod = this.ComponentCurrent.AddProduct(request);
+                var responseMethod = ComponentCurrent.AddProduct(request);
                 return Ok(responseMethod);
             }
             catch (Exception err)
@@ -42,17 +42,17 @@ namespace ProjetoDemo.Controllers
         {
             try
             {
-                var responseMethod = this.ComponentCurrent.GetProductById(id);
+                var responseMethod = ComponentCurrent.GetProductById(id);
                 return Ok(responseMethod);
             }
             catch (Exception err)
             {
-                return BadRequest(err.Message);
+                return NotFound(err.Message);
             }
         }
 
         [HttpGet]
-        [Route("allProductsFromCategory/{categoryId}")]
+        [Route("AllProducts/{categoryId}")]
         public IActionResult GetProductsByCategoryId(int categoryId, int? pageNumber, int? pageSize)
         {
             try
@@ -72,7 +72,7 @@ namespace ProjetoDemo.Controllers
         {
             try
             {
-                var responseMethod = this.ComponentCurrent.Update(request, id);
+                var responseMethod = ComponentCurrent.Update(request, id);
                 return Ok(responseMethod);
             }
             catch (Exception err)
@@ -88,7 +88,7 @@ namespace ProjetoDemo.Controllers
             try
             {
                 this.ComponentCurrent.Remove(id);
-                return Ok();
+                return Ok("Product successfully removed");
             }
             catch (Exception err)
             {

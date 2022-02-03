@@ -36,7 +36,7 @@ namespace ProjetoDemo.Controllers
         {
             try
             {
-                var responseMethod = this.ComponentCurrent.GetOrderById(id);
+                var responseMethod = ComponentCurrent.GetOrderById(id);
                 return Ok(responseMethod);
             }
             catch (Exception err)
@@ -47,11 +47,11 @@ namespace ProjetoDemo.Controllers
 
         [HttpGet]
         [Route("customerOrders/{customerId}")]
-        public IActionResult GetOrdersByCustomerId(int customerId)
+        public IActionResult GetCustomerOrders(int customerId)
         {
             try
             {
-                var responseMethod = ComponentCurrent.GetOrdersByCustomerId(customerId);
+                var responseMethod = ComponentCurrent.GetCustomerOrders(customerId);
                 return Ok(responseMethod);
             }
             catch (Exception err)
