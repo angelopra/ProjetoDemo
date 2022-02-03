@@ -35,7 +35,7 @@ namespace Business.CartBusiness
 
                 var response = 0;
 
-                var obj = MappingEntity<Cart>(request);
+                var obj = request.Map<Cart>();
 
                 response = this._context.AddCart(obj);
                 return response;
@@ -52,7 +52,7 @@ namespace Business.CartBusiness
             try
             {
                 var response = this._context.GetCartById(id);
-                var mappedResponse = MappingEntity<CartResponse>(response);
+                var mappedResponse = response.Map<CartResponse>();
                 return mappedResponse;
             }
             catch (Exception err)
@@ -105,7 +105,7 @@ namespace Business.CartBusiness
                 cart.IdCustomer = request.IdCustomer;
                 cart.IsClosed = request.IsClosed;
                 var response = _context.Update(cart);
-                var responseMapped = MappingEntity<CartResponse>(response);
+                var responseMapped = response.Map<CartResponse>();
                 return responseMapped;
             }
             catch (Exception err)
