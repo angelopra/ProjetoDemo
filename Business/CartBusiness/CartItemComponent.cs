@@ -81,11 +81,11 @@ namespace Business.CartBusiness
             }
         }
 
-        public IEnumerable GetCartItens(int idCart, int? pageNumber)
+        public IEnumerable GetCartItens(int idCart, int? pageNumber, int? pageSize)
         {
             try
             {
-                var paginatedItemList = _context.GetCartItens(idCart).Paginate(pageNumber, 2).Map<List<CartItemModelResponse>>();
+                var paginatedItemList = _context.GetCartItens(idCart).Paginate(pageNumber, pageSize).Map<List<CartItemModelResponse>>();
 
                 return paginatedItemList;
             }
