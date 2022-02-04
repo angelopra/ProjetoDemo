@@ -23,9 +23,9 @@ namespace DataBase.Repository
                 _context.SaveChanges();
                 return request.Id;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
@@ -33,30 +33,27 @@ namespace DataBase.Repository
         {
             try
             {
-                Product product = this._context.Product
+                var product = _context.Product
                                     .Where(c => c.Id == id)
                                     .Include(p => p.Category)
                                     .FirstOrDefault();
-                if (product != null)
-                {
-                    return product;
-                }
-                else
+                if (product == null)
                 {
                     throw new Exception("Product doesn't exist");
                 }
+                return product;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
-        public List<Product> GetProductsByCategoryId(int categoryId)
+        public IQueryable<Product> GetProductsByCategoryId(int categoryId)
         {
             try
             {
-                var products = _context.Product.Where(p => p.Category.Id == categoryId).ToList();
+                var products = _context.Product.Where(p => p.Category.Id == categoryId);
                 var category = _context.Category.Where(c => c.Id == categoryId).FirstOrDefault();
                 if (category == null)
                 {
@@ -64,9 +61,9 @@ namespace DataBase.Repository
                 }
                 return products;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
@@ -74,20 +71,17 @@ namespace DataBase.Repository
         {
             try
             {
-                var product = this._context.Product.Where(c => c.Id == id).FirstOrDefault();
-                if (product != null)
-                {
-                    this._context.Product.Remove(product);
-                    this._context.SaveChanges();
-                }
-                else
+                var product = _context.Product.Where(c => c.Id == id).FirstOrDefault();
+                if (product == null)
                 {
                     throw new Exception("Product doesn't exist");
                 }
+                _context.Product.Remove(product);
+                _context.SaveChanges();
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
@@ -95,11 +89,15 @@ namespace DataBase.Repository
         {
             try
             {
-                this._context.Product.Update(product);
-                this._context.SaveChanges();
+                if (_context.Product.Where(p => p.Id == product.Id).FirstOrDefault() == null)
+                {
+                    throw new Exception("Product doesn't exist");
+                }
+                _context.Product.Update(product);
+                _context.SaveChanges();
                 return product;
             }
-            catch (Exception err)
+            catch
             {
                 throw;
             }

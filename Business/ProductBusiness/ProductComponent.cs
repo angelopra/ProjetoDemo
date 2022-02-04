@@ -39,20 +39,16 @@ namespace Business.ProductBusiness
 
                 var response = 0;
 
-                var obj = MappingEntity<Product>(request);
-
-                if (String.IsNullOrEmpty(obj.Name) || String.IsNullOrWhiteSpace(obj.Name))
-                {
-                    throw new Exception("Insert a name");
-                }
+                var obj = request.Map<Product>();
 
                 var category = _categoryComponent.GetCategoryById(request.IdCategory);
-                if(category != null)
+                if(category == null)
                 {
-                    obj.Category = category;
+                    throw new Exception("Category does not exist");
                 }
+                obj.Category = category;
 
-                response = this._context.AddProduct(obj);
+                response = _context.AddProduct(obj);
                 return response;
             }
             catch (Exception err)
@@ -66,22 +62,22 @@ namespace Business.ProductBusiness
         {
             try
             {
-                var response = this._context.GetProductById(id);
+                var response = _context.GetProductById(id);
                 return response;
             }
-            catch (Exception err)
+            catch
             {
-                throw err;
+                throw;
             }
         }
 
-        public List<ProductListResponse> GetProductsByCategoryId(int categoryId)
+        public List<ProductListResponse> GetProductsByCategoryId(int categoryId, int? pageNumber, int? pageSize)
         {
             try
             {
-                var response = _context.GetProductsByCategoryId(categoryId);
-                var mappedResponse = MappingEntity<List<ProductListResponse>>(response);
-                return mappedResponse;
+                var response = _context.GetProductsByCategoryId(categoryId)
+                    .Paginate(pageNumber, pageSize).Map<List<ProductListResponse>>();
+                return response;
             }
             catch (Exception err)
             {
@@ -93,7 +89,7 @@ namespace Business.ProductBusiness
         {
             try
             {
-                this._context.Remove(id);
+                _context.Remove(id);
             }
             catch (Exception err)
             {
@@ -103,7 +99,6 @@ namespace Business.ProductBusiness
 
         public Product Update(ProductRequest request, int id)
         {
-            List<ValidateError> errors = null;
             try
             {
                 errors = ValidadeProductRequest(request);
@@ -112,18 +107,17 @@ namespace Business.ProductBusiness
                     throw new Exception();
                 }
 
-                Product response;
-
-                var obj = MappingEntity<Product>(request);
+                var obj = request.Map<Product>();
                 obj.Id = id;
 
                 var category = _categoryComponent.GetCategoryById(request.IdCategory);
-                if (category != null)
+                if (category == null)
                 {
-                    obj.Category = category;
+                    throw new Exception("Category does not exist");
                 }
+                obj.Category = category;
 
-                response = _context.Update(obj);
+                var response = _context.Update(obj);
                 return response;
             }
             catch (Exception err)

@@ -12,5 +12,8 @@ namespace Domain.Interfaces
     {
         TokenResponse ValidateCredentials(AuthenticationRequest request);
         public UserCreateResponse Create(UserCreateRequest request);
+        public UserCreateResponse GetUser(string userName);
+        public List<UserCreateResponse> GetAllUsers(int? pageNumber, int? pageSize);
+        public void DeleteUser(string userName);
     }
 }

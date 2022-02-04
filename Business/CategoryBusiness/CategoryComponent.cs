@@ -1,4 +1,5 @@
 ﻿using Business.Base;
+using Business.Pagination;
 using DataBase.Context;
 using DataBase.Repository;
 using Domain.Entities;
@@ -34,7 +35,7 @@ namespace Business.CategoryBusiness
                 }
 
                 var response = 0;
-                var obj = MappingEntity<Category>(request);
+                var obj = request.Map<Category>();
 
                 response = this._context.AddCategory(obj);
                 return response;
@@ -63,7 +64,7 @@ namespace Business.CategoryBusiness
                     throw new Exception("Insert a name");
                 }
 
-                var obj = MappingEntity<Category>(request);
+                var obj = request.Map<Category>();
                 obj.Id = id;
 
                 response = _context.Update(obj);
@@ -101,11 +102,11 @@ namespace Business.CategoryBusiness
             }
         }
 
-        public List<Category> GetAllCategories()
+        public List<Category> GetAllCategories(int? pageNumber, int? pageSize)
         {
             try
             {
-                var response = _context.GetAllCategories();
+                var response = _context.GetAllCategories().Paginate(pageNumber, pageSize);
                 return response;
             }
             catch (Exception err)

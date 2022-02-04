@@ -9,7 +9,6 @@ using System;
 
 namespace ProjetoDemo.Controllers
 {
-    [Authorize(Roles = "Admin,User")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : BaseController<IAuthenticationComponent>
@@ -29,6 +28,51 @@ namespace ProjetoDemo.Controllers
             catch (Exception err)
             {
                 return BadRequest(err.Data);
+            }
+        }
+
+        [HttpGet]
+        [Route("{userName}")]
+        public IActionResult GetUser(string userName)
+        {
+            try
+            {
+                var response = ComponentCurrent.GetUser(userName);
+                return Ok(response);
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Data);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetAllUsers(int? pageNumber, int? pageSize)
+        {
+            try
+            {
+                var response = ComponentCurrent.GetAllUsers(pageNumber, pageSize);
+                return Ok(response);
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Data);
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete]
+        [Route("{userName}")]
+        public IActionResult DeleteUser(string userName)
+        {
+            try
+            {
+                ComponentCurrent.DeleteUser(userName);
+                return Ok("User removed successfully");
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Data);
             }
         }
     }

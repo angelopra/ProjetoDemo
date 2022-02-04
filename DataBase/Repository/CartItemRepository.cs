@@ -34,14 +34,17 @@ namespace DataBase.Repository
             }
         }
 
-        public IEnumerable GetCartItens(int idCart)
+        public IQueryable<CartItem> GetCartItens(int idCart)
         {
             try
             {
                 if(CartExists(idCart))
                 {
-                    List<CartItem> items = _context.CartItem.Where(c => c.IdCart == idCart).ToList();
-                    return items;
+                    //List<CartItem> items = _context.CartItem.Where(c => c.IdCart == idCart).ToList();
+                    var query = from c in _context.CartItem 
+                                where c.IdCart == idCart 
+                                select c;
+                    return query;
                 }
                 else
                 {
@@ -89,13 +92,11 @@ namespace DataBase.Repository
             }
         }
 
-        public CartItem CartItemByIdProductAndByIdCart(int idCart, int idProduct)
+        public CartItem GetCartItem(int idCart, int idProduct)
         {
             try
             {
-                var response = _context.CartItem.Where(c => c.IdCart == idCart && c.IdProduct == idProduct)
-                        .Include(n => n.Cart)
-                        .FirstOrDefault();
+                var response = _context.CartItem.Where(c => c.IdCart == idCart && c.IdProduct == idProduct).Include(n => n.Cart).FirstOrDefault();
                 if (response == null)
                 {
                     throw new Exception("cart or product doesn't exist");
@@ -124,38 +125,6 @@ namespace DataBase.Repository
             {
                 throw err;
 
-            }
-        }
-
-        public bool CartItemExists(CartItemRequest cartItem)
-        {
-            try
-            {
-                var item = _context.CartItem.Where(c => c.IdCart == cartItem.IdCart && c.IdProduct == cartItem.IdProduct).FirstOrDefault();
-                if (item != null)
-                    return true;
-
-                return false;
-            }
-            catch(Exception err)
-            {
-                throw err;
-            }
-
-        }
-
-        public CartItem IncreaseCartItem(CartItemRequest cartItem)
-        {   
-            try
-            {
-                var item = CartItemByIdProductAndByIdCart(cartItem.IdCart, cartItem.IdProduct);
-                item.Quantity += cartItem.Quantity;
-
-                return item;
-            }
-            catch(Exception err)
-            {
-                throw err;
             }
         }
 

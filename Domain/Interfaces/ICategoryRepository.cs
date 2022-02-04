@@ -13,7 +13,7 @@ namespace Domain.Interfaces
         Category Update(Category request);
         void Remove(int id);
         Category GetCategoryById(int id);
-        List<Category> GetAllCategories();
+        IQueryable<Category> GetAllCategories();
         IQueryable<Category> GetCategorys(List<int> requestList = null);
     }
 }

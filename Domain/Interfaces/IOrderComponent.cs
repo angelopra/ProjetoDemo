@@ -13,7 +13,7 @@ namespace Domain.Interfaces
     {
         public OrderResponse CreateOrder(OrderRequest request);
         public OrderResponse GetOrderById(int id);
-        public List<OrderResponse> GetOrdersByCustomerId(int customerId);
+        public List<OrderResponse> GetCustomerOrders(int customerId);
         public void RemoveOrder(int orderId);
     }
 }

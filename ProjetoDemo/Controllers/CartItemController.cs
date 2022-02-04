@@ -34,12 +34,12 @@ namespace ProjetoDemo.Controllers
         }
 
         [HttpGet]
-        [Route("{idCart}")]
-        public IActionResult GetCartItens(int idCart)
+        [Route("getitens/{idCart}")]
+        public IActionResult GetCartItens(int idCart, int? pageNumber, int? pageSize)
         {
             try
             {
-                var response = ComponentCurrent.GetCartItens(idCart);
+                var response = ComponentCurrent.GetCartItens(idCart, pageNumber, pageSize);
                 return Ok(response);
             }
             catch (Exception err)

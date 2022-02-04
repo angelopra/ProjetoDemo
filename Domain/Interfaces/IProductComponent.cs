@@ -13,7 +13,7 @@ namespace Domain.Interfaces
     {
         int AddProduct(ProductRequest request);
         Product GetProductById(int id);
-        List<ProductListResponse> GetProductsByCategoryId(int categoryId);
+        List<ProductListResponse> GetProductsByCategoryId(int categoryId, int? pageNumber, int? pageSize);
         Product Update(ProductRequest request, int id);
         void Remove(int id);
     }

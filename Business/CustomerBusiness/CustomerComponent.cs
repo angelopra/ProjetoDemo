@@ -40,7 +40,7 @@ namespace Business.CustomerBusiness
                 
                 var response = 0;
 
-                var obj = MappingEntity<Customer>(request);
+                var obj = request.Map<Customer>();
                 
                 if (_context.EmailExist(obj))
                 {
@@ -67,7 +67,7 @@ namespace Business.CustomerBusiness
             try
             {
                 var response = this._context.GetCustomerById(id);
-                var customerResponse = MappingEntity<CustomerResponse>(response);
+                var customerResponse = response.Map<CustomerResponse>();
                 return customerResponse;
             }
             catch (Exception err)
@@ -86,10 +86,10 @@ namespace Business.CustomerBusiness
                 {
                     throw new Exception();
                 }
-                var requestMapped = MappingEntity<CustomerRequest>(request);
+                var requestMapped = request.Map<CustomerRequest>();
                 Customer customerDB = _context.GetCustomerByCustomerRequest(requestMapped);
 
-                var customerMapped = MappingEntity<Customer>(request);
+                var customerMapped = request.Map<Customer>();
                 customerMapped.Id = customerDB.Id;
                 customerMapped.Name = customerDB.Name;
 
@@ -102,7 +102,7 @@ namespace Business.CustomerBusiness
 
                 if (customerMapped.Hash == customerDB.Hash)
                 {
-                    var customerResponse = MappingEntity<CustomerResponse>(customerMapped);
+                    var customerResponse = customerMapped.Map<CustomerResponse>();
 
                     Cart cart = new Cart();
                     cart.IdCustomer = customerResponse.Id;
@@ -145,12 +145,12 @@ namespace Business.CustomerBusiness
 
                 Customer response;
 
-                var obj = MappingEntity<Customer>(request);
+                var obj = request.Map<Customer>();
                 obj.Id = id;
 
                 response = this._context.Update(obj);
 
-                var customerResponse = MappingEntity<CustomerResponse>(response);
+                var customerResponse = response.Map<CustomerResponse>();
                 return customerResponse;
             }
             catch (Exception err)

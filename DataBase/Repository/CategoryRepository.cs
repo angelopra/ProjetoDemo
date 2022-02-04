@@ -51,12 +51,14 @@ namespace DataBase.Repository
             }
         }
 
-        public List<Category> GetAllCategories()
+        public IQueryable<Category> GetAllCategories()
         {
             try
             {
-                var categories = _context.Category.ToList();
-                return categories;
+                //var query = from c in _context.Category select c;
+                var query = _context.Category.AsNoTracking();
+                //_context.Category.ToList();
+                return query;
             }
             catch (Exception err)
             {
