@@ -9,7 +9,6 @@ using System;
 
 namespace ProjetoDemo.Controllers
 {
-    [Authorize(Roles = "Admin,User")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : BaseController<IAuthenticationComponent>
@@ -33,13 +32,13 @@ namespace ProjetoDemo.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
-        public IActionResult GetUserById(string id)
+        [Route("{userName}")]
+        public IActionResult GetUser(string userName)
         {
             try
             {
-                var response = ComponentCurrent.GetUserById(id);
-                return Ok();
+                var response = ComponentCurrent.GetUser(userName);
+                return Ok(response);
             }
             catch (Exception err)
             {
@@ -62,29 +61,13 @@ namespace ProjetoDemo.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut]
-        [Route("{id}")]
-        public IActionResult UpdateUser(UserUpdateRequest user, string id)
-        {
-            try
-            {
-                var response = ComponentCurrent.UpdateUser(user, id);
-                return Ok(response);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Data);
-            }
-        }
-
-        [Authorize(Roles = "Admin")]
         [HttpDelete]
-        [Route("{id}")]
-        public IActionResult DeleteUser(string id)
+        [Route("{userName}")]
+        public IActionResult DeleteUser(string userName)
         {
             try
             {
-                ComponentCurrent.DeleteUser(id);
+                ComponentCurrent.DeleteUser(userName);
                 return Ok("User removed successfully");
             }
             catch (Exception err)

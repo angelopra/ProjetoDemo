@@ -187,5 +187,45 @@ namespace Business.AuthenticationBusiness
                 throw;
             }
         }
+
+        public UserCreateResponse GetUser(string userName)
+        {
+            try
+            {
+                var user = _userManager.FindByNameAsync(userName).GetAwaiter().GetResult().Map<UserCreateResponse>();
+                if (user == null)
+                {
+                    throw new Exception("User not found");
+                }
+                return user;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public List<UserCreateResponse> GetAllUsers(int? pageNumber, int? pageSize)
+        {
+            var users = _userManager.Users.Paginate(pageNumber, pageSize).ToList().Map<List<UserCreateResponse>>();
+            return users;
+        }
+
+        public void DeleteUser(string userName)
+        {
+            try
+            {
+                var user = _userManager.FindByNameAsync(userName).GetAwaiter().GetResult();
+                if (user == null)
+                {
+                    throw new Exception("User not found");
+                }
+                _userManager.DeleteAsync(user);
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

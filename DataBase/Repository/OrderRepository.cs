@@ -64,7 +64,7 @@ namespace DataBase.Repository
             }
         }
 
-        public IQueryable<Order> GetCustomerOrders(int customerId)
+        public List<Order> GetCustomerOrders(int customerId)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace DataBase.Repository
                     orders.Add(_context.Order.Where(o => o.IdCart == cart.Id).FirstOrDefault());
                 }
 
-                return (IQueryable<Order>)orders;
+                return orders;
             }
             catch
             {
