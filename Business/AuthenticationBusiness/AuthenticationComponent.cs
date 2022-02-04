@@ -138,6 +138,7 @@ namespace Business.AuthenticationBusiness
                 {
                     throw new Exception("Username already in use");
                 }
+
                 var user = CreateUser(
                     new AuthorizationUserDB()
                     {
@@ -145,7 +146,10 @@ namespace Business.AuthenticationBusiness
                         Email = request.Email,
                         EmailConfirmed = true
                     }, request.Password, EnumGetValue(request.Role));
+
                 var userMapped =  user.Map<UserCreateResponse>();
+                userMapped.Role = _userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault();
+
                 return userMapped;
             }
             catch (Exception err)
@@ -192,12 +196,15 @@ namespace Business.AuthenticationBusiness
         {
             try
             {
-                var user = _userManager.FindByNameAsync(userName).GetAwaiter().GetResult().Map<UserCreateResponse>();
+                var user = _userManager.FindByNameAsync(userName).GetAwaiter().GetResult();
                 if (user == null)
                 {
                     throw new Exception("User not found");
                 }
-                return user;
+                var response = user.Map<UserCreateResponse>();
+                response.Role = _userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault();
+
+                return response;
             }
             catch
             {
@@ -207,8 +214,14 @@ namespace Business.AuthenticationBusiness
 
         public List<UserCreateResponse> GetAllUsers(int? pageNumber, int? pageSize)
         {
-            var users = _userManager.Users.Paginate(pageNumber, pageSize).ToList().Map<List<UserCreateResponse>>();
-            return users;
+            var users = _userManager.Users.Paginate(pageNumber, pageSize).ToList();
+            var response = users.Map<List<UserCreateResponse>>();
+            int i = 0;
+            foreach (var user in users)
+            {
+                response[i++].Role = _userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault();
+            }
+            return response;
         }
 
         public void DeleteUser(string userName)
