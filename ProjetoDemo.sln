@@ -1,23 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31205.134
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetoDemo", "ProjetoDemo\ProjetoDemo.csproj", "{99780AD3-F9AD-421B-ADC6-65CE1489B91A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjetoDemo", "ProjetoDemo\ProjetoDemo.csproj", "{99780AD3-F9AD-421B-ADC6-65CE1489B91A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01-Presentation", "01-Presentation", "{472C2CD2-F59B-435D-8B7F-980B67B2A23E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02-Domain", "02-Domain", "{332BBA0C-EDA8-453C-8035-8A38F0747818}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{CF1830A0-7941-4B74-BF54-703C2D9231BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{CF1830A0-7941-4B74-BF54-703C2D9231BC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03-Business", "03-Business", "{E0F83962-F942-4AD6-A6D9-80086D1566E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{FEC6FC91-2E5B-4FC9-BAC6-B166AF1EEA99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Business\Business.csproj", "{FEC6FC91-2E5B-4FC9-BAC6-B166AF1EEA99}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataBase", "DataBase", "{DC731CA9-9F18-435F-9118-3158004D7884}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBase", "DataBase\DataBase.csproj", "{A02954EE-D642-447F-AD97-C6F30CBCC6B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataBase", "DataBase\DataBase.csproj", "{A02954EE-D642-447F-AD97-C6F30CBCC6B8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{E5FB8E6E-767C-406F-8908-F1AECC12CC3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetoDemoTests", "ProjetoDemoTests\ProjetoDemoTests.csproj", "{72D05D29-FFB5-44F3-83F0-CF451A9EAE47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +45,10 @@ Global
 		{A02954EE-D642-447F-AD97-C6F30CBCC6B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A02954EE-D642-447F-AD97-C6F30CBCC6B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A02954EE-D642-447F-AD97-C6F30CBCC6B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72D05D29-FFB5-44F3-83F0-CF451A9EAE47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72D05D29-FFB5-44F3-83F0-CF451A9EAE47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72D05D29-FFB5-44F3-83F0-CF451A9EAE47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72D05D29-FFB5-44F3-83F0-CF451A9EAE47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +58,7 @@ Global
 		{CF1830A0-7941-4B74-BF54-703C2D9231BC} = {332BBA0C-EDA8-453C-8035-8A38F0747818}
 		{FEC6FC91-2E5B-4FC9-BAC6-B166AF1EEA99} = {E0F83962-F942-4AD6-A6D9-80086D1566E8}
 		{A02954EE-D642-447F-AD97-C6F30CBCC6B8} = {DC731CA9-9F18-435F-9118-3158004D7884}
+		{72D05D29-FFB5-44F3-83F0-CF451A9EAE47} = {E5FB8E6E-767C-406F-8908-F1AECC12CC3B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ABDE52EA-6125-4A88-85A2-51F3C761C0EA}
