@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Model.Base;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Model.Request
 {
-    public class ProductRequest : BaseRequest
+    public class ProductRequest : BaseRequest, IRequest<int>
     {
         public string Name { get; set; }
 

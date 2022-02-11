@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Domain.Model.Response;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
+using MediatR;
 
 namespace ProjetoDemo.Controllers
 {
@@ -15,7 +16,7 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class CartItemController : BaseController<ICartItemComponent>
     {
-        public CartItemController([FromServices] ICartItemComponent contract) : base(contract)
+        public CartItemController([FromServices] ICartItemComponent contract, IMediator mediator) : base(contract, mediator)
         {
         }
 

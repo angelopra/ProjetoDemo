@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,8 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class ProductController : BaseController<IProductComponent>
     {
-        public ProductController([FromServices] IProductComponent contract) : base(contract)
+        public ProductController([FromServices] IProductComponent contract, IMediator mediator) : base(contract, mediator)
         {
-
         }
 
         [HttpPost]
@@ -33,6 +33,20 @@ namespace ProjetoDemo.Controllers
             catch (Exception err)
             {
                 return BadRequest(err.Data);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult<int> CreateWMediator(ProductRequest request)
+        {
+            try
+            {
+                var response = _mediator.Send(request);
+                return Ok(response);
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Message);
             }
         }
 

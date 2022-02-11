@@ -26,6 +26,8 @@ using ProjetoDemo.Filter;
 using Domain.Entities.Security;
 using Business.AuthenticationBusiness;
 using Microsoft.Extensions.Options;
+using MediatR;
+using System.Reflection;
 
 namespace ProjetoDemo
 {
@@ -60,6 +62,8 @@ namespace ProjetoDemo
             services.AddScoped<IValidator<CustomerLoginRequest>, CustomerLoginValidator>();
             services.AddScoped<IValidator<ProductRequest>, ProductValidator>();
             services.AddScoped<IValidator<OrderRequest>, OrderValidator>();
+
+            services.AddMediatR(Assembly.GetExecutingAssembly());
 
             #region Autentication
             // Configurando a dependência para a classe de validação
