@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DataBase.Repository
 {
@@ -15,12 +16,12 @@ namespace DataBase.Repository
         {
         }
 
-        public int AddProduct(Product request)
+        public async Task<int> AddProduct(Product request)
         {
             try
             {
-                _context.Product.Add(request);
-                _context.SaveChanges();
+                 await _context.Product.AddAsync(request);
+                await _context.SaveChangesAsync();
                 return request.Id;
             }
             catch

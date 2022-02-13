@@ -14,19 +14,18 @@ using System.Threading.Tasks;
 
 namespace Business.ProductBusiness.Create
 {
-    internal class ProductCreation : BaseBusiness<IProductRepository>, IRequestHandler<ProductRequest, int>
+    internal class ProductCreation : BaseBusiness<IUnityOfWork>, IRequestHandler<ProductRequest, int>
     {
         private ICategoryComponent _categoryComponent;
         private readonly IValidator<ProductRequest> _validator;
         private List<ValidateError> errors;
-        public ProductCreation(IProductRepository context, ICategoryComponent categoryComponent, IValidator<ProductRequest> validator)
-            : base(context)
+        public ProductCreation(IUnityOfWork uow, IValidator<ProductRequest> validator)
+            : base(uow)
         {
-            _categoryComponent = categoryComponent;
             _validator = validator;
         }
 
-        public int Handle(ProductRequest request, CancellationToken cancellationToken)
+        public async Task<int> Handle(ProductRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -47,7 +46,7 @@ namespace Business.ProductBusiness.Create
                 }
                 obj.Category = category;
 
-                response = _context.AddProduct(obj);
+                response= await _context.productRepository.AddProduct(obj);
                 return response;
             }
             catch (Exception err)

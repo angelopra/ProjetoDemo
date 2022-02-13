@@ -11,7 +11,7 @@ namespace Domain.Interfaces
 {
     public interface IProductComponent
     {
-        int AddProduct(ProductRequest request);
+        Task<int> AddProduct(ProductRequest request);
         Product GetProductById(int id);
         List<ProductListResponse> GetProductsByCategoryId(int categoryId, int? pageNumber, int? pageSize);
         Product Update(ProductRequest request, int id);

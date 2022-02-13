@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoDemo.Controllers.Base;
@@ -13,7 +14,7 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class CustomerController : BaseController<ICustomerComponent>
     {
-        public CustomerController([FromServices] ICustomerComponent contract) : base(contract)
+        public CustomerController([FromServices] ICustomerComponent contract, IMediator mediator) : base(contract, mediator)
         {
         }
 

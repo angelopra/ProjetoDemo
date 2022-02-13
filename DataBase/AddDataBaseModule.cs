@@ -24,6 +24,7 @@ namespace DataBase
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IUnityOfWork, UnitOfWork>();
             //services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 
             #region Autentication

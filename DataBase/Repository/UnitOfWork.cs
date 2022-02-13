@@ -24,7 +24,7 @@ namespace DataBase.Repository
 
         private IOrderRepository _order;
 
-        protected UnitOfWork(CoreDbContext context) : base(context)
+        public UnitOfWork(CoreDbContext context) : base(context)
         {
         }
 

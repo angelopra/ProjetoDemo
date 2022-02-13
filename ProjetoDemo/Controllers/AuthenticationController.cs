@@ -4,6 +4,7 @@ using Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Domain.Model.Request;
 using System;
+using MediatR;
 
 namespace ProjetoDemo.Controllers
 {
@@ -12,7 +13,7 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class AuthenticationController : BaseController<IAuthenticationComponent>
     {
-        public AuthenticationController([FromServices] IAuthenticationComponent contract) : base(contract)
+        public AuthenticationController([FromServices] IAuthenticationComponent contract, IMediator mediator) : base(contract, mediator)
         {
         }
 

@@ -1,12 +1,13 @@
 ﻿using Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
     public interface IProductRepository
     {
-        int AddProduct(Product request);
+        Task<int> AddProduct(Product request);
 
         Product GetProductById(int id);
 

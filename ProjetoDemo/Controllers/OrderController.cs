@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces;
 using Domain.Model.Request;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoDemo.Controllers.Base;
@@ -12,7 +13,7 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class OrderController : BaseController<IOrderComponent>
     {
-        public OrderController([FromServices] IOrderComponent contract) : base(contract)
+        public OrderController([FromServices] IOrderComponent contract, IMediator mediator) : base(contract, mediator)
         {
         }
 

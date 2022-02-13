@@ -5,6 +5,7 @@ using Domain.Model.Request;
 using Domain.Entities.Base;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
+using MediatR;
 
 namespace ProjetoDemo.Controllers.Base
 {
@@ -13,7 +14,7 @@ namespace ProjetoDemo.Controllers.Base
     [ApiController]
     public class CartController : BaseController<ICartComponent>
     {
-        public CartController([FromServices] ICartComponent contract) : base(contract)
+        public CartController([FromServices] ICartComponent contract, IMediator mediator) : base(contract, mediator)
         {
         }
 

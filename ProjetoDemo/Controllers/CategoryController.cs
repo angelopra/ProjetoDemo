@@ -2,6 +2,7 @@
 using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Model.Response;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoDemo.Controllers.Base;
@@ -15,7 +16,7 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class CategoryController : BaseController<ICategoryComponent>
     {
-        public CategoryController([FromServices] ICategoryComponent contract) : base(contract)
+        public CategoryController([FromServices] ICategoryComponent contract, IMediator mediator) : base(contract, mediator)
         {
         }
 

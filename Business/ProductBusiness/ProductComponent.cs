@@ -27,7 +27,7 @@ namespace Business.ProductBusiness
             _validator = validator;
         }
 
-        public int AddProduct(ProductRequest request)
+        public async Task<int> AddProduct(ProductRequest request)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace Business.ProductBusiness
                 }
                 obj.Category = category;
 
-                response = _context.AddProduct(obj);
+                response = await _context.AddProduct(obj);
                 return response;
             }
             catch (Exception err)
