@@ -14,7 +14,7 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class UserController : BaseController<IAuthenticationComponent>
     {
-        public UserController([FromServices] IAuthenticationComponent contract, IMediator mediator) : base(contract, mediator)
+        public UserController([FromServices] IAuthenticationComponent contract) : base(contract)
         {
         }
 

@@ -14,7 +14,7 @@ namespace ProjetoDemo.Controllers.Base
 
         protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetService<ISender>();
 
-        protected BaseController([FromServices] T contract, IMediator _mediator123)
+        protected BaseController([FromServices] T contract)
         {
             this.ComponentCurrent = contract;
         }

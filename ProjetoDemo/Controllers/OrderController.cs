@@ -13,7 +13,7 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class OrderController : BaseController<IOrderComponent>
     {
-        public OrderController([FromServices] IOrderComponent contract, IMediator mediator) : base(contract, mediator)
+        public OrderController([FromServices] IOrderComponent contract) : base(contract)
         {
         }
 

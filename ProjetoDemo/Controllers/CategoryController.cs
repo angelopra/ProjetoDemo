@@ -16,7 +16,7 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class CategoryController : BaseController<ICategoryComponent>
     {
-        public CategoryController([FromServices] ICategoryComponent contract, IMediator mediator) : base(contract, mediator)
+        public CategoryController([FromServices] ICategoryComponent contract) : base(contract)
         {
         }
 

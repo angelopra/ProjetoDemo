@@ -14,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace Business.ProductBusiness.Create
 {
-    internal class ProductCreation : BaseBusiness<IUnityOfWork>, IRequestHandler<ProductAddRequest, int>
+    public class ProductCreation : ServiceManagerBase, IRequestHandler<ProductAddRequest, int>
     {
-        private readonly IValidator<ProductRequest> _validator;
+        private readonly IValidator<ProductAddRequest> _validator;
         private List<ValidateError> errors;
-        public ProductCreation(IUnityOfWork uow, IValidator<ProductRequest> validator)
+        public ProductCreation(IUnityOfWork uow, IValidator<ProductAddRequest> validator)
             : base(uow)
         {
             _validator = validator;
@@ -28,18 +28,18 @@ namespace Business.ProductBusiness.Create
         {
             try
             {
-                //errors = ValidadeProductRequest(request);
-                //if (errors != null)
-                //{
-                //    throw new Exception();
-                //}
+                errors = ValidadeProductRequest(request);
+                if (errors != null)
+                {
+                    throw new Exception();
+                }
 
                 var response = 0;
 
                 var obj = request.Map<Product>();
 
                 //var category = _categoryComponent.GetCategoryById(request.IdCategory);
-                var category = _context.categoryRepository.GetCategoryById(request.IdCategory);
+                var category = _uow.categoryRepository.GetCategoryById(request.IdCategory);
 
                 if (category == null)
                 {
@@ -47,17 +47,17 @@ namespace Business.ProductBusiness.Create
                 }
                 obj.Category = category;
 
-                response= await _context.productRepository.AddProduct(obj);
+                response= await _uow.productRepository.AddProduct(obj);
                 return response;
             }
             catch (Exception err)
             {
-                MapperException(err, errors);
+                //MapperException(err, errors);
                 throw;
             }
         }
 
-        private List<ValidateError> ValidadeProductRequest(ProductRequest request)
+        private List<ValidateError> ValidadeProductRequest(ProductAddRequest request)
         {
             errors = null;
             var validate = _validator.Validate(request);

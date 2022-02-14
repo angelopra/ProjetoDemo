@@ -16,7 +16,7 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class CartItemController : BaseController<ICartItemComponent>
     {
-        public CartItemController([FromServices] ICartItemComponent contract, IMediator mediator) : base(contract, mediator)
+        public CartItemController([FromServices] ICartItemComponent contract) : base(contract)
         {
         }
 

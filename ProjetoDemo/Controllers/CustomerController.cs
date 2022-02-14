@@ -14,7 +14,7 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class CustomerController : BaseController<ICustomerComponent>
     {
-        public CustomerController([FromServices] ICustomerComponent contract, IMediator mediator) : base(contract, mediator)
+        public CustomerController([FromServices] ICustomerComponent contract) : base(contract)
         {
         }
 

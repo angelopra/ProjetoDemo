@@ -13,7 +13,7 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class AuthenticationController : BaseController<IAuthenticationComponent>
     {
-        public AuthenticationController([FromServices] IAuthenticationComponent contract, IMediator mediator) : base(contract, mediator)
+        public AuthenticationController([FromServices] IAuthenticationComponent contract) : base(contract)
         {
         }
 

@@ -16,27 +16,23 @@ namespace ProjetoDemo.Controllers
     //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : BaseController<IProductComponent>
+    public class ProductController : BaseControllerMediator
     {
-        public ProductController([FromServices] IProductComponent contract, IMediator _mediator123) : base(contract, _mediator123)
-        {
-        }
+        //[HttpPost]
+        //public IActionResult Create(ProductRequest request)
+        //{
+        //    try
+        //    {
+        //        var responseMethod = ComponentCurrent.AddProduct(request);
+        //        return Ok(responseMethod);
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        return BadRequest(err.Data);
+        //    }
+        //}
 
         [HttpPost]
-        public IActionResult Create(ProductRequest request)
-        {
-            try
-            {
-                var responseMethod = ComponentCurrent.AddProduct(request);
-                return Ok(responseMethod);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Data);
-            }
-        }
-
-        [HttpPost, Route("/postWithMediator")]
         public async Task<ActionResult<int>> CreateWMediator(ProductAddRequest request)
         {
             try
@@ -50,64 +46,64 @@ namespace ProjetoDemo.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{id}")]
-        public IActionResult GetProductById(int id)
-        {
-            try
-            {
-                var responseMethod = ComponentCurrent.GetProductById(id);
-                return Ok(responseMethod);
-            }
-            catch (Exception err)
-            {
-                return NotFound(err.Message);
-            }
-        }
+        //[HttpGet]
+        //[Route("{id}")]
+        //public IActionResult GetProductById(int id)
+        //{
+        //    try
+        //    {
+        //        var responseMethod = ComponentCurrent.GetProductById(id);
+        //        return Ok(responseMethod);
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        return NotFound(err.Message);
+        //    }
+        //}
 
-        [HttpGet]
-        [Route("AllProducts/{categoryId}")]
-        public IActionResult GetProductsByCategoryId(int categoryId, int? pageNumber, int? pageSize)
-        {
-            try
-            {
-                var responseMethod = ComponentCurrent.GetProductsByCategoryId(categoryId, pageNumber, pageSize);
-                return Ok(responseMethod);
-            }
-            catch (Exception err)
-            {
-                return NotFound(err.Message);
-            }
-        }
+        //[HttpGet]
+        //[Route("AllProducts/{categoryId}")]
+        //public IActionResult GetProductsByCategoryId(int categoryId, int? pageNumber, int? pageSize)
+        //{
+        //    try
+        //    {
+        //        var responseMethod = ComponentCurrent.GetProductsByCategoryId(categoryId, pageNumber, pageSize);
+        //        return Ok(responseMethod);
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        return NotFound(err.Message);
+        //    }
+        //}
 
-        [HttpPut]
-        [Route("{id}")]
-        public IActionResult Update(ProductRequest request, int id)
-        {
-            try
-            {
-                var responseMethod = ComponentCurrent.Update(request, id);
-                return Ok(responseMethod);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Data);
-            }
-        }
+        //[HttpPut]
+        //[Route("{id}")]
+        //public IActionResult Update(ProductRequest request, int id)
+        //{
+        //    try
+        //    {
+        //        var responseMethod = ComponentCurrent.Update(request, id);
+        //        return Ok(responseMethod);
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        return BadRequest(err.Data);
+        //    }
+        //}
 
-        [HttpDelete]
-        [Route("{id}")]
-        public IActionResult Remove(int id)
-        {
-            try
-            {
-                this.ComponentCurrent.Remove(id);
-                return Ok("Product successfully removed");
-            }
-            catch (Exception err)
-            {
-                return NotFound(err.Message);
-            }
-        }
+        //[HttpDelete]
+        //[Route("{id}")]
+        //public IActionResult Remove(int id)
+        //{
+        //    try
+        //    {
+        //        this.ComponentCurrent.Remove(id);
+        //        return Ok("Product successfully removed");
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        return NotFound(err.Message);
+        //    }
+        //}
     }
 }
