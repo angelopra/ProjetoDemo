@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace ProjetoDemo.Controllers
 {
-    [Authorize]
+    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : BaseController<IProductComponent>
     {
-        public ProductController([FromServices] IProductComponent contract, IMediator mediator) : base(contract, mediator)
+        public ProductController([FromServices] IProductComponent contract, IMediator _mediator123) : base(contract, _mediator123)
         {
         }
 
@@ -36,12 +36,12 @@ namespace ProjetoDemo.Controllers
             }
         }
 
-        [HttpPost]
-        public ActionResult<int> CreateWMediator(ProductRequest request)
+        [HttpPost, Route("/postWithMediator")]
+        public async Task<ActionResult<int>> CreateWMediator(ProductAddRequest request)
         {
             try
             {
-                var response = _mediator.Send(request);
+                var response = await Mediator.Send(request);
                 return Ok(response);
             }
             catch (Exception err)

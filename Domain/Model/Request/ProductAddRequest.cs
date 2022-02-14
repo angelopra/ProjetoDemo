@@ -1,15 +1,9 @@
-﻿using Domain.Entities;
-using Domain.Model.Base;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Model.Base;
+using MediatR;
 
 namespace Domain.Model.Request
 {
-    public class ProductRequest : BaseRequest
+    public class ProductAddRequest : BaseRequest, IRequest<int>
     {
         public string Name { get; set; }
 

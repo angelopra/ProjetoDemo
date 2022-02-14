@@ -14,9 +14,8 @@ using System.Threading.Tasks;
 
 namespace Business.ProductBusiness.Create
 {
-    internal class ProductCreation : BaseBusiness<IUnityOfWork>, IRequestHandler<ProductRequest, int>
+    internal class ProductCreation : BaseBusiness<IUnityOfWork>, IRequestHandler<ProductAddRequest, int>
     {
-        private ICategoryComponent _categoryComponent;
         private readonly IValidator<ProductRequest> _validator;
         private List<ValidateError> errors;
         public ProductCreation(IUnityOfWork uow, IValidator<ProductRequest> validator)
@@ -25,21 +24,23 @@ namespace Business.ProductBusiness.Create
             _validator = validator;
         }
 
-        public async Task<int> Handle(ProductRequest request, CancellationToken cancellationToken)
+        public async Task<int> Handle(ProductAddRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                errors = ValidadeProductRequest(request);
-                if (errors != null)
-                {
-                    throw new Exception();
-                }
+                //errors = ValidadeProductRequest(request);
+                //if (errors != null)
+                //{
+                //    throw new Exception();
+                //}
 
                 var response = 0;
 
                 var obj = request.Map<Product>();
 
-                var category = _categoryComponent.GetCategoryById(request.IdCategory);
+                //var category = _categoryComponent.GetCategoryById(request.IdCategory);
+                var category = _context.categoryRepository.GetCategoryById(request.IdCategory);
+
                 if (category == null)
                 {
                     throw new Exception("Category does not exist");

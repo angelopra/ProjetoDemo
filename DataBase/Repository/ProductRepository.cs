@@ -20,7 +20,7 @@ namespace DataBase.Repository
         {
             try
             {
-                 await _context.Product.AddAsync(request);
+                await _context.Product.AddAsync(request);
                 await _context.SaveChangesAsync();
                 return request.Id;
             }

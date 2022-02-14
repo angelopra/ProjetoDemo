@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,14 @@ namespace ProjetoDemo.Controllers.Base
 {
     public abstract class BaseController<T> : ControllerBase
     {
-        protected BaseController([FromServices] T contract, IMediator mediator)
+        private ISender _mediator;
+
+        protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetService<ISender>();
+
+        protected BaseController([FromServices] T contract, IMediator _mediator123)
         {
             this.ComponentCurrent = contract;
-            _mediator = mediator;
         }
-        public IMediator _mediator { get; }
         public T ComponentCurrent { get; }
     }
 }

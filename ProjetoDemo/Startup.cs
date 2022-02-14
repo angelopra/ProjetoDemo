@@ -63,7 +63,6 @@ namespace ProjetoDemo
             services.AddScoped<IValidator<ProductRequest>, ProductValidator>();
             services.AddScoped<IValidator<OrderRequest>, OrderValidator>();
 
-            services.AddMediatR(Assembly.GetExecutingAssembly());
 
             #region Autentication
             // Configurando a dependência para a classe de validação
