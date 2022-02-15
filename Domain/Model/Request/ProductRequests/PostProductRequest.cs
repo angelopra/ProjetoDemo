@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Domain.Model.Request
 {
-    public class ProductAddRequest : BaseRequest, IRequest<int>
+    public class PostProductRequest : BaseRequest, IRequest<int>
     {
         public string Name { get; set; }
 

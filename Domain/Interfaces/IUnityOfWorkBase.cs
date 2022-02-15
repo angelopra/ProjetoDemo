@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Interfaces
 {
     public interface IUnityOfWorkBase
     {
-        ICartItemRepository cartItemRepository { get; }
-        ICartRepository cartRepository { get; }
-        ICategoryRepository categoryRepository { get; }
-        IProductRepository productRepository { get; }
-        ICustomerRepository customerRepository { get; }
-        IOrderRepository orderRepository { get; }
+        DbSet<Product> Product { get; set; }
+        DbSet<Category> Category { get; set; }
+        DbSet<Customer> Customer { get; set; }
+        DbSet<Cart> Cart { get; set; }
+        DbSet<CartItem> CartItem { get; set; }
+        DbSet<Order> Order { get; set; }
     }
 }

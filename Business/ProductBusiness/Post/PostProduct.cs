@@ -14,50 +14,50 @@ using System.Threading.Tasks;
 
 namespace Business.ProductBusiness.Create
 {
-    public class ProductCreation : ServiceManagerBase, IRequestHandler<ProductAddRequest, int>
+    public class PostProduct : ServiceManagerBase, IRequestHandler<PostProductRequest, int>
     {
-        private readonly IValidator<ProductAddRequest> _validator;
+        private readonly IValidator<ProductRequest> _validator;
         private List<ValidateError> errors;
-        public ProductCreation(IUnityOfWork uow, IValidator<ProductAddRequest> validator)
+        public PostProduct(IUnityOfWork uow, IValidator<ProductRequest> validator)
             : base(uow)
         {
             _validator = validator;
         }
 
-        public async Task<int> Handle(ProductAddRequest request, CancellationToken cancellationToken)
+        public async Task<int> Handle(PostProductRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                errors = ValidadeProductRequest(request);
+                errors = ValidadeProductRequest(request.Map<ProductRequest>());
                 if (errors != null)
                 {
                     throw new Exception();
                 }
 
-                var response = 0;
-
                 var obj = request.Map<Product>();
 
-                //var category = _categoryComponent.GetCategoryById(request.IdCategory);
-                var category = _uow.categoryRepository.GetCategoryById(request.IdCategory);
+                var category = _uow.Category.Where(c => c.Id == request.IdCategory).FirstOrDefault();
 
                 if (category == null)
                 {
-                    throw new Exception("Category does not exist");
+                    throw new Exception("Category doesn't exist");
                 }
+
                 obj.Category = category;
 
-                response= await _uow.productRepository.AddProduct(obj);
-                return response;
+                await _uow.Product.AddAsync(obj);
+                await _uow.Commit(cancellationToken);
+
+                return obj.Id;
             }
             catch (Exception err)
             {
-                //MapperException(err, errors);
+                MapperException(err, errors);
                 throw;
             }
         }
 
-        private List<ValidateError> ValidadeProductRequest(ProductAddRequest request)
+        private List<ValidateError> ValidadeProductRequest(ProductRequest request)
         {
             errors = null;
             var validate = _validator.Validate(request);

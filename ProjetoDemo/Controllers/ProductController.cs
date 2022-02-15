@@ -1,6 +1,8 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using Domain.Model.Request.ProductRequests;
+using Domain.Model.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,22 +20,9 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class ProductController : BaseControllerMediator
     {
-        //[HttpPost]
-        //public IActionResult Create(ProductRequest request)
-        //{
-        //    try
-        //    {
-        //        var responseMethod = ComponentCurrent.AddProduct(request);
-        //        return Ok(responseMethod);
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return BadRequest(err.Data);
-        //    }
-        //}
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateWMediator(ProductAddRequest request)
+        public async Task<ActionResult<int>> Create(PostProductRequest request)
         {
             try
             {
@@ -46,64 +35,77 @@ namespace ProjetoDemo.Controllers
             }
         }
 
-        //[HttpGet]
-        //[Route("{id}")]
-        //public IActionResult GetProductById(int id)
-        //{
-        //    try
-        //    {
-        //        var responseMethod = ComponentCurrent.GetProductById(id);
-        //        return Ok(responseMethod);
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return NotFound(err.Message);
-        //    }
-        //}
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<Product>> GetProductById(int id)
+        {
+            try
+            {
 
-        //[HttpGet]
-        //[Route("AllProducts/{categoryId}")]
-        //public IActionResult GetProductsByCategoryId(int categoryId, int? pageNumber, int? pageSize)
-        //{
-        //    try
-        //    {
-        //        var responseMethod = ComponentCurrent.GetProductsByCategoryId(categoryId, pageNumber, pageSize);
-        //        return Ok(responseMethod);
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return NotFound(err.Message);
-        //    }
-        //}
+                var request = new GetProductByIdRequest();
+                request.id = id;
+                var response = await Mediator.Send(request);
+                return Ok(response);
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Message);
+            }
+        }
 
-        //[HttpPut]
-        //[Route("{id}")]
-        //public IActionResult Update(ProductRequest request, int id)
-        //{
-        //    try
-        //    {
-        //        var responseMethod = ComponentCurrent.Update(request, id);
-        //        return Ok(responseMethod);
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return BadRequest(err.Data);
-        //    }
-        //}
+        [HttpGet]
+        [Route("AllProducts/{categoryId}")]
+        public async Task<ActionResult<ProductListResponse>> GetProductsByCategoryId(int categoryId, int? pageNumber, int? pageSize)
+        {
+            try
+            {
 
-        //[HttpDelete]
-        //[Route("{id}")]
-        //public IActionResult Remove(int id)
-        //{
-        //    try
-        //    {
-        //        this.ComponentCurrent.Remove(id);
-        //        return Ok("Product successfully removed");
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return NotFound(err.Message);
-        //    }
-        //}
+                var request = new GetProductsByCategoryIdRequest();
+                request.categoryId = categoryId;
+                request.pageNumber = pageNumber;
+                request.pageSize = pageSize;
+
+                var responseMethod = await Mediator.Send(request);
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Message);
+            }
+        }
+
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<ActionResult<Product>> Update(UpdateProductRequest request, int id)
+        {
+            try
+            {
+                request.ProductId = id;
+                var response = await Mediator.Send(request);
+                return Ok(response);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Data);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult<int>> Remove(int id)
+        {
+            try
+            {
+
+                var request = new RemoveProductRequest();
+                var response = await Mediator.Send(request);
+                return Ok("Product successfully removed");
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Message);
+            }
+        }
     }
 }

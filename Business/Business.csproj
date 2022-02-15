@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <Compile Remove="Class1.cs" />
-    <Compile Remove="ProductBusiness\Create\ProductManagerAdd.cs" />
+    <Compile Remove="ProductBusiness\Post\ProductManagerAdd.cs" />
   </ItemGroup>
 
   <ItemGroup>

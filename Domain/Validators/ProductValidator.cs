@@ -12,7 +12,7 @@ namespace Domain.Validators
     {
         public ProductValidator()
         {
-            //RuleFor(p => p.Active).NotNull();
+            RuleFor(p => p.Active).NotNull();
             RuleFor(p => p.Description).MaximumLength(255);
             RuleFor(p => p.IdCategory).NotNull().GreaterThanOrEqualTo(0);
             RuleFor(p => p.Name).NotNull().Length(3, 30);

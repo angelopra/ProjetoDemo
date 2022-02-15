@@ -9,6 +9,6 @@ namespace Domain.Interfaces
 {
     public interface IUnityOfWork : IUnityOfWorkBase
     {
-        void Commit();
+        Task<int> Commit(CancellationToken cancellationToken);
     }
 }

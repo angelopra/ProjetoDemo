@@ -2,7 +2,7 @@
 
 namespace Business.Base
 {
-    public class ServiceManagerBase
+    public class ServiceManagerBase : BaseBusinessComon
     {
         public readonly IUnityOfWork _uow;
 

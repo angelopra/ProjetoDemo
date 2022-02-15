@@ -21,7 +21,6 @@ namespace Business
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             // Entities DI
-            services.AddScoped<IProductComponent, ProductComponent>();
             services.AddScoped<ICategoryComponent, CategoryComponent>();
             services.AddScoped<ICustomerComponent, CustomerComponent>();
             services.AddScoped<ICartComponent, CartComponent>();
