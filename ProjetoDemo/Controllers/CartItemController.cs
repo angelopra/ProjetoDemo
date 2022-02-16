@@ -14,7 +14,7 @@ using Domain.Model.Request.CartItemRequests;
 
 namespace ProjetoDemo.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CartItemController : BaseControllerMediator

@@ -77,11 +77,17 @@ namespace ProjetoDemo.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<ActionResult<Product>> Update(UpdateProductRequest request, int id)
+        public async Task<ActionResult<Product>> Update(ProductRequest req, int id)
         {
             try
             {
+                var request = new UpdateProductRequest();
                 request.ProductId = id;
+                request.Name = req.Name;
+                request.Description = req.Description; 
+                request.Price = req.Price;
+                request.Quantity = req.Quantity;
+                request.IdCategory = req.IdCategory;
                 var response = await Mediator.Send(request);
                 return Ok(response);
             }
@@ -99,6 +105,7 @@ namespace ProjetoDemo.Controllers
             {
 
                 var request = new RemoveProductRequest();
+                request.id = id;
                 var response = await Mediator.Send(request);
                 return Ok("Product successfully removed");
             }

@@ -27,8 +27,15 @@ namespace DataBase.Context
 
         public async Task<int> Commit(CancellationToken cancellationToken = new CancellationToken())
         {
-            var result = await base.SaveChangesAsync(cancellationToken);
-            return result;
+            try
+            {
+                var result = await base.SaveChangesAsync(cancellationToken);
+                return result;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
