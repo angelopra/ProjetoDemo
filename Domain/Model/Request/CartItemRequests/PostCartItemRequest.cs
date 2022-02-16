@@ -9,7 +9,7 @@ using Domain.Model.Response;
 
 namespace Domain.Model.Request.CartItemRequests
 {
-    public class PostCartItem : BaseRequest, IRequest<CartItemModelResponse>
+    public class PostCartItemRequest : BaseRequest, IRequest<CartItemModelResponse>
     {
         public int IdCart { get; set; }
         public int IdProduct { get; set; }

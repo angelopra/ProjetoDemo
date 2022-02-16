@@ -8,25 +8,24 @@ using Domain.Model.Response;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using MediatR;
+using System.Threading.Tasks;
+using System.Collections;
+using Domain.Model.Request.CartItemRequests;
 
 namespace ProjetoDemo.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class CartItemController : BaseController<ICartItemComponent>
+    public class CartItemController : BaseControllerMediator
     {
-        public CartItemController([FromServices] ICartItemComponent contract) : base(contract)
-        {
-        }
-
         [HttpPost]
-        public IActionResult Create([FromBody]CartItemRequest request)
+        public async Task<ActionResult<CartItemModelResponse>> Create([FromBody] CartItemRequest request)
         {
             try
             {
-                var responseMethod = ComponentCurrent.AddCartItem(request);
-                return Ok(responseMethod);
+                var response = await Mediator.Send(request);
+                return Ok(response);
             }
             catch (Exception err)
             {
@@ -36,11 +35,16 @@ namespace ProjetoDemo.Controllers
 
         [HttpGet]
         [Route("getitens/{idCart}")]
-        public IActionResult GetCartItens(int idCart, int? pageNumber, int? pageSize)
+        public async Task<ActionResult<IEnumerable>> GetCartItens(int idCart, int? pageNumber, int? pageSize)
         {
             try
             {
-                var response = ComponentCurrent.GetCartItens(idCart, pageNumber, pageSize);
+                var request = new GetCartItensRequest();
+                request.idCart = idCart;
+                request.pageSize = pageSize;
+                request.pageNumber = pageNumber;
+
+                var response = await Mediator.Send(request);
                 return Ok(response);
             }
             catch (Exception err)
@@ -51,11 +55,15 @@ namespace ProjetoDemo.Controllers
 
         [HttpGet]
         [Route("{idCart}/{idProduct}")]
-        public IActionResult GetCartItem(int idCart, int idProduct)
+        public async Task<ActionResult<CartItemModelResponse>> GetCartItem(int idCart, int idProduct)
         {
             try
             {
-                var response = ComponentCurrent.GetCartItem(idCart, idProduct);
+                var request = new GetCartItemRequest();
+                request.idProduct = idProduct;
+                request.idCart = idCart;
+
+                var response = await Mediator.Send(request);
                 return Ok(response);
             }
             catch (Exception err)
@@ -66,12 +74,14 @@ namespace ProjetoDemo.Controllers
 
         [HttpPut]
         [Route("{idCart}/{idProduct}")]
-        public IActionResult Update([FromBody]CartItemUpdateRequest request, int idCart, int idProduct)
+        public async Task<ActionResult<CartItemModelResponse>> Update([FromBody]CartItemUpdateRequest request, int idCart, int idProduct)
         {
             try
             {
-                var responseMethod = ComponentCurrent.Update(request, idCart, idProduct);
-                return Ok(responseMethod);
+                request.IdCart = idCart;
+                request.IdProduct = idProduct;
+                var response = await Mediator.Send(request);
+                return Ok(response);
             }
             catch (Exception err)
             {
@@ -81,11 +91,14 @@ namespace ProjetoDemo.Controllers
 
         [HttpDelete]
         [Route("{idCart}/{idProduct}")]
-        public IActionResult Remove(int idCart, int idProduct)
+        public async Task<IActionResult> Remove(int idCart, int idProduct)
         {
             try
             {
-                this.ComponentCurrent.Remove(idCart, idProduct);
+                var request = new RemoveCartItemRequest();
+                request.idProduct = idProduct;
+                request.idCart = idCart;
+                var response = await Mediator.Send(request);
                 return Ok();
             }
             catch (Exception err)
