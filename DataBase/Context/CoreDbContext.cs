@@ -25,7 +25,7 @@ namespace DataBase.Context
         public virtual DbSet<CartItem> CartItem { get; set; }
         public virtual DbSet<Order> Order { get; set; }
 
-        public async Task<int> Commit(CancellationToken cancellationToken)
+        public async Task<int> Commit(CancellationToken cancellationToken = new CancellationToken())
         {
             var result = await base.SaveChangesAsync(cancellationToken);
             return result;
