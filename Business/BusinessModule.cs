@@ -1,4 +1,5 @@
-﻿using Business.CartBusiness;
+﻿using Business.Base;
+using Business.CartBusiness;
 using Business.CategoryBusiness;
 using Business.CustomerBusiness;
 using Business.OrderBusiness;
@@ -36,6 +37,8 @@ namespace Business
             services.AddScoped<IValidator<CustomerLoginRequest>, CustomerLoginValidator>();
             services.AddScoped<IValidator<ProductRequest>, ProductValidator>();
             services.AddScoped<IValidator<OrderRequest>, OrderValidator>();
+
+            services.AddScoped<IHelper, BaseBusinessComon>();
         }
     }
 }

@@ -5,10 +5,11 @@ using FluentValidation.Results;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
+using Domain.Interfaces;
 
 namespace Business.Base
 {
-    public class BaseBusinessComon
+    public class BaseBusinessComon : IHelper
     {
         #region Serializations
         private JsonSerializerSettings JsonSerializerSettings()

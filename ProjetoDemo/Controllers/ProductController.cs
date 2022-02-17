@@ -20,6 +20,9 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class ProductController : BaseControllerMediator
     {
+        public ProductController(IHelper helper) : base(helper)
+        {
+        }
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(PostProductRequest request)
@@ -81,13 +84,9 @@ namespace ProjetoDemo.Controllers
         {
             try
             {
-                var request = new UpdateProductRequest();
+                var request = _helper.MappingEntity<UpdateProductRequest>(req);
                 request.ProductId = id;
-                request.Name = req.Name;
-                request.Description = req.Description; 
-                request.Price = req.Price;
-                request.Quantity = req.Quantity;
-                request.IdCategory = req.IdCategory;
+
                 var response = await Mediator.Send(request);
                 return Ok(response);
             }

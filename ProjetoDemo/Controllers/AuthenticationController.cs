@@ -5,24 +5,26 @@ using Microsoft.AspNetCore.Authorization;
 using Domain.Model.Request;
 using System;
 using MediatR;
+using System.Threading.Tasks;
+using Domain.Model.Response;
 
 namespace ProjetoDemo.Controllers
 {
     [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : BaseController<IAuthenticationComponent>
+    public class AuthenticationController : BaseControllerMediator
     {
-        public AuthenticationController([FromServices] IAuthenticationComponent contract) : base(contract)
+        public AuthenticationController(IHelper helper) : base(helper)
         {
         }
 
         [HttpPost]
-        public IActionResult AuthenticationLogin(AuthenticationRequest request)
+        public async Task<ActionResult<TokenResponse>> AuthenticationLogin(AuthenticationRequest request)
         {
             try
             {
-                var response = ComponentCurrent.ValidateCredentials(request);
+                var response = await Mediator.Send(request);
                 return Ok(response);
             }
             catch (Exception err)

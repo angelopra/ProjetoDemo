@@ -6,26 +6,28 @@ using Domain.Entities.Base;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using MediatR;
+using System.Threading.Tasks;
+using Domain.Model.Request.CartRequests;
+using Domain.Model.Response;
 
 namespace ProjetoDemo.Controllers.Base
 {
-    [Authorize(Roles = "Admin,User")]
+    //[Authorize(Roles = "Admin,User")]
     [Route("api/[controller]")]
     [ApiController]
-    public class CartController : BaseController<ICartComponent>
+    public class CartController : BaseControllerMediator
     {
-        public CartController([FromServices] ICartComponent contract) : base(contract)
+        public CartController(IHelper helper) : base(helper)
         {
         }
 
-        [Authorize(Roles = "User")]
         [HttpPost]
-        public IActionResult Create([FromBody]CartRequest request)
+        public async Task<ActionResult<int>> Create([FromBody]PostCartRequest request)
         {
             try
             {
-                var responseMethod = this.ComponentCurrent.AddCart(request);
-                return Ok(responseMethod);
+                var response = await Mediator.Send(request);
+                return Ok(response);
             }
             catch (Exception err)
             {
@@ -35,12 +37,14 @@ namespace ProjetoDemo.Controllers.Base
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetCartById(int id)
+        public async Task<ActionResult<CartResponse>> GetCartById(int id)
         {
             try
             {
-                var responseMethod = this.ComponentCurrent.GetCartById(id);
-                return Ok(responseMethod);
+                var request = new GetCartRequest();
+                request.id = id;
+                var response = await Mediator.Send(request);
+                return Ok(response);
             }
             catch (Exception err)
             {
@@ -50,12 +54,15 @@ namespace ProjetoDemo.Controllers.Base
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update([FromBody]CartRequest request, int id)
+        public async Task<ActionResult<CartResponse>> Update([FromBody]CartRequest req, int id)
         {
             try
             {
-                var responseMethod = this.ComponentCurrent.Update(request, id);
-                return Ok(responseMethod);
+                var request = _helper.MappingEntity<UpdateCartRequest>(req);
+                request.IdCart = id;
+
+                var response = await Mediator.Send(request);
+                return Ok(response);
             }
             catch (Exception err)
             {
@@ -65,12 +72,14 @@ namespace ProjetoDemo.Controllers.Base
 
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult Remove(int id)
+        public async Task<ActionResult<CartResponse>> Remove(int id)
         {
             try
             {
-                this.ComponentCurrent.Remove(id);
-                return Ok();
+                var request = new RemoveCartRequest();
+                request.Id = id;
+                var response = await Mediator.Send(request);
+                return Ok(response);
             }
             catch (Exception err)
             {
@@ -80,12 +89,14 @@ namespace ProjetoDemo.Controllers.Base
 
         [HttpDelete]
         [Route("/reset/{id}")]
-        public IActionResult RemoveAllItems(int id)
+        public async Task<ActionResult<int>> RemoveAllItems(int id)
         {
             try
             {
-                var numberDeleted = ComponentCurrent.RemoveAllItems(id);
-                return Ok(numberDeleted);
+                var request = new RemoveAllItemsRequest();
+                request.Id = id;
+                var response = await Mediator.Send(request);
+                return Ok(response);
             }
             catch (Exception err)
             {

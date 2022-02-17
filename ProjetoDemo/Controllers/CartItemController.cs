@@ -19,6 +19,10 @@ namespace ProjetoDemo.Controllers
     [ApiController]
     public class CartItemController : BaseControllerMediator
     {
+        public CartItemController(IHelper helper) : base(helper)
+        {
+        }
+
         [HttpPost]
         public async Task<ActionResult<CartItemModelResponse>> Create([FromBody] CartItemRequest request)
         {
