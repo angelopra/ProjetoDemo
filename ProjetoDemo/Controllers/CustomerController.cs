@@ -1,30 +1,33 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using Domain.Model.Request.CustomerRequests;
+using Domain.Model.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoDemo.Controllers.Base;
 using System;
+using System.Threading.Tasks;
 
 namespace ProjetoDemo.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : BaseController<ICustomerComponent>
+    public class CustomerController : BaseControllerMediator
     {
-        public CustomerController([FromServices] ICustomerComponent contract) : base(contract)
+        public CustomerController(IHelper helper) : base(helper)
         {
         }
 
         [HttpPost]
-        public IActionResult Create(CustomerRequest request)
+        public async Task<ActionResult<CustomerResponse>> Create(PostCustomerRequest request)
         {
             try
             {
-                var responseMethod = this.ComponentCurrent.AddCustomer(request);
-                return Ok(responseMethod);
+                var response = await Mediator.Send(request);
+                return Ok(response);
             }
             catch (Exception err)
             {
@@ -34,12 +37,15 @@ namespace ProjetoDemo.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetCostumerById(int id)
+        public async Task<ActionResult<Customer>> GetCustomerById(int id)
         {
             try
             {
-                var responseMethod = this.ComponentCurrent.GetCostumerById(id);
-                return Ok(responseMethod);
+
+                var request = new GetCustomerByIdRequest();
+                request.id = id;
+                var response = await Mediator.Send(request);
+                return Ok(response);
             }
             catch (Exception err)
             {
@@ -47,51 +53,51 @@ namespace ProjetoDemo.Controllers
             }
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("/login")]
-        public IActionResult Login([FromBody]CustomerLoginRequest customer)
-        {
-            try
-            {
-                var token = ComponentCurrent.Login(customer);
-                return Ok(token);
-            }
-            catch (Exception err)
-            {
+        //[AllowAnonymous]
+        //[HttpPost]
+        //[Route("/login")]
+        //public IActionResult Login([FromBody]CustomerLoginRequest customer)
+        //{
+        //    try
+        //    {
+        //        var token = ComponentCurrent.Login(customer);
+        //        return Ok(token);
+        //    }
+        //    catch (Exception err)
+        //    {
 
-                return BadRequest(err);
-            }
-        }
+        //        return BadRequest(err);
+        //    }
+        //}
 
-        [HttpPut]
-        [Route("{id}")]
-        public IActionResult Update(CustomerRequest request, int id)
-        {
-            try
-            {
-                var responseMethod = this.ComponentCurrent.Update(request, id);
-                return Ok(responseMethod);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Data);
-            }
-        }
+        //[HttpPut]
+        //[Route("{id}")]
+        //public IActionResult Update(CustomerRequest request, int id)
+        //{
+        //    try
+        //    {
+        //        var responseMethod = this.ComponentCurrent.Update(request, id);
+        //        return Ok(responseMethod);
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        return BadRequest(err.Data);
+        //    }
+        //}
 
-        [HttpDelete]
-        [Route("{id}")]
-        public IActionResult Remove(int id)
-        {
-            try
-            {
-                this.ComponentCurrent.Remove(id);
-                return Ok();
-            }
-            catch (Exception err)
-            {
-                return NotFound(err.Message);
-            }
-        }
+        //[HttpDelete]
+        //[Route("{id}")]
+        //public IActionResult Remove(int id)
+        //{
+        //    try
+        //    {
+        //        this.ComponentCurrent.Remove(id);
+        //        return Ok();
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        return NotFound(err.Message);
+        //    }
+        //}
     }
 }
