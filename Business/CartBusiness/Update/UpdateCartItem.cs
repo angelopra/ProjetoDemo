@@ -1,6 +1,5 @@
 ﻿using Business.Base;
 using Business.CartBusiness.Get;
-using Business.CartBusiness.StaticMethods;
 using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Model.Response;
@@ -20,9 +19,13 @@ namespace Business.CartBusiness.Update
     {
         private List<ValidateError> updateErrors;
         IValidator<CartItemUpdateRequest> _updateValidator;
-        public UpdateCartItem(IUnityOfWork uow, IValidator<CartItemUpdateRequest> updateValidator) : base(uow)
+        private ICartBusinessMethods _cartBusinessMethods;
+        public UpdateCartItem(IUnityOfWork uow
+            ,IValidator<CartItemUpdateRequest> updateValidator
+            ,ICartBusinessMethods cartBusinessMethods) : base(uow)
         {
             _updateValidator = updateValidator;
+            _cartBusinessMethods = cartBusinessMethods;
         }
 
         public async Task<CartItemModelResponse> Handle(CartItemUpdateRequest request, CancellationToken cancellationToken)
@@ -34,10 +37,10 @@ namespace Business.CartBusiness.Update
                 {
                     throw new Exception();
                 }
-                var cartItem = CartBusinessStaticMethods.GetCartItem(request.IdCart, request.IdProduct, _uow);
+                var cartItem = _cartBusinessMethods.GetCartItem(request.IdCart, request.IdProduct);
 
                 // Updating correspondent cart Total value
-                var cart = CartBusinessStaticMethods.GetCartById(request.IdCart, _uow);
+                var cart = _cartBusinessMethods.GetCartById(request.IdCart);
 
                 if (cart.IsClosed)
                 {

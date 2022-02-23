@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CartBusiness\StaticMethods\**" />
+    <EmbeddedResource Remove="CartBusiness\StaticMethods\**" />
+    <None Remove="CartBusiness\StaticMethods\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Class1.cs" />
     <Compile Remove="ProductBusiness\Post\ProductManagerAdd.cs" />
   </ItemGroup>

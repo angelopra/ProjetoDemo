@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Business.Base;
+using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,11 +8,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.CartBusiness.StaticMethods
+namespace Business.CartBusiness.Get
 {
-    public static class CartBusinessStaticMethods
+    public class CartBusinessMethods : ServiceManagerBase, ICartBusinessMethods
     {
-        public static Cart GetCartById(int id, IUnityOfWork _uow)
+        public CartBusinessMethods(IUnityOfWork uow) : base(uow)
+        {
+        }
+
+        public Cart GetCartById(int id)
         {
             try
             {
@@ -30,11 +35,14 @@ namespace Business.CartBusiness.StaticMethods
                 throw err;
             }
         }
-        public static bool CartItemExists(int idCart, int idProduct, IUnityOfWork _uow)
+
+        public bool CartItemExists(int idCart, int idProduct)
         {
             try
             {
-                var item = _uow.CartItem.Where(c => c.IdCart == idCart && c.IdProduct == idProduct).Include(n => n.Cart).FirstOrDefault();
+                var item = _uow.CartItem
+                            .Where(c => c.IdCart == idCart && c.IdProduct == idProduct)
+                            .Include(n => n.Cart).FirstOrDefault();
                 if (item != null)
                     return true;
                 return false;
@@ -45,11 +53,13 @@ namespace Business.CartBusiness.StaticMethods
             }
         }
 
-        public static CartItem GetCartItem(int idCart, int idProduct, IUnityOfWork _uow)
+        public CartItem GetCartItem(int idCart, int idProduct)
         {
             try
             {
-                var response = _uow.CartItem.Where(c => c.IdCart == idCart && c.IdProduct == idProduct).Include(n => n.Cart).FirstOrDefault();
+                var response = _uow
+                                .CartItem.Where(c => c.IdCart == idCart && c.IdProduct == idProduct)
+                                .Include(n => n.Cart).FirstOrDefault();
                 if (response == null)
                 {
                     throw new Exception("cart or product doesn't exist");
@@ -58,7 +68,6 @@ namespace Business.CartBusiness.StaticMethods
             }
             catch (Exception err)
             {
-
                 throw err;
             }
         }
