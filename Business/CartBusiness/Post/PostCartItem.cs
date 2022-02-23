@@ -14,17 +14,20 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Business.CartBusiness.StaticMethods;
 
 namespace Business.CartBusiness.Post
 {
     public class PostCartItem : ServiceManagerBase, IRequestHandler<PostCartItemRequest, CartItemModelResponse>
     {
         private readonly IValidator<CartItemRequest> _validator;
+        private ICartBusinessMethods _cartBusinessMethods;
         private List<ValidateError> errors;
-        public PostCartItem(IUnityOfWork uow, IValidator<CartItemRequest> validator) : base(uow)
+        public PostCartItem(IUnityOfWork uow
+            ,IValidator<CartItemRequest> validator
+            ,ICartBusinessMethods cartBusinessMethods) : base(uow)
         {
             _validator = validator;
+            _cartBusinessMethods = cartBusinessMethods;
         }
 
         public async Task<CartItemModelResponse> Handle(PostCartItemRequest request, CancellationToken cancellationToken)
@@ -40,13 +43,13 @@ namespace Business.CartBusiness.Post
                 CartItem obj;
 
                 // Updating correspondent cart Total value
-                var cart = CartBusinessStaticMethods.GetCartById(request.IdCart, _uow);
+                var cart = _cartBusinessMethods.GetCartById(request.IdCart);
 
                 cart.Total += request.UnitPrice * request.Quantity;
 
                 _uow.Cart.Update(cart);
 
-                if (CartBusinessStaticMethods.CartItemExists(request.IdCart, request.IdProduct, _uow))
+                if (_cartBusinessMethods.CartItemExists(request.IdCart, request.IdProduct))
                 {
                     obj = IncreaseCartItem(request);
                     _uow.CartItem.Update(obj);
@@ -69,7 +72,7 @@ namespace Business.CartBusiness.Post
         {
             try
             {
-                var item = CartBusinessStaticMethods.GetCartItem(cartItem.IdCart, cartItem.IdProduct, _uow);
+                var item = _cartBusinessMethods.GetCartItem(cartItem.IdCart, cartItem.IdProduct);
                 item.Quantity += cartItem.Quantity;
 
                 return item;

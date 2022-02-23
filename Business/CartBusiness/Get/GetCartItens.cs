@@ -1,5 +1,4 @@
 ﻿using Business.Base;
-using Business.CartBusiness.StaticMethods;
 using Domain.Interfaces;
 using Domain.Model.Request.CartItemRequests;
 using Domain.Model.Response;
