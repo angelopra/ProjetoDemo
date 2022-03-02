@@ -17,12 +17,14 @@ namespace Business.CartBusiness.Post
     public class PostCartItem : ServiceManagerBase, IRequestHandler<PostCartItemRequest, CartItemModelResponse>
     {
         private readonly IValidator<CartItemRequest> _validator;
-        private ICartBusinessMethods _cbm;
+        private ICartBusinessMethods _cartBusinessMethods;
         private List<ValidateError> errors;
-        public PostCartItem(IUnityOfWork uow, IValidator<CartItemRequest> validator, ICartBusinessMethods cbm) : base(uow)
+        public PostCartItem(IUnityOfWork uow
+            ,IValidator<CartItemRequest> validator
+            ,ICartBusinessMethods cartBusinessMethods) : base(uow)
         {
             _validator = validator;
-            _cbm = cbm;
+            _cartBusinessMethods = cartBusinessMethods;
         }
 
         public async Task<CartItemModelResponse> Handle(PostCartItemRequest request, CancellationToken cancellationToken)
@@ -38,13 +40,13 @@ namespace Business.CartBusiness.Post
                 CartItem obj;
 
                 // Updating correspondent cart Total value
-                var cart = _cbm.GetCartById(request.IdCart);
+                var cart = _cartBusinessMethods.GetCartById(request.IdCart);
 
                 cart.Total += request.UnitPrice * request.Quantity;
 
                 _uow.Cart.Update(cart);
 
-                if (_cbm.CartItemExists(request.IdCart, request.IdProduct))
+                if (_cartBusinessMethods.CartItemExists(request.IdCart, request.IdProduct))
                 {
                     obj = IncreaseCartItem(request);
                     _uow.CartItem.Update(obj);
@@ -67,7 +69,7 @@ namespace Business.CartBusiness.Post
         {
             try
             {
-                var item = _cbm.GetCartItem(cartItem.IdCart, cartItem.IdProduct);
+                var item = _cartBusinessMethods.GetCartItem(cartItem.IdCart, cartItem.IdProduct);
                 item.Quantity += cartItem.Quantity;
 
                 return item;

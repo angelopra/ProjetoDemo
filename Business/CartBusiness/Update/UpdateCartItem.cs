@@ -20,10 +20,13 @@ namespace Business.CartBusiness.Update
         private List<ValidateError> updateErrors;
         private ICartBusinessMethods _cbm;
         IValidator<CartItemUpdateRequest> _updateValidator;
-        public UpdateCartItem(IUnityOfWork uow, IValidator<CartItemUpdateRequest> updateValidator, ICartBusinessMethods cbm) : base(uow)
+        private ICartBusinessMethods _cartBusinessMethods;
+        public UpdateCartItem(IUnityOfWork uow
+            ,IValidator<CartItemUpdateRequest> updateValidator
+            ,ICartBusinessMethods cartBusinessMethods) : base(uow)
         {
             _updateValidator = updateValidator;
-            _cbm = cbm;
+            _cartBusinessMethods = cartBusinessMethods;
         }
 
         public async Task<CartItemModelResponse> Handle(CartItemUpdateRequest request, CancellationToken cancellationToken)
@@ -35,10 +38,10 @@ namespace Business.CartBusiness.Update
                 {
                     throw new Exception();
                 }
-                var cartItem = _cbm.GetCartItem(request.IdCart, request.IdProduct);
+                var cartItem = _cartBusinessMethods.GetCartItem(request.IdCart, request.IdProduct);
 
                 // Updating correspondent cart Total value
-                var cart = _cbm.GetCartById(request.IdCart);
+                var cart = _cartBusinessMethods.GetCartById(request.IdCart);
 
                 if (cart.IsClosed)
                 {

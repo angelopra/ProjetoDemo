@@ -15,20 +15,21 @@ namespace Business.CartBusiness.Remove
     public class RemoveCartItem : ServiceManagerBase, IRequestHandler<RemoveCartItemRequest, int>
     {
         private List<ValidateError> errors;
-        private ICartBusinessMethods _cbm;
-        public RemoveCartItem(IUnityOfWork uow, ICartBusinessMethods cbm) : base(uow)
+
+        private ICartBusinessMethods _cartBusinessMethods;
+        public RemoveCartItem(IUnityOfWork uow, ICartBusinessMethods cartBusinessMethods) : base(uow)
         {
-            _cbm = cbm;
+            _cartBusinessMethods = cartBusinessMethods;
         }
 
         public async Task<int> Handle(RemoveCartItemRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var cartItem = _cbm.GetCartItem(request.idCart, request.idProduct);
+                var cartItem = _cartBusinessMethods.GetCartItem(request.idCart, request.idProduct);
 
                 // Updating correspondent cart Total value
-                var cart = _cbm.GetCartById(request.idCart);
+                var cart = _cartBusinessMethods.GetCartById(request.idCart);
                 cart.Total -= cartItem.UnitPrice * cartItem.Quantity;
                 _uow.Cart.Update(cart);
 
