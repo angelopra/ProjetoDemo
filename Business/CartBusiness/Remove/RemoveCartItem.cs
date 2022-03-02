@@ -1,5 +1,4 @@
 ﻿using Business.Base;
-using Business.CartBusiness.StaticMethods;
 using Domain.Interfaces;
 using Domain.Model.Request.CartItemRequests;
 using Domain.Validators;
@@ -16,18 +15,20 @@ namespace Business.CartBusiness.Remove
     public class RemoveCartItem : ServiceManagerBase, IRequestHandler<RemoveCartItemRequest, int>
     {
         private List<ValidateError> errors;
-        public RemoveCartItem(IUnityOfWork uow) : base(uow)
+        private ICartBusinessMethods _cbm;
+        public RemoveCartItem(IUnityOfWork uow, ICartBusinessMethods cbm) : base(uow)
         {
+            _cbm = cbm;
         }
 
         public async Task<int> Handle(RemoveCartItemRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var cartItem = CartBusinessStaticMethods.GetCartItem(request.idCart, request.idProduct, _uow);
+                var cartItem = _cbm.GetCartItem(request.idCart, request.idProduct);
 
                 // Updating correspondent cart Total value
-                var cart = CartBusinessStaticMethods.GetCartById(request.idCart, _uow);
+                var cart = _cbm.GetCartById(request.idCart);
                 cart.Total -= cartItem.UnitPrice * cartItem.Quantity;
                 _uow.Cart.Update(cart);
 

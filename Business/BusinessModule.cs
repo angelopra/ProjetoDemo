@@ -39,6 +39,7 @@ namespace Business
             services.AddScoped<IValidator<OrderRequest>, OrderValidator>();
 
             services.AddScoped<IHelper, BaseBusinessComon>();
+            services.AddScoped<ICartBusinessMethods, CartBusinessMethods>();
         }
     }
 }

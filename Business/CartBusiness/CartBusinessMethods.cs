@@ -1,17 +1,36 @@
-﻿using Domain.Entities;
+﻿using Business.Base;
+using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Business.CartBusiness.StaticMethods
+namespace Business.CartBusiness
 {
-    public static class CartBusinessStaticMethods
+    public class CartBusinessMethods : ServiceManagerBase, ICartBusinessMethods
     {
-        public static Cart GetCartById(int id, IUnityOfWork _uow)
+        public CartBusinessMethods(IUnityOfWork uow) : base(uow)
+        {
+        }
+
+        public Cart GetCart(int id)
+        {
+            try
+            {
+                var cart = _uow.Cart.Where(c => c.Id == id).FirstOrDefault();
+                if (cart == null)
+                {
+                    throw new Exception("Cart not found");
+                }
+                return cart;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+
+        public Cart GetCartById(int id)
         {
             try
             {
@@ -30,7 +49,7 @@ namespace Business.CartBusiness.StaticMethods
                 throw err;
             }
         }
-        public static bool CartItemExists(int idCart, int idProduct, IUnityOfWork _uow)
+        public bool CartItemExists(int idCart, int idProduct)
         {
             try
             {
@@ -45,7 +64,7 @@ namespace Business.CartBusiness.StaticMethods
             }
         }
 
-        public static CartItem GetCartItem(int idCart, int idProduct, IUnityOfWork _uow)
+        public CartItem GetCartItem(int idCart, int idProduct)
         {
             try
             {
