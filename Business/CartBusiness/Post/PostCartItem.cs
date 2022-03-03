@@ -40,7 +40,7 @@ namespace Business.CartBusiness.Post
                 CartItem obj;
 
                 // Updating correspondent cart Total value
-                var cart = _cartBusinessMethods.GetCartById(request.IdCart);
+                var cart = _cartBusinessMethods.GetCart(request.IdCart);
 
                 cart.Total += request.UnitPrice * request.Quantity;
 

@@ -5,11 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
-<<<<<<< HEAD:Business/CartBusiness/CartBusinessMethods.cs
-namespace Business.CartBusiness
-=======
 namespace Business.CartBusiness.Get
->>>>>>> 42ba7dbe2345c031a1408df16e1a5b7b92e4c928:Business/CartBusiness/Get/CartBusinessMethods.cs
 {
     public class CartBusinessMethods : ServiceManagerBase, ICartBusinessMethods
     {
@@ -17,7 +13,6 @@ namespace Business.CartBusiness.Get
         {
         }
 
-<<<<<<< HEAD:Business/CartBusiness/CartBusinessMethods.cs
         public Cart GetCart(int id)
         {
             try
@@ -34,32 +29,6 @@ namespace Business.CartBusiness.Get
                 throw err;
             }
         }
-
-=======
->>>>>>> 42ba7dbe2345c031a1408df16e1a5b7b92e4c928:Business/CartBusiness/Get/CartBusinessMethods.cs
-        public Cart GetCartById(int id)
-        {
-            try
-            {
-                var cart = _uow.Cart.Where(c => c.Id == id).FirstOrDefault();
-                if (cart != null)
-                {
-                    return cart;
-                }
-                else
-                {
-                    throw new Exception("Cart not found");
-                }
-            }
-            catch (Exception err)
-            {
-                throw err;
-            }
-        }
-<<<<<<< HEAD:Business/CartBusiness/CartBusinessMethods.cs
-=======
-
->>>>>>> 42ba7dbe2345c031a1408df16e1a5b7b92e4c928:Business/CartBusiness/Get/CartBusinessMethods.cs
         public bool CartItemExists(int idCart, int idProduct)
         {
             try

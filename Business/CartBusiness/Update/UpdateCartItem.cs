@@ -41,7 +41,7 @@ namespace Business.CartBusiness.Update
                 var cartItem = _cartBusinessMethods.GetCartItem(request.IdCart, request.IdProduct);
 
                 // Updating correspondent cart Total value
-                var cart = _cartBusinessMethods.GetCartById(request.IdCart);
+                var cart = _cartBusinessMethods.GetCart(request.IdCart);
 
                 if (cart.IsClosed)
                 {
