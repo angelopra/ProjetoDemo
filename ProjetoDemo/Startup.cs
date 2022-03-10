@@ -1,31 +1,17 @@
-using Business.CategoryBusiness;
-using Business.CustomerBusiness;
-using Business.ProductBusiness;
-using Business.CartBusiness;
-using Business.OrderBusiness;
 using DataBase;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.Validators;
-using Domain.Model.Request;
-using FluentValidation;
 using ProjetoDemo.Filter;
 using Domain.Entities.Security;
 using Business.AuthenticationBusiness;
 using Microsoft.Extensions.Options;
+using Business;
+using ProjetoDemo.Messenger;
 
 namespace ProjetoDemo
 {
@@ -42,24 +28,8 @@ namespace ProjetoDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDataBaseModule(Configuration);
-
-            // Entities DI
-            services.AddScoped<IProductComponent, ProductComponent>();
-            services.AddScoped<ICategoryComponent, CategoryComponent>();
-            services.AddScoped<ICustomerComponent, CustomerComponent>();
-            services.AddScoped<ICartComponent, CartComponent>();
-            services.AddScoped<ICartItemComponent, CartItemComponent>();
-            services.AddScoped<IOrderComponent, OrderComponent>();
-
-            // Validators DI
-            services.AddScoped<IValidator<CartItemUpdateRequest>, CartItemUpdateValidator>();
-            services.AddScoped<IValidator<CartItemRequest>, CartItemValidator>();
-            services.AddScoped<IValidator<CartRequest>, CartValidator>();
-            services.AddScoped<IValidator<CategoryRequest>, CategoryValidator>();
-            services.AddScoped<IValidator<CustomerRequest>, CustomerValidator>();
-            services.AddScoped<IValidator<CustomerLoginRequest>, CustomerLoginValidator>();
-            services.AddScoped<IValidator<ProductRequest>, ProductValidator>();
-            services.AddScoped<IValidator<OrderRequest>, OrderValidator>();
+            services.AddBusinessModule(Configuration);
+            services.AddMessagerModule();
 
             #region Autentication
             // Configurando a dependência para a classe de validação

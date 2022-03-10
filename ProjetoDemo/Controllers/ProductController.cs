@@ -1,6 +1,9 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using Domain.Model.Request.ProductRequests;
+using Domain.Model.Response;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,38 +15,40 @@ using System.Threading.Tasks;
 
 namespace ProjetoDemo.Controllers
 {
-    [Authorize]
+    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : BaseController<IProductComponent>
+    public class ProductController : BaseControllerMediator
     {
-        public ProductController([FromServices] IProductComponent contract) : base(contract)
+        public ProductController(IHelper helper) : base(helper)
         {
-
         }
 
         [HttpPost]
-        public IActionResult Create(ProductRequest request)
+        public async Task<ActionResult<int>> Create(PostProductRequest request)
         {
             try
             {
-                var responseMethod = ComponentCurrent.AddProduct(request);
-                return Ok(responseMethod);
+                var response = await Mediator.Send(request);
+                return Ok(response);
             }
             catch (Exception err)
             {
-                return BadRequest(err.Data);
+                return NotFound(err.Message);
             }
         }
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetProductById(int id)
+        public async Task<ActionResult<Product>> GetProductById(int id)
         {
             try
             {
-                var responseMethod = ComponentCurrent.GetProductById(id);
-                return Ok(responseMethod);
+
+                var request = new GetProductByIdRequest();
+                request.id = id;
+                var response = await Mediator.Send(request);
+                return Ok(response);
             }
             catch (Exception err)
             {
@@ -53,11 +58,17 @@ namespace ProjetoDemo.Controllers
 
         [HttpGet]
         [Route("AllProducts/{categoryId}")]
-        public IActionResult GetProductsByCategoryId(int categoryId, int? pageNumber, int? pageSize)
+        public async Task<ActionResult<ProductListResponse>> GetProductsByCategoryId(int categoryId, int? pageNumber, int? pageSize)
         {
             try
             {
-                var responseMethod = ComponentCurrent.GetProductsByCategoryId(categoryId, pageNumber, pageSize);
+
+                var request = new GetProductsByCategoryIdRequest();
+                request.categoryId = categoryId;
+                request.pageNumber = pageNumber;
+                request.pageSize = pageSize;
+
+                var responseMethod = await Mediator.Send(request);
                 return Ok(responseMethod);
             }
             catch (Exception err)
@@ -66,14 +77,18 @@ namespace ProjetoDemo.Controllers
             }
         }
 
+
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update(ProductRequest request, int id)
+        public async Task<ActionResult<Product>> Update(ProductRequest req, int id)
         {
             try
             {
-                var responseMethod = ComponentCurrent.Update(request, id);
-                return Ok(responseMethod);
+                var request = _helper.MappingEntity<UpdateProductRequest>(req);
+                request.ProductId = id;
+
+                var response = await Mediator.Send(request);
+                return Ok(response);
             }
             catch (Exception err)
             {
@@ -83,11 +98,14 @@ namespace ProjetoDemo.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult Remove(int id)
+        public async Task<ActionResult<int>> Remove(int id)
         {
             try
             {
-                this.ComponentCurrent.Remove(id);
+
+                var request = new RemoveProductRequest();
+                request.id = id;
+                var response = await Mediator.Send(request);
                 return Ok("Product successfully removed");
             }
             catch (Exception err)

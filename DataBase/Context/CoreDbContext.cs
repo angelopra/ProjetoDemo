@@ -1,14 +1,16 @@
 ﻿using Domain.Entities;
+using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DataBase.Context
 {
-    public class CoreDbContext : DbContext
+    public class CoreDbContext : DbContext, IUnityOfWork
     {
         public CoreDbContext(DbContextOptions<CoreDbContext> options)
             : base(options)
@@ -22,6 +24,19 @@ namespace DataBase.Context
         public virtual DbSet<Cart> Cart { get; set; }
         public virtual DbSet<CartItem> CartItem { get; set; }
         public virtual DbSet<Order> Order { get; set; }
+
+        public async Task<int> Commit(CancellationToken cancellationToken = new CancellationToken())
+        {
+            try
+            {
+                var result = await base.SaveChangesAsync(cancellationToken);
+                return result;
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -2,6 +2,7 @@
 using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Model.Response;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoDemo.Controllers.Base;

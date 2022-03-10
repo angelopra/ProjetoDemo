@@ -5,10 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Class1.cs" />
+    <Compile Remove="CartBusiness\StaticMethods\**" />
+    <EmbeddedResource Remove="CartBusiness\StaticMethods\**" />
+    <None Remove="CartBusiness\StaticMethods\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Class1.cs" />
+    <Compile Remove="ProductBusiness\Post\ProductManagerAdd.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="6.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
