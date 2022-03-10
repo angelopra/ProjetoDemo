@@ -11,6 +11,7 @@ using Domain.Entities.Security;
 using Business.AuthenticationBusiness;
 using Microsoft.Extensions.Options;
 using Business;
+using ProjetoDemo.Messenger;
 
 namespace ProjetoDemo
 {
@@ -28,6 +29,7 @@ namespace ProjetoDemo
         {
             services.AddDataBaseModule(Configuration);
             services.AddBusinessModule(Configuration);
+            services.AddMessagerModule();
 
             #region Autentication
             // Configurando a dependência para a classe de validação
