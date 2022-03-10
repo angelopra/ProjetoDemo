@@ -1,5 +1,6 @@
 ﻿using Business.Base;
 using DataBase.Repository;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
@@ -80,11 +81,13 @@ namespace Business.CartBusiness
             }
         }
 
-        public IEnumerable GetCartItens(int idCart, int? pageNumber, int? pageSize)
+        public PaginatedList<CartItemModelResponse> GetCartItens(int idCart, int? pageNumber, int? pageSize)
         {
             try
             {
-                var paginatedItemList = _context.GetCartItens(idCart).Paginate(pageNumber, pageSize).Map<List<CartItemModelResponse>>();
+                var paginatedItemList = _context.GetCartItens(idCart)
+                    .MappingEntityLinq<List<CartItemModelResponse>>()
+                    .Paginate(pageNumber, pageSize);
 
                 return paginatedItemList;
             }

@@ -69,10 +69,19 @@ namespace Business.Base
                 return default(T);
             }
         }
+        public static T MappingEntityLinq<T>(this IQueryable<object> obj)
+        {
+            return Map<T>(obj);
+        }
 
-        public static PaginatedList<T> Paginate<T>(this IQueryable<T> obj, int? pageNumber, int? itemsPerPage)
+        public static PaginatedList<T> Paginate<T>(this List<T> obj, int? pageNumber, int? itemsPerPage)
         {
             var list = PaginatedList<T>.Create(obj, pageNumber ?? 1, itemsPerPage ?? 10);
+            return list;
+        }
+        public static PaginatedList<T> PaginateLinq<T>(this IQueryable<T> obj, int? pageNumber, int? itemsPerPage)
+        {
+            var list = PaginatedList<T>.Create(obj.ToList(), pageNumber ?? 1, itemsPerPage ?? 10);
             return list;
         }
     }

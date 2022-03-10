@@ -215,16 +215,14 @@ namespace Business.AuthenticationBusiness
 
         public PaginatedList<UserCreateResponse> GetAllUsers(int? pageNumber, int? pageSize)
         {
-            var users = _userManager.Users.Paginate(pageNumber, pageSize);
+            var users = _userManager.Users.PaginateLinq(pageNumber, pageSize);
             var response = users.Map<PaginatedList<UserCreateResponse>>();
-            var list = new List<UserCreateResponse>();
+            var i = 0;
 
-            //foreach (var user in userMapped.Items)
-            //{
-            //    //response[i++].Role = _userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault();
-            //    user.Role = _userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault();
-            //    list.Add(user);
-            //}
+            foreach (var user in users.Items)
+            {
+                response.Items[i++].Role = _userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault();
+            }
             return response;
         }
 
