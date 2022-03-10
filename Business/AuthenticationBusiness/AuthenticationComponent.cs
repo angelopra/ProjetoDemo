@@ -1,4 +1,5 @@
 ﻿using Business.Base;
+using Domain.Common;
 using Domain.Entities.Security;
 using Domain.Enums;
 using Domain.Interfaces;
@@ -212,15 +213,18 @@ namespace Business.AuthenticationBusiness
             }
         }
 
-        public List<UserCreateResponse> GetAllUsers(int? pageNumber, int? pageSize)
+        public PaginatedList<UserCreateResponse> GetAllUsers(int? pageNumber, int? pageSize)
         {
-            var users = _userManager.Users.Paginate(pageNumber, pageSize).ToList();
-            var response = users.Map<List<UserCreateResponse>>();
-            int i = 0;
-            foreach (var user in users)
-            {
-                response[i++].Role = _userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault();
-            }
+            var users = _userManager.Users.Paginate(pageNumber, pageSize);
+            var response = users.Map<PaginatedList<UserCreateResponse>>();
+            var list = new List<UserCreateResponse>();
+
+            //foreach (var user in userMapped.Items)
+            //{
+            //    //response[i++].Role = _userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault();
+            //    user.Role = _userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault();
+            //    list.Add(user);
+            //}
             return response;
         }
 

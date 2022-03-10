@@ -6,8 +6,11 @@
 
   <ItemGroup>
     <Compile Remove="CartBusiness\StaticMethods\**" />
+    <Compile Remove="Pagination\**" />
     <EmbeddedResource Remove="CartBusiness\StaticMethods\**" />
+    <EmbeddedResource Remove="Pagination\**" />
     <None Remove="CartBusiness\StaticMethods\**" />
+    <None Remove="Pagination\**" />
   </ItemGroup>
 
   <ItemGroup>

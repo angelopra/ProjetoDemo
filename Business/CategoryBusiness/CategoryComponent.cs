@@ -1,7 +1,7 @@
 ﻿using Business.Base;
-using Business.Pagination;
 using DataBase.Context;
 using DataBase.Repository;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
@@ -102,7 +102,7 @@ namespace Business.CategoryBusiness
             }
         }
 
-        public List<Category> GetAllCategories(int? pageNumber, int? pageSize)
+        public PaginatedList<Category> GetAllCategories(int? pageNumber, int? pageSize)
         {
             try
             {
