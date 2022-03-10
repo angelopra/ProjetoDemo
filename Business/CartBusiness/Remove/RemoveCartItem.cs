@@ -29,7 +29,7 @@ namespace Business.CartBusiness.Remove
                 var cartItem = _cartBusinessMethods.GetCartItem(request.idCart, request.idProduct);
 
                 // Updating correspondent cart Total value
-                var cart = _cartBusinessMethods.GetCartById(request.idCart);
+                var cart = _cartBusinessMethods.GetCart(request.idCart);
                 cart.Total -= cartItem.UnitPrice * cartItem.Quantity;
                 _uow.Cart.Update(cart);
 

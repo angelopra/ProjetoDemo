@@ -20,8 +20,10 @@ namespace Business.CartBusiness.Update
     {
         private List<ValidateError> errors;
         private readonly IValidator<CartRequest> _validator;
-        public UpdateCart(IUnityOfWork uow, IValidator<CartRequest> validator) : base(uow)
+        private ICartBusinessMethods _cbm;
+        public UpdateCart(IUnityOfWork uow, IValidator<CartRequest> validator, ICartBusinessMethods cbm) : base(uow)
         {
+            _cbm = cbm;
             _validator = validator;
         }
 
@@ -35,7 +37,7 @@ namespace Business.CartBusiness.Update
                     throw new Exception();
                 }
 
-                var cart = GetCart(request.IdCart);
+                var cart = _cbm.GetCart(request.IdCart);
                 cart.Active = request.Active;
                 cart.IdCustomer = request.IdCustomer;
                 cart.IsClosed = request.IsClosed;
@@ -50,23 +52,6 @@ namespace Business.CartBusiness.Update
             {
                 MapperException(err, errors);
                 throw;
-            }
-        }
-
-        private Cart GetCart(int id)
-        {
-            try
-            {
-                var cart = _uow.Cart.Where(c => c.Id == id).FirstOrDefault();
-                if (cart == null)
-                {
-                    throw new Exception("Cart not found");
-                }
-                return cart;
-            }
-            catch (Exception err)
-            {
-                throw err;
             }
         }
 

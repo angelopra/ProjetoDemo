@@ -16,8 +16,10 @@ namespace Business.CartBusiness.Remove
     public class RemoveAllItems : ServiceManagerBase, IRequestHandler<RemoveAllItemsRequest, int>
     {
         private List<ValidateError> errors;
-        public RemoveAllItems(IUnityOfWork uow) : base(uow)
+        private ICartBusinessMethods _cbm;
+        public RemoveAllItems(IUnityOfWork uow, ICartBusinessMethods cbm) : base(uow)
         {
+            _cbm = cbm;
         }
 
         public async Task<int> Handle(RemoveAllItemsRequest request, CancellationToken cancellationToken)
@@ -36,7 +38,7 @@ namespace Business.CartBusiness.Remove
                         numberDeleted++;
                     }
 
-                    var cart = GetCart(request.Id);
+                    var cart = _cbm.GetCart(request.Id);
                     cart.Total = 0;
 
                     _uow.Cart.Update(cart);
@@ -55,21 +57,6 @@ namespace Business.CartBusiness.Remove
                 throw;
             }
         }
-        private Cart GetCart(int id)
-        {
-            try
-            {
-                var cart = _uow.Cart.Where(c => c.Id == id).FirstOrDefault();
-                if (cart == null)
-                {
-                    throw new Exception("Cart not found");
-                }
-                return cart;
-            }
-            catch (Exception err)
-            {
-                throw err;
-            }
-        }
+        
     }
 }

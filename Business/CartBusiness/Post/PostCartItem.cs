@@ -7,11 +7,8 @@ using Domain.Model.Response;
 using Domain.Validators;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -43,7 +40,7 @@ namespace Business.CartBusiness.Post
                 CartItem obj;
 
                 // Updating correspondent cart Total value
-                var cart = _cartBusinessMethods.GetCartById(request.IdCart);
+                var cart = _cartBusinessMethods.GetCart(request.IdCart);
 
                 cart.Total += request.UnitPrice * request.Quantity;
 

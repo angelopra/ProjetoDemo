@@ -18,6 +18,7 @@ namespace Business.CartBusiness.Update
     public class UpdateCartItem : ServiceManagerBase, IRequestHandler<CartItemUpdateRequest, CartItemModelResponse>
     {
         private List<ValidateError> updateErrors;
+        private ICartBusinessMethods _cbm;
         IValidator<CartItemUpdateRequest> _updateValidator;
         private ICartBusinessMethods _cartBusinessMethods;
         public UpdateCartItem(IUnityOfWork uow
@@ -40,7 +41,7 @@ namespace Business.CartBusiness.Update
                 var cartItem = _cartBusinessMethods.GetCartItem(request.IdCart, request.IdProduct);
 
                 // Updating correspondent cart Total value
-                var cart = _cartBusinessMethods.GetCartById(request.IdCart);
+                var cart = _cartBusinessMethods.GetCart(request.IdCart);
 
                 if (cart.IsClosed)
                 {

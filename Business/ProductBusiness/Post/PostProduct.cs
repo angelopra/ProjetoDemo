@@ -1,5 +1,6 @@
 ﻿using Business.Base;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Validators;
@@ -18,10 +19,13 @@ namespace Business.ProductBusiness.Create
     {
         private readonly IValidator<ProductRequest> _validator;
         private List<ValidateError> errors;
-        public PostProduct(IUnityOfWork uow, IValidator<ProductRequest> validator)
+        private IMessengerBusClient _messenger;
+
+        public PostProduct(IUnityOfWork uow, IValidator<ProductRequest> validator, IMessengerBusClient messenger)
             : base(uow)
         {
             _validator = validator;
+            _messenger = messenger;
         }
 
         public async Task<int> Handle(PostProductRequest request, CancellationToken cancellationToken)
@@ -47,6 +51,8 @@ namespace Business.ProductBusiness.Create
 
                 await _uow.Product.AddAsync(obj);
                 await _uow.Commit(cancellationToken);
+
+                _messenger.Publish(EnumGetValue(QueuesEnum.ProductAdd), obj, "ProductQueue", "ProductExchange");
 
                 return obj.Id;
             }

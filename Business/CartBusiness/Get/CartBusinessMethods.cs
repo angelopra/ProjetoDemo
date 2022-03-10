@@ -3,10 +3,7 @@ using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.CartBusiness.Get
 {
@@ -16,26 +13,22 @@ namespace Business.CartBusiness.Get
         {
         }
 
-        public Cart GetCartById(int id)
+        public Cart GetCart(int id)
         {
             try
             {
                 var cart = _uow.Cart.Where(c => c.Id == id).FirstOrDefault();
-                if (cart != null)
-                {
-                    return cart;
-                }
-                else
+                if (cart == null)
                 {
                     throw new Exception("Cart not found");
                 }
+                return cart;
             }
             catch (Exception err)
             {
                 throw err;
             }
         }
-
         public bool CartItemExists(int idCart, int idProduct)
         {
             try
