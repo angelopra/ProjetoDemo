@@ -1,4 +1,5 @@
-﻿using Domain.Model.Request;
+﻿using Domain.Common;
+using Domain.Model.Request;
 using Domain.Model.Response;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Domain.Interfaces
         TokenResponse ValidateCredentials(AuthenticationRequest request);
         public UserCreateResponse Create(UserCreateRequest request);
         public UserCreateResponse GetUser(string userName);
-        public List<UserCreateResponse> GetAllUsers(int? pageNumber, int? pageSize);
+        public PaginatedList<UserCreateResponse> GetAllUsers(int? pageNumber, int? pageSize);
         public void DeleteUser(string userName);
     }
 }

@@ -5,19 +5,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Pagination
+namespace Domain.Common
 {
-    public class PaginatedList<T> : List<T>
+    public class PaginatedList<T>
     {
+        public List<T> Items { get; set; }
         public int PageIndex { get; private set; }
         public int TotalPages { get; private set; }
+        public int TotalCount { get; }
 
         public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
         {
             PageIndex = pageIndex;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            TotalCount = count;
 
-            this.AddRange(items);
+            Items = items;
         }
 
         public bool HasPreviousPage
