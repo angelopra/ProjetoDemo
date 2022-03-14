@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace ProjetoDemo.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : BaseController<ICategoryComponent>

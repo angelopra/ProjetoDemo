@@ -17,6 +17,7 @@ namespace ProjetoDemo.Messenger
             var connection = connectionFactory.CreateConnection("Messengers");
             services.AddSingleton(new ProducerConnection(connection));
             services.AddSingleton<IMessengerBusClient, RabbitMqClient>();
+            services.AddHostedService<MessagerSubscriber>();
         }
     }
 }
