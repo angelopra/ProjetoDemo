@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Domain.Common;
+using Domain.Entities;
 using Domain.Model.Request;
 using Domain.Model.Response;
 using System;
@@ -16,6 +17,6 @@ namespace Domain.Interfaces
         CartItemModelResponse Update(CartItemUpdateRequest request, int idCart, int idProduct);
         void Remove(int idCart, int idProduct);
         CartItemModelResponse GetCartItem(int idCart, int idProduct);
-        IEnumerable GetCartItens(int idCart, int? pageNumber, int? pageSize);
+        PaginatedList<CartItemModelResponse> GetCartItens(int idCart, int? pageNumber, int? pageSize);
     }
 }

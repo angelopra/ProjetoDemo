@@ -106,7 +106,7 @@ namespace Business.CategoryBusiness
         {
             try
             {
-                var response = _context.GetAllCategories().Paginate(pageNumber, pageSize);
+                var response = _context.GetAllCategories().PaginateLinq(pageNumber, pageSize);
                 return response;
             }
             catch (Exception err)

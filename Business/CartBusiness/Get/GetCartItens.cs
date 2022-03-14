@@ -1,4 +1,5 @@
 ﻿using Business.Base;
+using Domain.Common;
 using Domain.Interfaces;
 using Domain.Model.Request.CartItemRequests;
 using Domain.Model.Response;
@@ -14,14 +15,14 @@ using System.Threading.Tasks;
 
 namespace Business.CartBusiness.Get
 {
-    public class GetCartItens : ServiceManagerBase, IRequestHandler<GetCartItensRequest, IEnumerable>
+    public class GetCartItens : ServiceManagerBase, IRequestHandler<GetCartItensRequest, PaginatedList<CartItemModelResponse>>
     {
         private List<ValidateError> errors;
         public GetCartItens(IUnityOfWork uow) : base(uow)
         {
         }
 
-        public async Task<IEnumerable> Handle(GetCartItensRequest request, CancellationToken cancellationToken)
+        public async Task<PaginatedList<CartItemModelResponse>> Handle(GetCartItensRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -31,7 +32,9 @@ namespace Business.CartBusiness.Get
                                 where c.IdCart == request.idCart
                                 select c;
 
-                    var paginatedItemList = query.Paginate(request.pageNumber, request.pageSize).Map<List<CartItemModelResponse>>();
+                    var paginatedItemList = query
+                        .MappingEntityLinq<List<CartItemModelResponse>>()
+                        .Paginate(request.pageNumber, request.pageSize);
 
                     return paginatedItemList;
                 }

@@ -215,7 +215,7 @@ namespace Business.AuthenticationBusiness
 
         public PaginatedList<UserCreateResponse> GetAllUsers(int? pageNumber, int? pageSize)
         {
-            var users = _userManager.Users.Paginate(pageNumber, pageSize);
+            var users = _userManager.Users.PaginateLinq(pageNumber, pageSize);
             var response = users.Map<PaginatedList<UserCreateResponse>>();
             var i = 0;
 

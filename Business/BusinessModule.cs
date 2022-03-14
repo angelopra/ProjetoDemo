@@ -5,6 +5,7 @@ using Business.CategoryBusiness;
 using Business.CustomerBusiness;
 using Business.OrderBusiness;
 using Business.ProductBusiness;
+using Business.ProductBusiness.Subscriber;
 using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Validators;
@@ -21,6 +22,9 @@ namespace Business
         public static void AddBusinessModule(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
+
+            //Subscribers
+            services.AddHostedService<ProductSubscriber>();
 
             // Entities DI
             services.AddScoped<ICategoryComponent, CategoryComponent>();

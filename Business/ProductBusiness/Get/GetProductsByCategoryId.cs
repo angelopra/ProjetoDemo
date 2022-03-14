@@ -1,4 +1,5 @@
 ﻿using Business.Base;
+using Domain.Common;
 using Domain.Interfaces;
 using Domain.Model.Request.ProductRequests;
 using Domain.Model.Response;
@@ -13,14 +14,14 @@ using System.Threading.Tasks;
 
 namespace Business.ProductBusiness.Get
 {
-    public class GetProductsByCategoryId : ServiceManagerBase, IRequestHandler<GetProductsByCategoryIdRequest, List<ProductListResponse>>
+    public class GetProductsByCategoryId : ServiceManagerBase, IRequestHandler<GetProductsByCategoryIdRequest, PaginatedList<ProductListResponse>>
     {
         private List<ValidateError> errors;
         public GetProductsByCategoryId(IUnityOfWork uow) : base(uow)
         {
         }
 
-        public async Task<List<ProductListResponse>> Handle(GetProductsByCategoryIdRequest request, CancellationToken cancellationToken)
+        public async Task<PaginatedList<ProductListResponse>> Handle(GetProductsByCategoryIdRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -31,7 +32,7 @@ namespace Business.ProductBusiness.Get
                 }
                 var products = _uow.Product.Where(p => p.Category.Id == request.categoryId);
 
-                var response = products.Paginate(request.pageNumber, request.pageSize).Map<List<ProductListResponse>>();
+                var response = products.MappingEntityLinq<List<ProductListResponse>>().Paginate(request.pageNumber, request.pageSize);
 
                 return response;
             }
