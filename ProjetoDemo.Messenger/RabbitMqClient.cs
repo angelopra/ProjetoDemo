@@ -22,20 +22,24 @@ namespace ProjetoDemo.Messenger
         {
             using (var channel = _connection.CreateModel())
             {
-                var settings = new JsonSerializerSettings
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                    NullValueHandling = NullValueHandling.Ignore,
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                };
-
-                var payload = JsonConvert.SerializeObject(message, settings);
-                var body = Encoding.UTF8.GetBytes(payload);
-
-                //channel.ExchangeDeclare(exchange, ExchangeType.Topic, true);
+                var body = MakeBody(message);
+                channel.ExchangeDeclare(exchange, ExchangeType.Topic, true);
                 //channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, null);
                 channel.BasicPublish(exchange, routingKey, null, body);
             }
+        }
+
+        private byte[] MakeBody(object message)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
+            var payload = JsonConvert.SerializeObject(message, settings);
+            return Encoding.UTF8.GetBytes(payload);
         }
     }
 }
