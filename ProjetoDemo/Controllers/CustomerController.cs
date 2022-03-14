@@ -53,22 +53,22 @@ namespace ProjetoDemo.Controllers
             }
         }
 
-        //[AllowAnonymous]
-        //[HttpPost]
-        //[Route("/login")]
-        //public IActionResult Login([FromBody]CustomerLoginRequest customer)
-        //{
-        //    try
-        //    {
-        //        var token = ComponentCurrent.Login(customer);
-        //        return Ok(token);
-        //    }
-        //    catch (Exception err)
-        //    {
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("/login")]
+        public async Task<ActionResult<CustomerResponse>> Login([FromBody] LoginCustomerRequest request)
+        {
+            try
+            {
+                var token = await Mediator.Send(request);
+                return Ok(token);
+            }
+            catch (Exception err)
+            {
 
-        //        return BadRequest(err);
-        //    }
-        //}
+                return BadRequest(err);
+            }
+        }
 
         //[HttpPut]
         //[Route("{id}")]

@@ -99,21 +99,21 @@ namespace Business.CustomerBusiness
 
                 customerMapped.Hash = HashPassword(request.password, salt);
 
-
-                if (customerMapped.Hash == customerDB.Hash)
+                if (customerMapped.Hash != customerDB.Hash)
                 {
-                    var customerResponse = customerMapped.Map<CustomerResponse>();
-
-                    Cart cart = new Cart();
-                    cart.IdCustomer = customerResponse.Id;
-                    cart.Active = true;
-                    var idCart = _context.AddCart(cart);
-
-                    customerResponse.IdCart = idCart;
-
-                    return customerResponse;
+                    throw new Exception("Wrong password");
                 }
-                throw new Exception("wrong password");
+
+                var customerResponse = customerMapped.Map<CustomerResponse>();
+
+                Cart cart = new Cart();
+                cart.IdCustomer = customerResponse.Id;
+                cart.Active = true;
+                var idCart = _context.AddCart(cart);
+
+                customerResponse.IdCart = idCart;
+
+                return customerResponse;
             }
             catch (Exception err)
             {
