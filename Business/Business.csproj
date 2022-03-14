@@ -16,6 +16,7 @@
   <ItemGroup>
     <Compile Remove="Class1.cs" />
     <Compile Remove="ProductBusiness\Post\ProductManagerAdd.cs" />
+    <Compile Remove="ProductBusiness\Subscriber\MessageSubscriber.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +28,10 @@
   <ItemGroup>
     <ProjectReference Include="..\DataBase\DataBase.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ProductBusiness\Subscriber\" />
   </ItemGroup>
 
 </Project>
