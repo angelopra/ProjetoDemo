@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Domain.Messengers;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -27,7 +28,6 @@ namespace ProjetoDemo.Messenger
             //stoppingToken.ThrowIfCancellationRequested();
 
             var consumer = new EventingBasicConsumer(_channel);
-
             consumer.Received += (ModuleHandle, ea) =>
             {
                 Console.WriteLine("---> event received");

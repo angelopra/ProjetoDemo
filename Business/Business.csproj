@@ -18,6 +18,7 @@
     <Compile Remove="ProductBusiness\Post\ProductManagerAdd.cs" />
     <Compile Remove="ProductBusiness\Subscriber\MessageSubscriber.cs" />
     <Compile Remove="ProductBusiness\Subscriber\ProductMessagerSubscriber.cs" />
+    <Compile Remove="ProductBusiness\Subscriber\ProductSubscriberDerived.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,10 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DataBase\DataBase.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ProductBusiness\Subscriber\" />
+    <ProjectReference Include="..\ProjetoDemo.Messenger\ProjetoDemo.Messenger.csproj" />
   </ItemGroup>
 
 </Project>

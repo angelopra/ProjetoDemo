@@ -1,7 +1,7 @@
 ﻿using Domain.Interfaces;
 using RabbitMQ.Client;
 
-namespace ProjetoDemo.Messenger
+namespace Domain.Messengers
 {
     public class ProducerConnection : IProducerConnection
     {
