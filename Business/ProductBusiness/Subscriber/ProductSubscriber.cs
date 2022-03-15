@@ -1,4 +1,9 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Domain.Interfaces;
+using Domain.Messengers;
+using Domain.Messengers.QueueType;
+using Microsoft.Extensions.Hosting;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,24 +13,16 @@ using System.Threading.Tasks;
 
 namespace Business.ProductBusiness.Subscriber
 {
-    public class ProductSubscriber : IHostedService
+    public class ProductSubscriber : InitializeSubscriber<ProductAddQueue>
     {
-        private Timer _timer;
-
-        public Task StartAsync(CancellationToken cancellationToken)
+        public ProductSubscriber(ProducerConnection connection, ProductAddQueue obj) : base(connection, obj)
         {
-            _timer = new Timer(DoWork, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1));
-            return Task.CompletedTask;
+
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public virtual void ProcessEvent(string message)
         {
-            throw new NotImplementedException();
-        }
-
-        private void DoWork(object state)
-        {
-            Console.WriteLine($"{DateTime.Now:o} =>");
+            Console.WriteLine("chamou no ProductSubscriber");
         }
     }
 }

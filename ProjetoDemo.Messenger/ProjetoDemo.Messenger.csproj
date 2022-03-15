@@ -2,12 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Class1.cs" />
     <Compile Remove="IMessageBusClient.cs" />
+    <Compile Remove="MessagerSubscriber.cs" />
+    <Compile Remove="ProducerConnection.cs" />
   </ItemGroup>
 
   <ItemGroup>

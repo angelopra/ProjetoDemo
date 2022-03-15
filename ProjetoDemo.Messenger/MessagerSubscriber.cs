@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Domain.Messengers;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -13,14 +14,12 @@ namespace ProjetoDemo.Messenger
 {
     public class MessagerSubscriber : BackgroundService
     {
-        private readonly IConfiguration _configuration;
         private readonly IConnection _connection;
         private IModel _channel;
         private string _queueName;
 
-        public MessagerSubscriber( IConfiguration configuration, ProducerConnection producerConnection)
+        public MessagerSubscriber( ProducerConnection producerConnection)
         {
-            _configuration = configuration;
             _connection = producerConnection.Connection;
             Initialize();
         }
@@ -29,7 +28,6 @@ namespace ProjetoDemo.Messenger
             //stoppingToken.ThrowIfCancellationRequested();
 
             var consumer = new EventingBasicConsumer(_channel);
-
             consumer.Received += (ModuleHandle, ea) =>
             {
                 Console.WriteLine("---> event received");
@@ -40,18 +38,28 @@ namespace ProjetoDemo.Messenger
                 //_eventProcessor.ProcessEvent(message);
             };
 
-            _channel.BasicConsume(queue: _queueName, autoAck: false, consumer: consumer);
+            _channel.BasicConsume(queue: _queueName, autoAck: true, consumer: consumer);
             return Task.CompletedTask;
         }
 
         private void Initialize()
         {
-            using (var channel = _connection.CreateModel())
+            Console.WriteLine("---> listening on RabbitMQ");
+            _channel = _connection.CreateModel();
+            _channel.ExchangeDeclare(exchange: "ProductExchange", type: ExchangeType.Topic);
+            _queueName = _channel.QueueDeclare().QueueName;
+            _channel.QueueBind(queue: _queueName, exchange: "ProductExchange", routingKey: "ProductQueue");
+        }
+
+        public override void Dispose()
+        {
+            if (_channel.IsOpen)
             {
-                _channel.ExchangeDeclare(exchange: "teste", type: ExchangeType.Fanout);
-                _queueName = _channel.QueueDeclare().QueueName;
-                _channel.QueueBind(queue: _queueName, exchange: "teste", routingKey: "");
+                _channel.Close();
+                _connection.Close();
             }
+
+            base.Dispose();
         }
     }
 }
