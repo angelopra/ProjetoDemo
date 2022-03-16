@@ -11,24 +11,32 @@ using System.Threading.Tasks;
 
 namespace ProjetoDemo.Messenger
 {
-    public class RabbitMqClient : IMessengerBusClient
+    public class RabbitMqClient : IMessengerBusClient, IDisposable
     {
         private readonly IConnection _connection;
+        private IModel _channel;
         public RabbitMqClient(ProducerConnection producerConnection)
         {
             _connection = producerConnection.Connection;
+            _channel = _connection.CreateModel();
+        }
+
+        public void Dispose()
+        {
+            if (_channel.IsOpen)
+            {
+                _channel.Close();
+                _connection.Close();
+            }
         }
 
         public void Publish(string queueName, object message, string routingKey, string exchange)
         {
             // aqui é criado um canal pra cada vez que o publish é chamado, mas na documentação do rabbitmq é recomendado a reutilização de canais
-            using (var channel = _connection.CreateModel())
-            {
-                var body = MakeBody(message);
-                //channel.ExchangeDeclare(exchange, ExchangeType.Topic, true);
-                //channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, null);
-                channel.BasicPublish(exchange, routingKey, null, body);
-            }
+            var body = MakeBody(message);
+            //channel.ExchangeDeclare(exchange, ExchangeType.Topic, true);
+            //channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, null);
+            _channel.BasicPublish(exchange, routingKey, null, body);
         }
 
         private byte[] MakeBody(object message)

@@ -19,7 +19,7 @@ namespace ProjetoDemo.Messenger
 
             var connection = connectionFactory.CreateConnection("Messengers");
 
-            services.AddSingleton(new ProductAddQueue("ProductAdd", "ProductExchange", "ProductQueue", ExchangeType.Direct));
+            services.AddSingleton(new ProductAddQueue("ProductAdd", "ProductExchange", "ProductKey", ExchangeType.Topic));
             services.AddSingleton(new ProducerConnection(connection));
             services.AddSingleton<IMessengerBusClient, RabbitMqClient>();
         }
