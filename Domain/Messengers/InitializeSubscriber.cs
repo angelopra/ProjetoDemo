@@ -16,8 +16,6 @@ namespace Domain.Messengers
         public IModel _channel;
         private readonly IConnection _connection;
         public QueueModelSubscriber _obj;
-        private Timer _timer;
-        private string _queueName;
 
 
         public InitializeSubscriber(ProducerConnection connection, T obj)
@@ -102,7 +100,7 @@ namespace Domain.Messengers
         {
             Console.WriteLine("implementa essa bagaça");
         }
-        public void Dispose()
+        public override void Dispose()
         {
             if (_channel.IsOpen)
             {

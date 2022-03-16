@@ -44,7 +44,6 @@ namespace ProjetoDemo.Controllers
         {
             try
             {
-
                 var request = new GetProductByIdRequest();
                 request.id = id;
                 var response = await Mediator.Send(request);
