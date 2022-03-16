@@ -42,8 +42,7 @@ namespace ProjetoDemo.Controllers
             try
             {
 
-                var request = new GetCustomerByIdRequest();
-                request.id = id;
+                var request = new GetCustomerByIdRequest(id);
                 var response = await Mediator.Send(request);
                 return Ok(response);
             }
@@ -70,34 +69,36 @@ namespace ProjetoDemo.Controllers
             }
         }
 
-        //[HttpPut]
-        //[Route("{id}")]
-        //public IActionResult Update(CustomerRequest request, int id)
-        //{
-        //    try
-        //    {
-        //        var responseMethod = this.ComponentCurrent.Update(request, id);
-        //        return Ok(responseMethod);
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return BadRequest(err.Data);
-        //    }
-        //}
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<ActionResult<CustomerResponse>> Update(UpdateCustomerRequest request, int id)
+        {
+            try
+            {
+                request.Id = id;
+                var response = await Mediator.Send(request);
+                return Ok(response);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Data);
+            }
+        }
 
-        //[HttpDelete]
-        //[Route("{id}")]
-        //public IActionResult Remove(int id)
-        //{
-        //    try
-        //    {
-        //        this.ComponentCurrent.Remove(id);
-        //        return Ok();
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return NotFound(err.Message);
-        //    }
-        //}
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult<int>> Remove(int id)
+        {
+            try
+            {
+                var request = new RemoveCustomerRequest(id);
+                var response = await Mediator.Send(request);
+                return Ok($"Customer {id} successfully removed");
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Message);
+            }
+        }
     }
 }

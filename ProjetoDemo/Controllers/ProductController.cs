@@ -45,8 +45,7 @@ namespace ProjetoDemo.Controllers
             try
             {
 
-                var request = new GetProductByIdRequest();
-                request.id = id;
+                var request = new GetProductByIdRequest(id);
                 var response = await Mediator.Send(request);
                 return Ok(response);
             }
@@ -62,7 +61,6 @@ namespace ProjetoDemo.Controllers
         {
             try
             {
-
                 var request = new GetProductsByCategoryIdRequest();
                 request.categoryId = categoryId;
                 request.pageNumber = pageNumber;
@@ -103,10 +101,9 @@ namespace ProjetoDemo.Controllers
             try
             {
 
-                var request = new RemoveProductRequest();
-                request.id = id;
+                var request = new RemoveProductRequest(id);
                 var response = await Mediator.Send(request);
-                return Ok("Product successfully removed");
+                return Ok($"Product {id} successfully removed");
             }
             catch (Exception err)
             {

@@ -5,6 +5,11 @@ namespace Domain.Model.Request.ProductRequests
 {
     public class RemoveProductRequest : BaseRequest, IRequest<int>
     {
-        public int id { get; set; }
+        public int Id { get; set; }
+
+        public RemoveProductRequest(int id)
+        {
+            Id = id;
+        }
     }
 }

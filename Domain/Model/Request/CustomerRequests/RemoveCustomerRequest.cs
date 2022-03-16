@@ -1,6 +1,4 @@
-﻿using Domain.Entities;
-using Domain.Model.Base;
-using MediatR;
+﻿using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Model.Request.CustomerRequests
 {
-    public class GetCustomerByIdRequest : BaseRequest, IRequest<Customer>
+    public class RemoveCustomerRequest : IRequest<int>
     {
         public int Id { get; set; }
 
-        public GetCustomerByIdRequest(int id)
+        public RemoveCustomerRequest(int id)
         {
             Id = id;
         }

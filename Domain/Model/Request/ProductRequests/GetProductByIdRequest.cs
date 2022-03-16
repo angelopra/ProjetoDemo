@@ -11,6 +11,11 @@ namespace Domain.Model.Request.ProductRequests
 {
     public class GetProductByIdRequest : BaseRequest, IRequest<Product>
     {
-        public int id { get; set; }
+        public int Id { get; set; }
+
+        public GetProductByIdRequest(int id)
+        {
+            Id = id;
+        }
     }
 }

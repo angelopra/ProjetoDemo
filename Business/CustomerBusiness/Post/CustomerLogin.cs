@@ -56,12 +56,16 @@ namespace Business.CustomerBusiness.Post
 
                 var customerResponse = customerMapped.Map<CustomerResponse>();
 
-                //Cart cart = new Cart();
-                //cart.IdCustomer = customerResponse.Id;
-                //cart.Active = true;
-                //_uow.Cart.AddAsync(cart);
+                var customerCart = _uow.Cart.Where(c => c.IdCustomer == customerResponse.Id).FirstOrDefault();
 
-                //customerResponse.IdCart = cart.Id;
+                if(customerCart != null)
+                {
+                    customerResponse.IdCart = customerCart.Id;
+                }
+                else
+                {
+                    customerResponse.IdCart = null;
+                }
 
                 return customerResponse;
             }
