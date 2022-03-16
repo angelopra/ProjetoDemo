@@ -17,12 +17,12 @@ namespace Business.ProductBusiness.Subscriber
     {
         public ProductSubscriber(ProducerConnection connection, ProductAddQueue obj) : base(connection, obj)
         {
-
         }
 
-        public virtual void ProcessEvent(string message)
+        public override void ProcessEvent(string message)
         {
-            Console.WriteLine("chamou no ProductSubscriber");
+            Console.WriteLine("chamou no override");
+            Console.WriteLine(message);
         }
     }
 }

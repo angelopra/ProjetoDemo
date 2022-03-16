@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Messengers
 {
-    public abstract class InitializeSubscriber<T> : IHostedService
+    public abstract class InitializeSubscriber<T> : BackgroundService
     {
         public IModel _channel;
         private readonly IConnection _connection;
         public QueueModelSubscriber _obj;
         private Timer _timer;
-
+        private string _queueName;
 
 
         public InitializeSubscriber(ProducerConnection connection, T obj)
@@ -32,49 +32,7 @@ namespace Domain.Messengers
             _channel.QueueBind(queue: _obj.QueueName, exchange: _obj.Exchange, routingKey: _obj.RoutingKey);
         }
 
-        //protected override Task ExecuteAsync(CancellationToken stoppingToken)
-        //{
-        //    //stoppingToken.ThrowIfCancellationRequested();
-        //    try
-        //    {
-        //        var consumer = new EventingBasicConsumer(_channel);
-        //        consumer.Received += (ModuleHandle, ea) =>
-        //        {
-        //            Console.WriteLine("---> event received");
-
-        //            var body = ea.Body;
-        //            var message = Encoding.UTF8.GetString(body.ToArray());
-
-        //            // event processor
-        //            ProcessEvent(message);
-
-        //            _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-        //            _channel.BasicConsume(queue: _obj.QueueName, autoAck: false, consumer: consumer);
-        //        };
-
-        //        return Task.CompletedTask;
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        // se der algum erro ele escreve a mensagem em um arquivo de texto ou algo do tipo pra se ter o log
-        //        throw err;
-        //    }
-        //}
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            _timer = new Timer(DoWork, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1));
-
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            Dispose();
-            return Task.CompletedTask;
-        }
-
-        private void DoWork(object state)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             try
             {
@@ -90,8 +48,10 @@ namespace Domain.Messengers
                     ProcessEvent(message);
 
                     _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-                    _channel.BasicConsume(queue: _obj.QueueName, autoAck: false, consumer: consumer);
                 };
+
+                _channel.BasicConsume(queue: _obj.QueueName, autoAck: false, consumer: consumer);
+                return Task.CompletedTask;
             }
             catch (Exception err)
             {
@@ -99,6 +59,45 @@ namespace Domain.Messengers
                 throw err;
             }
         }
+
+        //public Task StartAsync(CancellationToken cancellationToken)
+        //{
+        //    _timer = new Timer(DoWork, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1));
+
+        //    return Task.CompletedTask;
+        //}
+
+        //public Task StopAsync(CancellationToken cancellationToken)
+        //{
+        //    Dispose();
+        //    return Task.CompletedTask;
+        //}
+
+        //private void DoWork(object state)
+        //{
+        //    try
+        //    {
+        //        var consumer = new EventingBasicConsumer(_channel);
+        //        consumer.Received += (ModuleHandle, ea) =>
+        //        {
+        //            Console.WriteLine("---> event received");
+
+        //            var body = ea.Body;
+        //            var message = Encoding.UTF8.GetString(body.ToArray());
+
+        //            // event processor
+        //            ProcessEvent(message);
+
+        //            //_channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+        //        };
+        //        _channel.BasicConsume(queue: _obj.QueueName, autoAck: true, consumer: consumer);
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        // se der algum erro ele escreve a mensagem em um arquivo de texto ou algo do tipo pra se ter o log
+        //        throw err;
+        //    }
+        //}
         public virtual void ProcessEvent(string message)
         {
             Console.WriteLine("implementa essa bagaça");
@@ -110,7 +109,7 @@ namespace Domain.Messengers
                 _channel.Close();
                 _connection.Close();
             }
-            //base.Dispose();
+            base.Dispose();
         }
     }
 }

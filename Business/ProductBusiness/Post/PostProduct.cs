@@ -52,7 +52,7 @@ namespace Business.ProductBusiness.Create
                 await _uow.Product.AddAsync(obj);
                 await _uow.Commit(cancellationToken);
 
-                _messenger.Publish(EnumGetValue(QueuesEnum.ProductAdd), obj, "ProductQueue", "ProductExchange");
+                _messenger.Publish(EnumGetValue(QueuesEnum.ProductAdd), obj, "ProductKey", "ProductExchange");
 
                 return obj.Id;
             }
