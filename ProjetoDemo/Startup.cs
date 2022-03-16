@@ -12,6 +12,7 @@ using Business.AuthenticationBusiness;
 using Microsoft.Extensions.Options;
 using Business;
 using ProjetoDemo.Messenger;
+using DataBaseQuery;
 
 namespace ProjetoDemo
 {
@@ -28,6 +29,7 @@ namespace ProjetoDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDataBaseModule(Configuration);
+            services.AddDataBaseQueryModule(Configuration);
             services.AddBusinessModule(Configuration);
             services.AddMessagerModule();
 

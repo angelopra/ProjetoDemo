@@ -36,7 +36,7 @@ namespace DataBase
 
             services.AddDbContext<AuthenticationContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(configuration.GetConnectionString("SqlServerCore"));
             });
             #endregion
         }

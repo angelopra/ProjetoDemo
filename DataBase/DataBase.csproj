@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DataBaseQuery\**" />
     <Compile Remove="Migrations\**" />
+    <EmbeddedResource Remove="DataBaseQuery\**" />
     <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="DataBaseQuery\**" />
     <None Remove="Migrations\**" />
   </ItemGroup>
 

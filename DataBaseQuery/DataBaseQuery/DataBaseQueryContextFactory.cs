@@ -8,11 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataBase.Context
+namespace DataBase.DataBaseQuery
 {
-    public class ContextFactoryCore : IDesignTimeDbContextFactory<CoreDbContext>
+    public class DataBaseQueryContextFactory : IDesignTimeDbContextFactory<DataBaseQueryContext>
     {
-        public CoreDbContext CreateDbContext(string[] args)
+        public DataBaseQueryContext CreateDbContext(string[] args)
         {
             var parentDirectory = Directory.GetParent(Directory.GetCurrentDirectory());
             var directories = parentDirectory.GetDirectories("ProjetoDemo");
@@ -22,12 +22,12 @@ namespace DataBase.Context
                 .SetBasePath(apiDirectory)
                 .AddJsonFile("appsettings.json");
             var configuration = builderConfiguration.Build();
-            var connectionString = configuration.GetConnectionString("SqlServerCore");
+            var connectionString = configuration.GetConnectionString("SqlServerQuery");
 
-            var builder = new DbContextOptionsBuilder<CoreDbContext>();
+            var builder = new DbContextOptionsBuilder<DataBaseQueryContext>();
             builder.UseSqlServer(connectionString);
 
-            return new CoreDbContext(builder.Options);
+            return new DataBaseQueryContext(builder.Options);
         }
     }
 }
