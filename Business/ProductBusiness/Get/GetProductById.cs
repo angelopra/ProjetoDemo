@@ -25,12 +25,12 @@ namespace Business.ProductBusiness.Get
         {
             try
             {
-                if (request.id < 0)
+                if (request.Id < 0)
                 {
                     throw new Exception();
                 }
 
-                var product = _uow.Product.Where(c => c.Id == request.id).Include(p => p.Category).FirstOrDefault();
+                var product = _uow.Product.Where(c => c.Id == request.Id).Include(p => p.Category).FirstOrDefault();
 
                 if (product == null)
                 {

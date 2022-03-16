@@ -24,12 +24,12 @@ namespace Business.CustomerBusiness.Get
         {
             try
             {
-                if (request.id < 0)
+                if (request.Id < 0)
                 {
                     throw new Exception();
                 }
 
-                var customer = _uow.Customer.Where(c => c.Id == request.id).FirstOrDefault();
+                var customer = _uow.Customer.Where(c => c.Id == request.Id).FirstOrDefault();
 
                 if (customer == null)
                 {

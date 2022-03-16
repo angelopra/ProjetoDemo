@@ -23,7 +23,7 @@ namespace Business.ProductBusiness.Remove
         {
             try
             {
-                var product = _uow.Product.Where(c => c.Id == request.id).FirstOrDefault();
+                var product = _uow.Product.Where(c => c.Id == request.Id).FirstOrDefault();
                 if (product == null)
                 {
                     throw new Exception("Product doesn't exist");
@@ -32,7 +32,7 @@ namespace Business.ProductBusiness.Remove
                 _uow.Product.Remove(product);
                 await _uow.Commit(cancellationToken);
 
-                return request.id;
+                return request.Id;
             }
             catch (Exception err)
             {
