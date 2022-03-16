@@ -15,7 +15,7 @@ namespace DataBase
         {
             services.AddDbContextPool<CoreDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(configuration.GetConnectionString("SqlServerCore"));
             });
 
             services.AddScoped<ICategoryRepository, CategoryRepository>();

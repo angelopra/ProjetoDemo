@@ -50,6 +50,8 @@ namespace DataBase.DataBaseQuery
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
 
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+
             base.OnModelCreating(modelBuilder);
         }
     }

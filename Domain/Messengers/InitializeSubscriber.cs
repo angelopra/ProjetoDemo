@@ -17,7 +17,6 @@ namespace Domain.Messengers
         private readonly IConnection _connection;
         public QueueModelSubscriber _obj;
 
-
         public InitializeSubscriber(ProducerConnection connection, T obj)
         {
             _connection = connection.Connection;
@@ -44,7 +43,6 @@ namespace Domain.Messengers
 
                     // event processor
                     ProcessEvent(message);
-
                     _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
                 };
 

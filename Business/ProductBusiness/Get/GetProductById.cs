@@ -14,10 +14,10 @@ using System.Threading.Tasks;
 
 namespace Business.ProductBusiness.Get
 {
-    public class GetProductById : ServiceManagerBase, IRequestHandler<GetProductByIdRequest, Product>
+    public class GetProductById : ServiceManagerQueryBase, IRequestHandler<GetProductByIdRequest, Product>
     {
         private List<ValidateError> errors;
-        public GetProductById(IUnityOfWork uow) : base(uow)
+        public GetProductById(IUnityOfWorkQuery uow) : base(uow)
         {
         }
 
@@ -30,7 +30,7 @@ namespace Business.ProductBusiness.Get
                     throw new Exception();
                 }
 
-                var product = _uow.Product.Where(c => c.Id == request.Id).Include(p => p.Category).FirstOrDefault();
+                var product = _uowQuery.Product.Where(c => c.Id == request.Id).Include(p => p.Category).FirstOrDefault();
 
                 if (product == null)
                 {

@@ -14,10 +14,10 @@ using System.Threading.Tasks;
 
 namespace Business.ProductBusiness.Get
 {
-    public class GetProductsByCategoryId : ServiceManagerBase, IRequestHandler<GetProductsByCategoryIdRequest, PaginatedList<ProductListResponse>>
+    public class GetProductsByCategoryId : ServiceManagerQueryBase, IRequestHandler<GetProductsByCategoryIdRequest, PaginatedList<ProductListResponse>>
     {
         private List<ValidateError> errors;
-        public GetProductsByCategoryId(IUnityOfWork uow) : base(uow)
+        public GetProductsByCategoryId(IUnityOfWorkQuery uow) : base(uow)
         {
         }
 
@@ -25,12 +25,12 @@ namespace Business.ProductBusiness.Get
         {
             try
             {
-                var category = _uow.Category.Where(c => c.Id == request.categoryId).FirstOrDefault();
+                var category = _uowQuery.Category.Where(c => c.Id == request.categoryId).FirstOrDefault();
                 if (category == null)
                 {
                     throw new Exception("Category doesn't exist");
                 }
-                var products = _uow.Product.Where(p => p.Category.Id == request.categoryId);
+                var products = _uowQuery.Product.Where(p => p.Category.Id == request.categoryId);
 
                 var response = products.MappingEntityLinq<List<ProductListResponse>>().Paginate(request.pageNumber, request.pageSize);
 
