@@ -19,6 +19,7 @@ namespace Business.ProductBusiness.Subscriber
     public class ProductSubscriber : InitializeSubscriber<ProductAddQueue>
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
+        private IUnityOfWorkQuery uowQuery;
 
         public ProductSubscriber(
             ProducerConnection connection
@@ -27,6 +28,9 @@ namespace Business.ProductBusiness.Subscriber
             ) : base(connection, obj)
         {
             _serviceScopeFactory = serviceScopeFactory;
+            var scope = _serviceScopeFactory.CreateScope();
+            uowQuery = scope.ServiceProvider.GetService<IUnityOfWorkQuery>();
+
         }
 
         public override void ProcessEvent(string message)
@@ -34,14 +38,9 @@ namespace Business.ProductBusiness.Subscriber
             if (!String.IsNullOrEmpty(message))
             {
                 var cancellationToken = new CancellationToken();
-                using (var scope = _serviceScopeFactory.CreateScope())
-                {
-                    var uowQuery = scope.ServiceProvider.GetService<IUnityOfWorkQuery>();
-
-                    var obj = JsonConvert.DeserializeObject<Product>(message);
-                    uowQuery.Product.Add(obj);
-                    uowQuery.Commit(cancellationToken);
-                }
+                var obj = JsonConvert.DeserializeObject<Product>(message);
+                uowQuery.Product.Add(obj);
+                uowQuery.Commit(cancellationToken);
             }
         }
     }

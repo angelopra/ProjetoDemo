@@ -173,7 +173,7 @@ namespace DataBaseQuery.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int?>("CategoryFK")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateUTC")
@@ -194,7 +194,7 @@ namespace DataBaseQuery.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryFK");
 
                     b.ToTable("Product");
                 });
@@ -243,15 +243,10 @@ namespace DataBaseQuery.Migrations
             modelBuilder.Entity("Domain.Entities.Product", b =>
                 {
                     b.HasOne("Domain.Entities.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId");
+                        .WithMany()
+                        .HasForeignKey("CategoryFK");
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Category", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

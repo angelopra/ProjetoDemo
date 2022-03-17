@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace Domain.Entities
         [Required]
         public int Quantity { get; set; }
 
-        public virtual Category Category { get; set; }
+        [ForeignKey("CategoryFK")]
+        public Category Category { get; set; }
     }
 }

@@ -15,8 +15,5 @@ namespace Domain.Entities
 
         [Required]
         public string Name { get; set; }
-
-        [JsonIgnore]
-        public virtual IList<Product> Products { get; set; }
     }
 }
