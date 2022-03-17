@@ -25,7 +25,7 @@ namespace Domain.Entities
         [Required]
         public int Quantity { get; set; }
 
-        [ForeignKey("CategoryFK")]
+        [ForeignKey("IdCategory")]
         public Category Category { get; set; }
     }
 }

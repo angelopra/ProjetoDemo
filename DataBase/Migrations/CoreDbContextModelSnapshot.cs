@@ -177,14 +177,14 @@ namespace DataBase.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("CategoryFK")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreateUTC")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("IdCategory")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -198,7 +198,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryFK");
+                    b.HasIndex("IdCategory");
 
                     b.ToTable("Product");
                 });
@@ -248,7 +248,7 @@ namespace DataBase.Migrations
                 {
                     b.HasOne("Domain.Entities.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryFK");
+                        .HasForeignKey("IdCategory");
 
                     b.Navigation("Category");
                 });

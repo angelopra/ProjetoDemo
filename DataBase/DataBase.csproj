@@ -46,6 +46,8 @@
     <Compile Include="Migrations\20220124200746_OrderSubtotal.Designer.cs" />
     <Compile Include="Migrations\20220317051533_Adjusting.cs" />
     <Compile Include="Migrations\20220317051533_Adjusting.Designer.cs" />
+    <Compile Include="Migrations\20220317175634_change.cs" />
+    <Compile Include="Migrations\20220317175634_change.Designer.cs" />
     <Compile Include="Migrations\Authentication\20220127190648_AuthenticationMigration.cs" />
     <Compile Include="Migrations\Authentication\20220127190648_AuthenticationMigration.Designer.cs" />
     <Compile Include="Migrations\Authentication\AuthenticationContextModelSnapshot.cs" />
