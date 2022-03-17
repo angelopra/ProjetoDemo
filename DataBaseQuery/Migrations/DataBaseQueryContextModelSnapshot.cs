@@ -179,7 +179,7 @@ namespace DataBaseQuery.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("IdCategory")
+                    b.Property<int>("IdCategory")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -244,7 +244,9 @@ namespace DataBaseQuery.Migrations
                 {
                     b.HasOne("Domain.Entities.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("IdCategory");
+                        .HasForeignKey("IdCategory")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Category");
                 });

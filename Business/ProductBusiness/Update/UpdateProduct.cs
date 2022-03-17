@@ -42,7 +42,7 @@ namespace Business.ProductBusiness.Update
                 {
                     throw new Exception("Category does not exist");
                 }
-                obj.Category = category;
+                //obj.Category = category;
 
                 //if (_uow.Product.Where(p => p.Id == request.ProductId).FirstOrDefault() == null)
                 //{

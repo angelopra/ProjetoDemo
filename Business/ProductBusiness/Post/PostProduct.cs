@@ -47,7 +47,7 @@ namespace Business.ProductBusiness.Create
                     throw new Exception("Category doesn't exist");
                 }
 
-                obj.Category = category;
+                //obj.Category = category;
 
                 await _uow.Product.AddAsync(obj);
                 await _uow.Commit(cancellationToken);

@@ -30,7 +30,7 @@ namespace Business.ProductBusiness.Get
                 {
                     throw new Exception("Category doesn't exist");
                 }
-                var products = _uowQuery.Product.Where(p => p.Category.Id == request.categoryId);
+                var products = _uowQuery.Product.Where(p => p.IdCategory == request.categoryId);
 
                 var response = products.MappingEntityLinq<List<ProductListResponse>>().Paginate(request.pageNumber, request.pageSize);
 

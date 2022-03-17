@@ -30,7 +30,7 @@ namespace Business.ProductBusiness.Get
                     throw new Exception();
                 }
 
-                var product = _uowQuery.Product.Where(c => c.Id == request.Id).Include(p => p.Category).FirstOrDefault();
+                var product = _uowQuery.Product.Where(c => c.Id == request.Id).FirstOrDefault();
 
                 if (product == null)
                 {

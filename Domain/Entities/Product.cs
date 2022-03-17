@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Domain.Entities
@@ -12,6 +13,7 @@ namespace Domain.Entities
     public class Product : EntityBase
     {
         [Key]
+        [JsonPropertyName("IdProduct")]
         public int Id { get; set; }
 
         [Required]
@@ -25,7 +27,10 @@ namespace Domain.Entities
         [Required]
         public int Quantity { get; set; }
 
-        [ForeignKey("IdCategory")]
+        [Required]
+        public int IdCategory { get; set; }
+
+        [ForeignKey(nameof(IdCategory))]
         public Category Category { get; set; }
     }
 }
