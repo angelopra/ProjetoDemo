@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31205.134
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjetoDemo", "ProjetoDemo\ProjetoDemo.csproj", "{99780AD3-F9AD-421B-ADC6-65CE1489B91A}"
 EndProject
@@ -21,13 +21,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataBase", "DataBase\DataBa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{40F5A97B-28F8-475B-B4CB-90071178A845}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetoDemo.Tests", "ProjetoDemo.Tests\ProjetoDemo.Tests.csproj", "{AA097528-2EA0-457D-813B-8F351691AB03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjetoDemo.Tests", "ProjetoDemo.Tests\ProjetoDemo.Tests.csproj", "{AA097528-2EA0-457D-813B-8F351691AB03}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Messenger", "Messenger", "{A56AB02B-62BC-4AC8-A81B-70F6A62A16E3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjetoDemo.Messenger", "ProjetoDemo.Messenger\ProjetoDemo.Messenger.csproj", "{680D9C53-3CC7-47F6-8ADE-CF051BEED2D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBaseQuery", "DataBaseQuery\DataBaseQuery.csproj", "{233F83F6-B398-4335-9D66-317417F26CFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataBaseQuery", "DataBaseQuery\DataBaseQuery.csproj", "{233F83F6-B398-4335-9D66-317417F26CFB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BackgroundService", "BackgroundService", "{ADCF638C-51E8-43B2-942C-3DD079C251B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetoDemo.BackgroundService", "ProjetoDemo.BackgroundService\ProjetoDemo.BackgroundService.csproj", "{0883914C-A699-4ACB-BF29-54AC3DDE5482}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +67,10 @@ Global
 		{233F83F6-B398-4335-9D66-317417F26CFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{233F83F6-B398-4335-9D66-317417F26CFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{233F83F6-B398-4335-9D66-317417F26CFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0883914C-A699-4ACB-BF29-54AC3DDE5482}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0883914C-A699-4ACB-BF29-54AC3DDE5482}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0883914C-A699-4ACB-BF29-54AC3DDE5482}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0883914C-A699-4ACB-BF29-54AC3DDE5482}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +83,7 @@ Global
 		{AA097528-2EA0-457D-813B-8F351691AB03} = {40F5A97B-28F8-475B-B4CB-90071178A845}
 		{680D9C53-3CC7-47F6-8ADE-CF051BEED2D6} = {A56AB02B-62BC-4AC8-A81B-70F6A62A16E3}
 		{233F83F6-B398-4335-9D66-317417F26CFB} = {DC731CA9-9F18-435F-9118-3158004D7884}
+		{0883914C-A699-4ACB-BF29-54AC3DDE5482} = {ADCF638C-51E8-43B2-942C-3DD079C251B3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ABDE52EA-6125-4A88-85A2-51F3C761C0EA}
