@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace ProjectDemo.Hangfire
 {
-    public class HangfireTasks
+    public static class HangfireTasks
     {
-        public void Teste(IProductSubscriber subscriber)
+        public static async void Teste(IProductSubscriber subscriber)
         {
-            subscriber.ExecuteAsync();
+            await subscriber.ExecuteAsync();
         }
     }
 }

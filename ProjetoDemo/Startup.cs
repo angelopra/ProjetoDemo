@@ -14,6 +14,7 @@ using Business;
 using ProjetoDemo.Messenger;
 using DataBaseQuery;
 using Hangfire;
+using ProjectDemo.Hangfire;
 
 namespace ProjetoDemo
 {
@@ -89,7 +90,7 @@ namespace ProjetoDemo
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IdentityInitializer identityInitializer)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IdentityInitializer identityInitializer, IProductSubscriber subscriber)
         {
             if (env.IsDevelopment())
             {
