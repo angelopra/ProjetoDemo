@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Interfaces;
+using Domain.Messengers.QueueType;
 using Domain.Model.Request;
 using Domain.Validators;
 using FluentValidation;
@@ -20,12 +21,18 @@ namespace Business.ProductBusiness.Create
         private readonly IValidator<ProductRequest> _validator;
         private List<ValidateError> errors;
         private IMessengerBusClient _messenger;
+        private readonly ProductAddQueue _productAddQueue;
 
-        public PostProduct(IUnityOfWork uow, IValidator<ProductRequest> validator, IMessengerBusClient messenger)
+        public PostProduct(
+            IUnityOfWork uow
+            ,IValidator<ProductRequest> validator
+            ,IMessengerBusClient messenger
+            ,ProductAddQueue productAddQueue)
             : base(uow)
         {
             _validator = validator;
             _messenger = messenger;
+            _productAddQueue = productAddQueue;
         }
 
         public async Task<int> Handle(PostProductRequest request, CancellationToken cancellationToken)
@@ -52,7 +59,7 @@ namespace Business.ProductBusiness.Create
                 await _uow.Product.AddAsync(obj);
                 await _uow.Commit(cancellationToken);
 
-                _messenger.Publish(EnumGetValue(QueuesEnum.ProductAdd), obj, "ProductKey", "ProductExchange");
+                _messenger.Publish(EnumGetValue(QueuesEnum.ProductAdd), obj, _productAddQueue.RoutingKey, _productAddQueue.Exchange);
 
                 return obj.Id;
             }

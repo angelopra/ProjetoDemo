@@ -39,6 +39,13 @@ namespace Business.ProductBusiness.Subscriber
             {
                 var cancellationToken = new CancellationToken();
                 var obj = JsonConvert.DeserializeObject<Product>(message);
+
+                var getCategory = uowQuery.Category.Where(c => c.Id == obj.IdCategory).FirstOrDefault();
+                if (getCategory != null)
+                {
+                    obj.Category = null;
+                }
+
                 uowQuery.Product.Add(obj);
                 uowQuery.Commit(cancellationToken);
             }

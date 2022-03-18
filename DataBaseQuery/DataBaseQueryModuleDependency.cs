@@ -17,7 +17,9 @@ namespace DataBaseQuery
         {
             services.AddDbContextPool<DataBaseQueryContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("SqlServerQuery"));
+                options
+                    .UseSqlServer(configuration.GetConnectionString("SqlServerQuery"))
+                    .EnableSensitiveDataLogging();
             });
 
             services.AddScoped<IUnityOfWorkQuery, DataBaseQueryContext>();
