@@ -3,34 +3,25 @@ using Domain.Interfaces;
 using Domain.Messengers;
 using Domain.Messengers.QueueType;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
+using ProjectDemo.Hangfire;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Business.ProductBusiness.Subscriber
 {
-    public class ProductSubscriber : InitializeSubscriber<ProductAddQueue>
+    public class ProductSubscriber : HangfireSubscriber<ProductAddQueue>, IProductSubscriber
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private IUnityOfWorkQuery uowQuery;
-
-        public ProductSubscriber(
-            ProducerConnection connection
-            ,ProductAddQueue obj
-            ,IServiceScopeFactory serviceScopeFactory
-            ) : base(connection, obj)
+        public ProductSubscriber(ProducerConnection connection
+            , ProductAddQueue obj
+            , IServiceScopeFactory serviceScopeFactory) : base(connection, obj)
         {
             _serviceScopeFactory = serviceScopeFactory;
             var scope = _serviceScopeFactory.CreateScope();
             uowQuery = scope.ServiceProvider.GetService<IUnityOfWorkQuery>();
-
         }
 
         public override void ProcessEvent(string message)

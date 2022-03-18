@@ -1,11 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Extensions.DependencyInjection;
-using Hangfire.SqlServer;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Hangfire;
 using Microsoft.Extensions.Configuration;
-using Domain.Interfaces;
 
 namespace ProjectDemo.Hangfire
 {
@@ -22,8 +17,6 @@ namespace ProjectDemo.Hangfire
             });
             // Add the processing server as IHostedService
             services.AddHangfireServer();
-
-            services.AddSingleton<IProductSubscriber, ProductSubscriber>();
         }
 
     }

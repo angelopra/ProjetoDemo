@@ -6,7 +6,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectDemo.Hangfire
+namespace Domain.Messengers
 {
     public abstract class HangfireSubscriber<T>
     {
@@ -32,7 +32,6 @@ namespace ProjectDemo.Hangfire
             {
                 try
                 {
-                    Console.WriteLine("foi");
                     var consumer = new EventingBasicConsumer(_channel);
                     consumer.Received += (ModuleHandle, ea) =>
                     {
