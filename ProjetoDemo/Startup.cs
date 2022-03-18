@@ -14,6 +14,7 @@ using Business;
 using ProjetoDemo.Messenger;
 using DataBaseQuery;
 using ProjetoDemo.BackgroundService;
+using Hangfire;
 
 namespace ProjetoDemo
 {
@@ -89,7 +90,7 @@ namespace ProjetoDemo
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IdentityInitializer identityInitializer)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IdentityInitializer identityInitializer, IProductSubscriber subscriber)
         {
             if (env.IsDevelopment())
             {
@@ -97,6 +98,8 @@ namespace ProjetoDemo
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProjetoDemo v1"));
             }
+            app.UseHangfireDashboard();
+            BackgroundJob.Enqueue(() => subscriber.ExecuteAsync());
 
             app.UseCors(builder => builder.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
             //app.UseHttpsRedirection();
