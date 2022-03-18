@@ -100,7 +100,8 @@ namespace ProjetoDemo
             }
 
             app.UseHangfireDashboard();
-            BackgroundJob.Enqueue(() => HangfireTasks.Teste(subscriber));
+            BackgroundJob.Enqueue(() => subscriber.ExecuteAsync());
+            //RecurringJob.AddOrUpdate("RabbitMQSubscriber", () => subscriber.ExecuteAsync(), "*/1 * * * * *");
 
             app.UseCors(builder => builder.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
             //app.UseHttpsRedirection();

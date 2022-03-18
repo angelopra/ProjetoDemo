@@ -32,6 +32,7 @@ namespace ProjectDemo.Hangfire
             {
                 try
                 {
+                    Console.WriteLine("foi");
                     var consumer = new EventingBasicConsumer(_channel);
                     consumer.Received += (ModuleHandle, ea) =>
                     {

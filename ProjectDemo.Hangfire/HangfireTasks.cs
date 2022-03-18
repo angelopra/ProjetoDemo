@@ -9,7 +9,7 @@ namespace ProjectDemo.Hangfire
 {
     public static class HangfireTasks
     {
-        public static async void Teste(IProductSubscriber subscriber)
+        public static async Task Teste(IProductSubscriber subscriber)
         {
             await subscriber.ExecuteAsync();
         }
