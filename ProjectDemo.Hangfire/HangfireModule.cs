@@ -7,7 +7,7 @@ using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Domain.Interfaces;
 
-namespace ProjetoDemo.BackGroundService
+namespace ProjectDemo.Hangfire
 {
     public static class HangfireModule
     {
