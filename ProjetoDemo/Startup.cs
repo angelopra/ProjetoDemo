@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Business;
 using ProjetoDemo.Messenger;
 using DataBaseQuery;
+using Hangfire;
 
 namespace ProjetoDemo
 {
@@ -32,7 +33,7 @@ namespace ProjetoDemo
             services.AddDataBaseQueryModule(Configuration);
             services.AddBusinessModule(Configuration);
             services.AddMessagerModule();
-            services.AddHangfireModule();
+            services.AddHangfireModule(Configuration);
 
             #region Autentication
             // Configurando a dependência para a classe de validação
@@ -96,6 +97,9 @@ namespace ProjetoDemo
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProjetoDemo v1"));
             }
+
+            app.UseHangfireDashboard();
+            BackgroundJob.Enqueue(() => HangfireTasks.Teste(subscriber));
 
             app.UseCors(builder => builder.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
             //app.UseHttpsRedirection();
