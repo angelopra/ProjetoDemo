@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Business;
 using ProjetoDemo.Messenger;
 using DataBaseQuery;
+using ProjetoDemo.BackgroundService;
 
 namespace ProjetoDemo
 {
@@ -32,6 +33,7 @@ namespace ProjetoDemo
             services.AddDataBaseQueryModule(Configuration);
             services.AddBusinessModule(Configuration);
             services.AddMessagerModule();
+            services.AddHangfireModule(Configuration);
 
             #region Autentication
             // Configurando a dependência para a classe de validação

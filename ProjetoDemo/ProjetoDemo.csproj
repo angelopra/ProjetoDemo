@@ -23,6 +23,7 @@
     <ProjectReference Include="..\DataBaseQuery\DataBaseQuery.csproj" />
     <ProjectReference Include="..\DataBase\DataBase.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\ProjetoDemo.BackgroundService\ProjetoDemo.BackgroundService.csproj" />
     <ProjectReference Include="..\ProjetoDemo.Messenger\ProjetoDemo.Messenger.csproj" />
   </ItemGroup>
 

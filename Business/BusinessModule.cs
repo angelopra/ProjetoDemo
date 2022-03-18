@@ -24,7 +24,7 @@ namespace Business
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             //Subscribers
-            services.AddHostedService<ProductSubscriber>();
+            services.AddSingleton<IProductSubscriber, ProductSubscriber>();
 
             // Entities DI
             services.AddScoped<ICategoryComponent, CategoryComponent>();

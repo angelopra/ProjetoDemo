@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Business.ProductBusiness.Subscriber
 {
-    public class ProductSubscriber : InitializeSubscriber<ProductAddQueue>
+    public class ProductSubscriber : HangfireSubscriber<ProductAddQueue>, IProductSubscriber
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private IUnityOfWorkQuery uowQuery;
