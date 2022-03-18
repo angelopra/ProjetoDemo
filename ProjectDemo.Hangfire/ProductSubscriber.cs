@@ -1,4 +1,5 @@
-﻿using Domain.Interfaces;
+﻿using Business.ProductBusiness.Subscriber;
+using Domain.Interfaces;
 using Domain.Messengers;
 using Domain.Messengers.QueueType;
 using System;

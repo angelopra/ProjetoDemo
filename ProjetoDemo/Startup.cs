@@ -32,6 +32,7 @@ namespace ProjetoDemo
             services.AddDataBaseQueryModule(Configuration);
             services.AddBusinessModule(Configuration);
             services.AddMessagerModule();
+            services.AddHangfireModule();
 
             #region Autentication
             // Configurando a dependência para a classe de validação
