@@ -13,6 +13,8 @@ using Microsoft.Extensions.Options;
 using Business;
 using ProjetoDemo.Messenger;
 using DataBaseQuery;
+using Hangfire;
+using Business.ProductBusiness.Subscriber;
 
 namespace ProjetoDemo
 {
@@ -32,6 +34,7 @@ namespace ProjetoDemo
             services.AddDataBaseQueryModule(Configuration);
             services.AddBusinessModule(Configuration);
             services.AddMessagerModule();
+            //services.AddHangfireModule(Configuration);
 
             #region Autentication
             // Configurando a dependência para a classe de validação
@@ -87,7 +90,11 @@ namespace ProjetoDemo
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IdentityInitializer identityInitializer)
+        public void Configure(IApplicationBuilder app
+            ,IWebHostEnvironment env
+            ,IdentityInitializer identityInitializer
+            ,IBackgroundJobClient backgroundJobs
+            ,ProductAddSubscriber productAddSubscriber)
         {
             if (env.IsDevelopment())
             {
@@ -96,18 +103,29 @@ namespace ProjetoDemo
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProjetoDemo v1"));
             }
 
-            app.UseCors(builder => builder.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
+            app.UseCors(builder => 
+                builder.AllowAnyMethod()
+                       .AllowAnyOrigin()
+                       .AllowAnyHeader());
             //app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 
+
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
+
+            #region Load Methods
             identityInitializer.Initialize();
+            backgroundJobs.Enqueue(() => productAddSubscriber.Execute());
+            #endregion
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHangfireDashboard();
             });
         }
     }
