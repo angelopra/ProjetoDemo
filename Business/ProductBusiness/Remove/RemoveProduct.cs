@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Interfaces;
+using Domain.Messengers.QueueType;
 using Domain.Messengers.QueueType.ProductQueues;
 using Domain.Model.Request.ProductRequests;
 using Domain.Validators;
@@ -17,14 +18,16 @@ namespace Business.ProductBusiness.Remove
     public class RemoveProduct : ServiceManagerBase, IRequestHandler<RemoveProductRequest, int>
     {
         private List<ValidateError> errors;
+        private readonly ProductDeleteQueue _productDeleteQueue;
         private IMessengerBusClient _messenger;
-        private ProductRemoveQueue _productRemoveQueue;
 
-        public RemoveProduct(IUnityOfWork uow, IMessengerBusClient messenger, ProductRemoveQueue productRemoveQueue) : base(uow)
+        public RemoveProduct(
+            IUnityOfWork uow
+            ,IMessengerBusClient messenger
+            ,ProductDeleteQueue productDeleteQueue) : base(uow)
         {
             _messenger = messenger;
-            _productRemoveQueue = productRemoveQueue;
-
+            _productDeleteQueue = productDeleteQueue;
         }
 
         public async Task<int> Handle(RemoveProductRequest request, CancellationToken cancellationToken)
@@ -40,7 +43,7 @@ namespace Business.ProductBusiness.Remove
                 _uow.Product.Remove(product);
                 await _uow.Commit(cancellationToken);
 
-                _messenger.Publish(EnumGetValue(QueuesEnum.ProductAdd), product, _productRemoveQueue.RoutingKey, _productRemoveQueue.Exchange);
+                _messenger.Publish(_productDeleteQueue.QueueName, product, _productDeleteQueue.RoutingKey, _productDeleteQueue.Exchange);
 
                 return request.Id;
             }

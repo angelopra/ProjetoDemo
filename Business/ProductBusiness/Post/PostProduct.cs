@@ -59,7 +59,7 @@ namespace Business.ProductBusiness.Create
                 await _uow.Product.AddAsync(obj);
                 await _uow.Commit(cancellationToken);
 
-                _messenger.Publish(EnumGetValue(QueuesEnum.ProductAdd), obj, _productAddQueue.RoutingKey, _productAddQueue.Exchange);
+                _messenger.Publish(_productAddQueue.QueueName, obj, _productAddQueue.RoutingKey, _productAddQueue.Exchange);
 
                 return obj;
             }

@@ -30,6 +30,8 @@ namespace DataBase.DataBaseQuery
             {
                 base.ChangeTracker.Clear();
                 var result = await base.SaveChangesAsync(cancellationToken);
+                base.ChangeTracker.Clear();
+
                 return result;
             }
             catch (Exception err)

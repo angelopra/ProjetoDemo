@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Interfaces;
+using Domain.Messengers.QueueType;
 using Domain.Messengers.QueueType.ProductQueues;
 using Domain.Model.Request;
 using Domain.Model.Request.ProductRequests;
@@ -22,13 +23,18 @@ namespace Business.ProductBusiness.Update
         private List<ValidateError> errors;
         private ProductUpdateQueue _productUpdateQueue;
         private readonly IValidator<ProductRequest> _validator;
+        private readonly ProductUpdateQueue _productUpdQueue;
         private IMessengerBusClient _messenger;
 
-        public UpdateProduct(IUnityOfWork uow, IValidator<ProductRequest> validator, IMessengerBusClient messenger, ProductUpdateQueue productUpdateQueue) : base(uow)
+        public UpdateProduct(
+            IUnityOfWork uow
+            ,IValidator<ProductRequest> validator
+            ,IMessengerBusClient messenger
+            ,ProductUpdateQueue productUpdQueue) : base(uow)
         {
             _validator = validator;
             _messenger = messenger;
-            _productUpdateQueue = productUpdateQueue;
+            _productUpdQueue = productUpdQueue;
         }
 
         public async Task<Product> Handle(UpdateProductRequest request, CancellationToken cancellationToken)
@@ -49,18 +55,11 @@ namespace Business.ProductBusiness.Update
                 {
                     throw new Exception("Category does not exist");
                 }
-                //obj.Category = category;
-
-                //if (_uow.Product.Where(p => p.Id == request.ProductId).FirstOrDefault() == null)
-                //{
-                //    throw new Exception("Product doesn't exist");
-                //}
 
                 _uow.Product.Update(obj);
                 await _uow.Commit(cancellationToken);
 
-                _messenger.Publish(EnumGetValue(QueuesEnum.ProductAdd), obj, _productUpdateQueue.RoutingKey, _productUpdateQueue.Exchange);
-
+                _messenger.Publish(_productUpdQueue.QueueName, obj, _productUpdQueue.RoutingKey, _productUpdQueue.Exchange);
 
                 return obj;
             }
