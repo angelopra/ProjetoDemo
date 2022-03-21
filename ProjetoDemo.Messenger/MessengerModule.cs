@@ -21,6 +21,7 @@ namespace ProjetoDemo.Messenger
 
             services.AddSingleton(new ProductAddQueue("ProductAdd", "ProductAddExchange", "ProductAddKey", ExchangeType.Direct));
             services.AddSingleton(new ProductUpdateQueue("ProductUpdate", "ProductUpdExchange", "ProductUpdKey", ExchangeType.Direct));
+            services.AddSingleton(new ProductRemoveQueue("ProductRemove", "ProductRmExchange", "ProductRmKey", ExchangeType.Direct));
             
             services.AddSingleton(new ProducerConnection(connection));
             services.AddSingleton<IMessengerBusClient, RabbitMqClient>();

@@ -94,7 +94,9 @@ namespace ProjetoDemo
             ,IWebHostEnvironment env
             ,IdentityInitializer identityInitializer
             ,IBackgroundJobClient backgroundJobs
-            ,ProductAddSubscriber productAddSubscriber)
+            ,ProductAddSubscriber productAddSubscriber
+            ,ProductRemoveSubscriber productRemoveSubscriber
+            ,ProductUpdateSubscriber productUpdateSubscriber)
         {
             if (env.IsDevelopment())
             {
@@ -120,6 +122,8 @@ namespace ProjetoDemo
             #region Load Methods
             identityInitializer.Initialize();
             backgroundJobs.Enqueue(() => productAddSubscriber.Execute());
+            backgroundJobs.Enqueue(() => productRemoveSubscriber.Execute());
+            backgroundJobs.Enqueue(() => productUpdateSubscriber.Execute());
             #endregion
 
             app.UseEndpoints(endpoints =>
