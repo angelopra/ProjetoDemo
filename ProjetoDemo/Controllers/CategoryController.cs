@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
+using Domain.Model.Request.CategoryRequests;
 using Domain.Model.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProjetoDemo.Controllers.Base;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProjetoDemo.Controllers
 {
@@ -20,19 +22,19 @@ namespace ProjetoDemo.Controllers
         {
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult<CategoryResponse>> Create(PostCustomerRequest request)
-        //{
-        //    try
-        //    {
-        //        var response = await Mediator.Send(request);
-        //        return Ok(response);
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return BadRequest(err.Data);
-        //    }
-        //}
+        [HttpPost]
+        public async Task<ActionResult<CategoryResponse>> Create(PostCategoryRequest request)
+        {
+            try
+            {
+                var response = await Mediator.Send(request);
+                return Ok(response);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Data);
+            }
+        }
 
         //[HttpPost]
         //public IActionResult Create(CategoryRequest request)
