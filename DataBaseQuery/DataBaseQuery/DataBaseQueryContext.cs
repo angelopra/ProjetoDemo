@@ -29,6 +29,8 @@ namespace DataBase.DataBaseQuery
             try
             {
                 var result = await base.SaveChangesAsync(cancellationToken);
+                base.ChangeTracker.Clear();
+
                 return result;
             }
             catch (Exception err)

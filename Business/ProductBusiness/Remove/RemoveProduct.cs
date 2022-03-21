@@ -1,6 +1,7 @@
 ﻿using Business.Base;
 using Domain.Entities;
 using Domain.Interfaces;
+using Domain.Messengers.QueueType;
 using Domain.Model.Request.ProductRequests;
 using Domain.Validators;
 using MediatR;
@@ -15,8 +16,16 @@ namespace Business.ProductBusiness.Remove
     public class RemoveProduct : ServiceManagerBase, IRequestHandler<RemoveProductRequest, int>
     {
         private List<ValidateError> errors;
-        public RemoveProduct(IUnityOfWork uow) : base(uow)
+        private readonly ProductDeleteQueue _productDeleteQueue;
+        private IMessengerBusClient _messenger;
+
+        public RemoveProduct(
+            IUnityOfWork uow
+            ,IMessengerBusClient messenger
+            ,ProductDeleteQueue productDeleteQueue) : base(uow)
         {
+            _messenger = messenger;
+            _productDeleteQueue = productDeleteQueue;
         }
 
         public async Task<int> Handle(RemoveProductRequest request, CancellationToken cancellationToken)
@@ -31,6 +40,8 @@ namespace Business.ProductBusiness.Remove
 
                 _uow.Product.Remove(product);
                 await _uow.Commit(cancellationToken);
+
+                _messenger.Publish(_productDeleteQueue.QueueName, product, _productDeleteQueue.RoutingKey, _productDeleteQueue.Exchange);
 
                 return request.Id;
             }
