@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Messengers.QueueType;
+using Domain.Messengers.QueueType.ProductQueues;
 using Domain.Model.Request.ProductRequests;
 using Domain.Validators;
 using MediatR;

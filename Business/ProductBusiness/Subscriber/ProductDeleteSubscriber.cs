@@ -2,6 +2,7 @@
 using Domain.Interfaces;
 using Domain.Messengers;
 using Domain.Messengers.QueueType;
+using Domain.Messengers.QueueType.ProductQueues;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
