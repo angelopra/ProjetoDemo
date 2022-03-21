@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Model.Request;
-using Domain.Model.Request.CustomerRequests;
+using Domain.Model.Request.CategoryRequests;
 using Domain.Model.Response;
 using Domain.Validators;
 using FluentValidation;
@@ -14,40 +14,38 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Business.CustomerBusiness.Update
+namespace Business.CategoryBusiness.Update
 {
-    public class UpdateCustomer : ServiceManagerBase, IRequestHandler<UpdateCustomerRequest, CustomerResponse>
+    public class UpdateCategory : ServiceManagerBase, IRequestHandler<UpdateCategoryRequest, CategoryResponse>
     {
         private List<ValidateError> errors;
-        private readonly IValidator<CustomerRequest> _validator;
+        private readonly IValidator<CategoryRequest> _validator;
 
-        public UpdateCustomer(IUnityOfWork uow, IValidator<CustomerRequest> validator) : base(uow)
+        public UpdateCategory(IUnityOfWork uow, IValidator<CategoryRequest> validator) : base(uow)
         {
             _validator = validator;
         }
 
-        public async Task<CustomerResponse> Handle(UpdateCustomerRequest request, CancellationToken cancellationToken)
+        public async Task<CategoryResponse> Handle(UpdateCategoryRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                errors = ValidadeCustomerRequest(request.Map<CustomerRequest>());
+                errors = ValidadeCategoryRequest(request.Map<CategoryRequest>());
                 if (errors != null)
                 {
                     throw new Exception();
                 }
-
-                var obj = request.Map<Customer>();
-
-                var email = _uow.Customer.Where(c => c.Email == request.Email).FirstOrDefault();
-                if (email != null)
+                if(_uow.Category.Where(c => c.Name == request.Name).FirstOrDefault() != null)
                 {
-                    throw new Exception("Email already in use");
+                    throw new Exception("Category name already in use");
                 }
 
-                _uow.Customer.Update(obj);
+                var obj = request.Map<Category>();
+
+                _uow.Category.Update(obj);
                 await _uow.Commit(cancellationToken);
 
-                return obj.Map<CustomerResponse>();
+                return obj.Map<CategoryResponse>();
             }
             catch (Exception err)
             {
@@ -56,7 +54,7 @@ namespace Business.CustomerBusiness.Update
             }
         }
 
-        private List<ValidateError> ValidadeCustomerRequest(CustomerRequest request)
+        private List<ValidateError> ValidadeCategoryRequest(CategoryRequest request)
         {
             errors = null;
             var validate = _validator.Validate(request);
