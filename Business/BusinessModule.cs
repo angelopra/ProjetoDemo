@@ -10,9 +10,11 @@ using Domain.Interfaces;
 using Domain.Model.Request;
 using Domain.Validators;
 using FluentValidation;
+using Hangfire;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Reflection;
 
 namespace Business
@@ -22,9 +24,6 @@ namespace Business
         public static void AddBusinessModule(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
-
-            //Subscribers
-            services.AddSingleton<IProductSubscriber, ProductSubscriber>();
 
             // Entities DI
             services.AddScoped<ICategoryComponent, CategoryComponent>();
@@ -45,6 +44,19 @@ namespace Business
 
             services.AddScoped<IHelper, BaseBusinessComon>();
             services.AddScoped<ICartBusinessMethods, CartBusinessMethods>();
+
+
+            #region HangFire
+            services.AddHangfire(x => x
+            .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+            .UseSimpleAssemblyNameTypeSerializer()
+            .UseRecommendedSerializerSettings()
+            .UseRecommendedSerializerSettings()
+            .UseInMemoryStorage());
+
+            services.AddHangfireServer();
+            services.AddScoped<ProductAddSubscriber>();
+            #endregion
         }
     }
 }
