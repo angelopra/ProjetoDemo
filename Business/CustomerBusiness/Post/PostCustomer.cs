@@ -22,6 +22,7 @@ namespace Business.CustomerBusiness.Post
     {
         private readonly IValidator<CustomerRequest> _validator;
         private List<ValidateError> errors;
+
         public PostCustomer(IUnityOfWork uow, IValidator<CustomerRequest> validator)
             : base(uow)
         {

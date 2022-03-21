@@ -9,8 +9,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Model.Request.CategoryRequests
 {
-    public class PostCategoryRequest : BaseRequest, IRequest<CategoryResponse>
+    public class GetCategoryByIdRequest : BaseRequest, IRequest<CategoryResponse>
     {
-        public string Name { get; set; }
+        public int Id { get; set; }
+
+        public GetCategoryByIdRequest(int id)
+        {
+            Id = id;
+        }
     }
 }

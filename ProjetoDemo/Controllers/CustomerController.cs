@@ -71,12 +71,13 @@ namespace ProjetoDemo.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<ActionResult<CustomerResponse>> Update(UpdateCustomerRequest request, int id)
+        public async Task<ActionResult<CustomerResponse>> Update(CustomerRequest request, int id)
         {
             try
             {
-                request.Id = id;
-                var response = await Mediator.Send(request);
+                var req = _helper.MappingEntity<UpdateCustomerRequest>(request);
+                req.Id = id;
+                var response = await Mediator.Send(req);
                 return Ok(response);
             }
             catch (Exception err)

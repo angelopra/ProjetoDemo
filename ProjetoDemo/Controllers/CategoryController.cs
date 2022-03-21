@@ -36,86 +36,70 @@ namespace ProjetoDemo.Controllers
             }
         }
 
-        //[HttpPost]
-        //public IActionResult Create(CategoryRequest request)
-        //{
-        //    try
-        //    {
-        //        var responseMethod = this.ComponentCurrent.AddCategory(request);
-        //        return Ok(responseMethod);
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return BadRequest(err.Data);
-        //    }
-        //}
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<ActionResult<CategoryResponse>> Update(CategoryRequest request, int id)
+        {
+            try
+            {
+                var req = _helper.MappingEntity<UpdateCategoryRequest>(request);
+                req.Id = id;
+                var response = await Mediator.Send(req);
+                return Ok(response);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Data);
+            }
+        }
 
-        //[HttpPost]
-        //[Route("ListCategorys")]
-        //public List<Category> ListCategorys(CategoryQueryRequest request)
-        //{
-        //    var responseMethod = this.ComponentCurrent.GetCategorys(request);
-        //    return responseMethod;
-        //}
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult<int>> Remove(int id)
+        {
+            try
+            {
+                var request = new RemoveCategoryRequest(id);
+                var response = await Mediator.Send(request);
+                return Ok($"Category {id} successfully removed");
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Message);
+            }
+        }
 
-        //[HttpPut]
-        //[Route("{id}")]
-        //public IActionResult Update(CategoryRequest request, int id)
-        //{
-        //    try
-        //    {
-        //        var responseMethod = this.ComponentCurrent.Update(request, id);
-        //        return Ok(responseMethod);
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return BadRequest(err.Data);
-        //    }
-        //}
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<CategoryResponse>> GetCategoryById(int id)
+        {
+            try
+            {
+                var request = new GetCategoryByIdRequest(id);
+                var response = await Mediator.Send(request);
+                return Ok(response);
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Message);
+            }
+        }
 
-        //[HttpDelete]
-        //[Route("{id}")]
-        //public IActionResult Remove(int id)
-        //{
-        //    try
-        //    {
-        //        this.ComponentCurrent.Remove(id);
-        //        return Ok();
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return NotFound(err.Message);
-        //    }
-        //}
+        [HttpGet]
+        [Route("allcategories")]
+        public async Task<ActionResult<CategoryResponse>> GetAllCategories(int? pageNumber, int? pageSize)
+        {
+            try
+            {
+                var request = new GetAllCategoriesRequest(pageNumber, pageSize);
 
-        //[HttpGet]
-        //[Route("{id}")]
-        //public IActionResult GetCategoryById(int id)
-        //{
-        //    try
-        //    {
-        //        var responseMethod = this.ComponentCurrent.GetCategoryById(id);
-        //        return Ok(responseMethod);
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return NotFound(err.Message);
-        //    }
-        //}
-
-        //[HttpGet]
-        //[Route("allcategories")]
-        //public IActionResult GetAllCategories(int? pageNumber, int? pageSize)
-        //{
-        //    try
-        //    {
-        //        var responseMethod = ComponentCurrent.GetAllCategories(pageNumber, pageSize);
-        //        return Ok(responseMethod);
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return NotFound(err.Message);
-        //    }
-        //}
+                var responseMethod = await Mediator.Send(request);
+                return Ok(responseMethod);
+            }
+            catch (Exception err)
+            {
+                return NotFound(err.Message);
+            }
+        }
     }
 }

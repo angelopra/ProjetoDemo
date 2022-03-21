@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Model.Request.CategoryRequests
 {
-    public class PostCategoryRequest : BaseRequest, IRequest<CategoryResponse>
+    public class UpdateCategoryRequest : BaseRequest, IRequest<CategoryResponse>
     {
+        public int Id { get; set; }
         public string Name { get; set; }
     }
 }
