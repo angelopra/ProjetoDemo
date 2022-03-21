@@ -1,6 +1,6 @@
 ﻿using Domain.Interfaces;
 using Domain.Messengers;
-using Domain.Messengers.QueueType;
+using Domain.Messengers.QueueType.ProductQueues;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;

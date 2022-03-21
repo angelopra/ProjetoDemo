@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Interfaces;
-using Domain.Messengers.QueueType;
+using Domain.Messengers.QueueType.ProductQueues;
 using Domain.Model.Request;
 using Domain.Validators;
 using FluentValidation;
@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Business.ProductBusiness.Create
 {
-    public class PostProduct : ServiceManagerBase, IRequestHandler<PostProductRequest, int>
+    public class PostProduct : ServiceManagerBase, IRequestHandler<PostProductRequest, Product>
     {
         private readonly IValidator<ProductRequest> _validator;
         private List<ValidateError> errors;
@@ -35,7 +35,7 @@ namespace Business.ProductBusiness.Create
             _productAddQueue = productAddQueue;
         }
 
-        public async Task<int> Handle(PostProductRequest request, CancellationToken cancellationToken)
+        public async Task<Product> Handle(PostProductRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -54,14 +54,14 @@ namespace Business.ProductBusiness.Create
                     throw new Exception("Category doesn't exist");
                 }
 
-                //obj.Category = category;
+                obj.Category = category;
 
                 await _uow.Product.AddAsync(obj);
                 await _uow.Commit(cancellationToken);
 
                 _messenger.Publish(_productAddQueue.QueueName, obj, _productAddQueue.RoutingKey, _productAddQueue.Exchange);
 
-                return obj.Id;
+                return obj;
             }
             catch (Exception err)
             {

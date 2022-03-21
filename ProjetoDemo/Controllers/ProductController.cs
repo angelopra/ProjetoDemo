@@ -25,7 +25,7 @@ namespace ProjetoDemo.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create(PostProductRequest request)
+        public async Task<ActionResult<Product>> Create(PostProductRequest request)
         {
             try
             {
