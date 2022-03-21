@@ -1,4 +1,4 @@
-﻿namespace Domain.Messengers.QueueType
+﻿namespace Domain.Messengers.QueueType.ProductQueues
 {
     public class ProductUpdateQueue : QueueModelSubscriber
     {

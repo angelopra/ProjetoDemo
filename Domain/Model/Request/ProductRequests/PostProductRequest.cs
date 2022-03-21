@@ -1,9 +1,10 @@
-﻿using Domain.Model.Base;
+﻿using Domain.Entities;
+using Domain.Model.Base;
 using MediatR;
 
 namespace Domain.Model.Request
 {
-    public class PostProductRequest : BaseRequest, IRequest<int>
+    public class PostProductRequest : BaseRequest, IRequest<Product>
     {
         public string Name { get; set; }
 
