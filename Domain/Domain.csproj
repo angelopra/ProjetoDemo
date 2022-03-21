@@ -13,6 +13,7 @@
   <ItemGroup>
     <Compile Remove="Class1.cs" />
     <Compile Remove="Interfaces\Interface1.cs" />
+    <Compile Remove="Messengers\QueueType\ProductQueues\ProductRemoveQueue.cs" />
   </ItemGroup>
 
   <ItemGroup>

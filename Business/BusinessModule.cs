@@ -56,7 +56,7 @@ namespace Business
 
             services.AddHangfireServer();
             services.AddScoped<ProductAddSubscriber>();
-            services.AddScoped<ProductUpdSubscriber>();
+            services.AddScoped<ProductUpdateSubscriber>();
             services.AddScoped<ProductDeleteSubscriber>();
             #endregion
         }

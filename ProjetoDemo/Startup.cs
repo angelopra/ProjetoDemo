@@ -15,6 +15,7 @@ using ProjetoDemo.Messenger;
 using DataBaseQuery;
 using Hangfire;
 using Business.ProductBusiness.Subscriber;
+using Business.CategoryBusiness.Subscriber;
 
 namespace ProjetoDemo
 {
@@ -95,8 +96,11 @@ namespace ProjetoDemo
             ,IdentityInitializer identityInitializer
             ,IBackgroundJobClient backgroundJobs
             ,ProductAddSubscriber productAddSubscriber
-            ,ProductUpdSubscriber productUpdSubscriber
-            ,ProductDeleteSubscriber productDeleteSubscriber)
+            ,ProductUpdateSubscriber productUpdSubscriber
+            ,ProductDeleteSubscriber productDeleteSubscriber
+            ,CategoryAddSubscriber categoryAddSubscriber
+            ,CategoryUpdateSubscriber categoryUpdSubscriber
+            ,CategoryDeleteSubscriber categoryDeleteSubscriber)
         {
             if (env.IsDevelopment())
             {
@@ -124,6 +128,9 @@ namespace ProjetoDemo
             backgroundJobs.Enqueue(() => productAddSubscriber.Execute());
             backgroundJobs.Enqueue(() => productUpdSubscriber.Execute());
             backgroundJobs.Enqueue(() => productDeleteSubscriber.Execute());
+            backgroundJobs.Enqueue(() => categoryAddSubscriber.Execute());
+            backgroundJobs.Enqueue(() => categoryUpdSubscriber.Execute());
+            backgroundJobs.Enqueue(() => categoryDeleteSubscriber.Execute());
             #endregion
 
             app.UseEndpoints(endpoints =>

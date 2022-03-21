@@ -1,6 +1,7 @@
 ﻿using Domain.Interfaces;
 using Domain.Messengers;
 using Domain.Messengers.QueueType;
+using Domain.Messengers.QueueType.CategoryQueues;
 using Domain.Messengers.QueueType.ProductQueues;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,9 @@ namespace ProjetoDemo.Messenger
             services.AddSingleton(new ProductAddQueue("ProductAdd", "ProductAddExchange", "ProductAddKey", ExchangeType.Direct));
             services.AddSingleton(new ProductUpdateQueue("ProductUpdate", "ProductUpdExchange", "ProductUpdKey", ExchangeType.Direct));
             services.AddSingleton(new ProductDeleteQueue("ProductDelete", "ProductDelExchange", "ProductDelKey", ExchangeType.Direct));
+            services.AddSingleton(new CategoryAddQueue("CategoryAdd", "CategoryAddExchange", "CategoryAddKey", ExchangeType.Direct));
+            services.AddSingleton(new CategoryUpdateQueue("CategoryUpdate", "CategoryUpdExchange", "CategoryUpdKey", ExchangeType.Direct));
+            services.AddSingleton(new CategoryDeleteQueue("CategoryDelete", "CategoryDelExchange", "CategoryDelKey", ExchangeType.Direct));
 
             services.AddSingleton(new ProducerConnection(connection));
             services.AddSingleton<IMessengerBusClient, RabbitMqClient>();

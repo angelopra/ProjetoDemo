@@ -11,12 +11,12 @@ using System.Threading;
 
 namespace Business.ProductBusiness.Subscriber
 {
-    public class ProductUpdSubscriber : SubscriberManagerBase<ProductUpdateQueue>
+    public class ProductUpdateSubscriber : SubscriberManagerBase<ProductUpdateQueue>
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private IUnityOfWorkQuery uowQuery;
 
-        public ProductUpdSubscriber(
+        public ProductUpdateSubscriber(
             ProducerConnection connection
             ,ProductUpdateQueue obj
             ,IServiceScopeFactory serviceScopeFactory
