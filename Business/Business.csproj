@@ -37,4 +37,11 @@
     <ProjectReference Include="..\ProjetoDemo.Messenger\ProjetoDemo.Messenger.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CategoryBusiness\Get\" />
+    <Folder Include="CategoryBusiness\Update\" />
+    <Folder Include="CategoryBusiness\Remove\" />
+    <Folder Include="CategoryBusiness\Post\" />
+  </ItemGroup>
+
 </Project>
