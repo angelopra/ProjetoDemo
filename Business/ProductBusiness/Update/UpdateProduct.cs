@@ -1,6 +1,8 @@
 ﻿using Business.Base;
 using Domain.Entities;
 using Domain.Interfaces;
+using Domain.Messengers.QueueType;
+using Domain.Messengers.QueueType.ProductQueues;
 using Domain.Model.Request;
 using Domain.Model.Request.ProductRequests;
 using Domain.Validators;
@@ -19,9 +21,18 @@ namespace Business.ProductBusiness.Update
     {
         private List<ValidateError> errors;
         private readonly IValidator<ProductRequest> _validator;
-        public UpdateProduct(IUnityOfWork uow, IValidator<ProductRequest> validator) : base(uow)
+        private readonly ProductUpdateQueue _productUpdQueue;
+        private IMessengerBusClient _messenger;
+
+        public UpdateProduct(
+            IUnityOfWork uow
+            ,IValidator<ProductRequest> validator
+            ,IMessengerBusClient messenger
+            ,ProductUpdateQueue productUpdQueue) : base(uow)
         {
             _validator = validator;
+            _messenger = messenger;
+            _productUpdQueue = productUpdQueue;
         }
 
         public async Task<Product> Handle(UpdateProductRequest request, CancellationToken cancellationToken)
@@ -42,15 +53,11 @@ namespace Business.ProductBusiness.Update
                 {
                     throw new Exception("Category does not exist");
                 }
-                //obj.Category = category;
-
-                //if (_uow.Product.Where(p => p.Id == request.ProductId).FirstOrDefault() == null)
-                //{
-                //    throw new Exception("Product doesn't exist");
-                //}
 
                 _uow.Product.Update(obj);
                 await _uow.Commit(cancellationToken);
+
+                _messenger.Publish(_productUpdQueue.QueueName, obj, _productUpdQueue.RoutingKey, _productUpdQueue.Exchange);
 
                 return obj;
             }
