@@ -28,7 +28,6 @@ namespace DataBase.DataBaseQuery
         {
             try
             {
-                base.ChangeTracker.Clear();
                 var result = await base.SaveChangesAsync(cancellationToken);
                 base.ChangeTracker.Clear();
 

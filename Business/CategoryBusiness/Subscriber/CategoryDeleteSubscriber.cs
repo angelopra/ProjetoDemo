@@ -35,16 +35,8 @@ namespace Business.CategoryBusiness.Subscriber
                     var cancellationToken = new CancellationToken();
                     var obj = JsonConvert.DeserializeObject<Category>(message);
 
-                    var category = uowQuery.Category.Where(c => c.Id == obj.Id).FirstOrDefault();
-                    if (category != null)
-                    {
-                        uowQuery.Category.Remove(obj);
-                        uowQuery.Commit(cancellationToken);
-                    }
-                    else
-                    {
-                        throw new Exception("Category doesn't exist");
-                    }
+                    uowQuery.Category.Remove(obj);
+                    uowQuery.Commit(cancellationToken);
                 }
             }
             catch (Exception err)
