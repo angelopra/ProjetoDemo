@@ -1,5 +1,6 @@
 ﻿using Business.Base;
 using Domain.Interfaces;
+using Domain.Messengers.QueueType.CategoryQueues;
 using Domain.Model.Request.CategoryRequests;
 using MediatR;
 using System;
@@ -13,8 +14,13 @@ namespace Business.CategoryBusiness.Remove
 {
     public class RemoveCategory : ServiceManagerBase, IRequestHandler<RemoveCategoryRequest, int>
     {
-        public RemoveCategory(IUnityOfWork uow) : base(uow)
+        private readonly IMessengerBusClient _messenger;
+        private readonly CategoryDeleteQueue _categoryDeleteQueue;
+
+        public RemoveCategory(IUnityOfWork uow, IMessengerBusClient messenger, CategoryDeleteQueue categoryDeleteQueue) : base(uow)
         {
+            _messenger = messenger;
+            _categoryDeleteQueue = categoryDeleteQueue;
         }
 
         public async Task<int> Handle(RemoveCategoryRequest request, CancellationToken cancellationToken)
@@ -29,6 +35,7 @@ namespace Business.CategoryBusiness.Remove
 
                 _uow.Category.Remove(category);
                 await _uow.Commit(cancellationToken);
+                _messenger.Publish(_categoryDeleteQueue.QueueName, category, _categoryDeleteQueue.RoutingKey, _categoryDeleteQueue.Exchange);
 
                 return request.Id;
             }

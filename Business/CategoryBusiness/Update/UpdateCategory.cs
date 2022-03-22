@@ -1,6 +1,7 @@
 ﻿using Business.Base;
 using Domain.Entities;
 using Domain.Interfaces;
+using Domain.Messengers.QueueType.CategoryQueues;
 using Domain.Model.Request;
 using Domain.Model.Request.CategoryRequests;
 using Domain.Model.Response;
@@ -20,10 +21,15 @@ namespace Business.CategoryBusiness.Update
     {
         private List<ValidateError> errors;
         private readonly IValidator<CategoryRequest> _validator;
+        private readonly IMessengerBusClient _messenger;
+        private readonly CategoryUpdateQueue _categoryUpdateQueue;
 
-        public UpdateCategory(IUnityOfWork uow, IValidator<CategoryRequest> validator) : base(uow)
+
+        public UpdateCategory(IUnityOfWork uow, IValidator<CategoryRequest> validator, IMessengerBusClient messenger, CategoryUpdateQueue categoryUpdateQueue) : base(uow)
         {
             _validator = validator;
+            _messenger = messenger;
+            _categoryUpdateQueue = categoryUpdateQueue;
         }
 
         public async Task<CategoryResponse> Handle(UpdateCategoryRequest request, CancellationToken cancellationToken)
@@ -44,6 +50,8 @@ namespace Business.CategoryBusiness.Update
 
                 _uow.Category.Update(obj);
                 await _uow.Commit(cancellationToken);
+
+                _messenger.Publish(_categoryUpdateQueue.QueueName, obj, _categoryUpdateQueue.RoutingKey, _categoryUpdateQueue.Exchange);
 
                 return obj.Map<CategoryResponse>();
             }
