@@ -2,6 +2,7 @@
 using Business.CartBusiness;
 using Business.CartBusiness.Get;
 using Business.CategoryBusiness;
+using Business.CategoryBusiness.Subscriber;
 using Business.CustomerBusiness;
 using Business.OrderBusiness;
 using Business.ProductBusiness;
@@ -59,6 +60,9 @@ namespace Business
             services.AddScoped<ProductAddSubscriber>();
             services.AddScoped<ProductUpdateSubscriber>();
             services.AddScoped<ProductDeleteSubscriber>();
+            services.AddScoped<CategoryAddSubscriber>();
+            services.AddScoped<CategoryUpdateSubscriber>();
+            services.AddScoped<CategoryDeleteSubscriber>();
             #endregion
         }
     }
