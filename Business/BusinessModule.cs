@@ -11,6 +11,7 @@ using Domain.Model.Request;
 using Domain.Validators;
 using FluentValidation;
 using Hangfire;
+using Hangfire.InMemory;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,12 +48,12 @@ namespace Business
 
 
             #region HangFire
-            services.AddHangfire(x => x
-            .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-            .UseSimpleAssemblyNameTypeSerializer()
-            .UseRecommendedSerializerSettings()
-            .UseRecommendedSerializerSettings()
-            .UseInMemoryStorage());
+            //var inMemory = GlobalConfiguration.Configuration.UseMemoryStorage();
+            var inMemoryStorageOptions = new InMemoryStorageOptions()
+            {
+                DisableJobSerialization = false
+            };
+            services.AddHangfire(x => x.UseInMemoryStorage(inMemoryStorageOptions));
 
             services.AddHangfireServer();
             services.AddScoped<ProductAddSubscriber>();
