@@ -31,9 +31,9 @@ namespace ProjetoDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddBusinessModule(Configuration);
             services.AddDataBaseModule(Configuration);
             services.AddDataBaseQueryModule(Configuration);
-            services.AddBusinessModule(Configuration);
             services.AddMessagerModule();
             //services.AddHangfireModule(Configuration);
 
@@ -93,8 +93,8 @@ namespace ProjetoDemo
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app
             ,IWebHostEnvironment env
-            ,IdentityInitializer identityInitializer
             ,IBackgroundJobClient backgroundJobs
+            ,IdentityInitializer identityInitializer
             ,ProductAddSubscriber productAddSubscriber
             ,ProductUpdateSubscriber productUpdSubscriber
             ,ProductDeleteSubscriber productDeleteSubscriber
@@ -120,7 +120,7 @@ namespace ProjetoDemo
             app.UseAuthorization();
 
 
-            app.UseHangfireServer();
+            //app.UseHangfireServer();
             app.UseHangfireDashboard();
 
             #region Load Methods
