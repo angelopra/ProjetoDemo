@@ -19,14 +19,14 @@ namespace Business.CategoryBusiness.Post
 {
     public class PostCategory : ServiceManagerBase, IRequestHandler<PostCategoryRequest, CategoryResponse>
     {
-        private readonly IValidator<CategoryRequest> _validator;
         private readonly IMessengerBusClient _messenger;
         private readonly CategoryAddQueue _categoryAddQueue;
         private List<ValidateError> errors;
 
-        public PostCategory(IUnityOfWork uow, IValidator<CategoryRequest> validator, IMessengerBusClient messenger, CategoryAddQueue categoryAddQueue) : base(uow)
+        public PostCategory(IUnityOfWork uow
+            ,IMessengerBusClient messenger
+            ,CategoryAddQueue categoryAddQueue) : base(uow)
         {
-            _validator = validator;
             _messenger = messenger;
             _categoryAddQueue = categoryAddQueue;
         }
@@ -35,7 +35,7 @@ namespace Business.CategoryBusiness.Post
         {
             try
             {
-                errors = ValidadeCategoryRequest(request.Map<CategoryRequest>());
+                errors = ValidateObj<CategoryRequest>(request);
                 if (errors != null)
                 {
                     throw new Exception();
@@ -59,24 +59,6 @@ namespace Business.CategoryBusiness.Post
                 MapperException(err, errors);
                 throw;
             }
-        }
-
-        private List<ValidateError> ValidadeCategoryRequest(CategoryRequest request)
-        {
-            errors = null;
-            var validate = _validator.Validate(request);
-            if (!validate.IsValid)
-            {
-                errors = new List<ValidateError>();
-                foreach (var failure in validate.Errors)
-                {
-                    var error = new ValidateError();
-                    error.PropertyName = failure.PropertyName;
-                    error.Error = failure.ErrorMessage;
-                    errors.Add(error);
-                }
-            }
-            return errors;
         }
     }
 }

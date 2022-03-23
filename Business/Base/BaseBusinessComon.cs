@@ -6,6 +6,8 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using Domain.Interfaces;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Business.Base
 {
@@ -159,6 +161,28 @@ namespace Business.Base
                 }
             }
             return null;
+        }
+
+        public Byte[] GenerateSalt()
+        {
+            byte[] salt = new byte[128 / 8];
+            using (var rngCsp = new RNGCryptoServiceProvider())
+            {
+                rngCsp.GetNonZeroBytes(salt);
+            }
+            return salt;
+        }
+
+        public String HashPassword(String password, Byte[] salt)
+        {
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: password,
+            salt: salt,
+            prf: KeyDerivationPrf.HMACSHA256,
+            iterationCount: 100000,
+            numBytesRequested: 256 / 8));
+
+            return hashed;
         }
     }
 }

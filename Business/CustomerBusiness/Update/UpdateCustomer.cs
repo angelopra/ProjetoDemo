@@ -19,18 +19,15 @@ namespace Business.CustomerBusiness.Update
     public class UpdateCustomer : ServiceManagerBase, IRequestHandler<UpdateCustomerRequest, CustomerResponse>
     {
         private List<ValidateError> errors;
-        private readonly IValidator<CustomerRequest> _validator;
-
-        public UpdateCustomer(IUnityOfWork uow, IValidator<CustomerRequest> validator) : base(uow)
+        public UpdateCustomer(IUnityOfWork uow) : base(uow)
         {
-            _validator = validator;
         }
 
         public async Task<CustomerResponse> Handle(UpdateCustomerRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                errors = ValidadeCustomerRequest(request.Map<CustomerRequest>());
+                errors = ValidateObj<CustomerRequest>(request);
                 if (errors != null)
                 {
                     throw new Exception();
@@ -54,24 +51,6 @@ namespace Business.CustomerBusiness.Update
                 MapperException(err, errors);
                 throw;
             }
-        }
-
-        private List<ValidateError> ValidadeCustomerRequest(CustomerRequest request)
-        {
-            errors = null;
-            var validate = _validator.Validate(request);
-            if (!validate.IsValid)
-            {
-                errors = new List<ValidateError>();
-                foreach (var failure in validate.Errors)
-                {
-                    var error = new ValidateError();
-                    error.PropertyName = failure.PropertyName;
-                    error.Error = failure.ErrorMessage;
-                    errors.Add(error);
-                }
-            }
-            return errors;
         }
     }
 }

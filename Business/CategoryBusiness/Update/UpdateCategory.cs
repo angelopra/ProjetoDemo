@@ -20,14 +20,14 @@ namespace Business.CategoryBusiness.Update
     public class UpdateCategory : ServiceManagerBase, IRequestHandler<UpdateCategoryRequest, CategoryResponse>
     {
         private List<ValidateError> errors;
-        private readonly IValidator<CategoryRequest> _validator;
         private readonly IMessengerBusClient _messenger;
         private readonly CategoryUpdateQueue _categoryUpdateQueue;
 
 
-        public UpdateCategory(IUnityOfWork uow, IValidator<CategoryRequest> validator, IMessengerBusClient messenger, CategoryUpdateQueue categoryUpdateQueue) : base(uow)
+        public UpdateCategory(IUnityOfWork uow
+            ,IMessengerBusClient messenger
+            ,CategoryUpdateQueue categoryUpdateQueue) : base(uow)
         {
-            _validator = validator;
             _messenger = messenger;
             _categoryUpdateQueue = categoryUpdateQueue;
         }
@@ -36,7 +36,7 @@ namespace Business.CategoryBusiness.Update
         {
             try
             {
-                errors = ValidadeCategoryRequest(request.Map<CategoryRequest>());
+                errors = ValidateObj<CategoryRequest>(request);
                 if (errors != null)
                 {
                     throw new Exception();
@@ -60,24 +60,6 @@ namespace Business.CategoryBusiness.Update
                 MapperException(err, errors);
                 throw;
             }
-        }
-
-        private List<ValidateError> ValidadeCategoryRequest(CategoryRequest request)
-        {
-            errors = null;
-            var validate = _validator.Validate(request);
-            if (!validate.IsValid)
-            {
-                errors = new List<ValidateError>();
-                foreach (var failure in validate.Errors)
-                {
-                    var error = new ValidateError();
-                    error.PropertyName = failure.PropertyName;
-                    error.Error = failure.ErrorMessage;
-                    errors.Add(error);
-                }
-            }
-            return errors;
         }
     }
 }

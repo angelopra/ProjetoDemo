@@ -15,18 +15,16 @@ namespace Business.OrderBusiness
 {
     public class OrderComponent : BaseBusiness<IOrderRepository>, IOrderComponent
     {
-        private readonly IValidator<OrderRequest> _validator;
         private List<ValidateError> errors = null;
-        public OrderComponent(IOrderRepository context, IValidator<OrderRequest> validator) : base(context)
+        public OrderComponent(IOrderRepository context) : base(context)
         {
-            _validator = validator;
         }
 
         public OrderResponse CreateOrder(OrderRequest request)
         {
             try
             {
-                errors = ValidadeOrderRequest(request);
+                errors = ValidateObj<OrderRequest>(request);
                 if (errors != null)
                 {
                     throw new Exception();
@@ -110,24 +108,6 @@ namespace Business.OrderBusiness
             {
                 throw;
             }
-        }
-
-        private List<ValidateError> ValidadeOrderRequest(OrderRequest request)
-        {
-            errors = null;
-            var validate = _validator.Validate(request);
-            if (!validate.IsValid)
-            {
-                errors = new List<ValidateError>();
-                foreach (var failure in validate.Errors)
-                {
-                    var error = new ValidateError();
-                    error.PropertyName = failure.PropertyName;
-                    error.Error = failure.ErrorMessage;
-                    errors.Add(error);
-                }
-            }
-            return errors;
         }
 
         private void CloseCart(int idCart)

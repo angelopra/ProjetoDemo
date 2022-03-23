@@ -18,14 +18,10 @@ namespace Business.CartBusiness.Update
     public class UpdateCartItem : ServiceManagerBase, IRequestHandler<CartItemUpdateRequest, CartItemModelResponse>
     {
         private List<ValidateError> updateErrors;
-        private ICartBusinessMethods _cbm;
-        IValidator<CartItemUpdateRequest> _updateValidator;
         private ICartBusinessMethods _cartBusinessMethods;
         public UpdateCartItem(IUnityOfWork uow
-            ,IValidator<CartItemUpdateRequest> updateValidator
             ,ICartBusinessMethods cartBusinessMethods) : base(uow)
         {
-            _updateValidator = updateValidator;
             _cartBusinessMethods = cartBusinessMethods;
         }
 
@@ -33,7 +29,7 @@ namespace Business.CartBusiness.Update
         {
             try
             {
-                updateErrors = ValidadeCartItemUpdateRequest(request);
+                updateErrors = ValidateObj<CartItemUpdateRequest>(request);
                 if (updateErrors != null)
                 {
                     throw new Exception();
@@ -68,24 +64,6 @@ namespace Business.CartBusiness.Update
                 MapperException(err, updateErrors);
                 throw;
             }
-        }
-
-        private List<ValidateError> ValidadeCartItemUpdateRequest(CartItemUpdateRequest request)
-        {
-            updateErrors = null;
-            var validate = _updateValidator.Validate(request);
-            if (!validate.IsValid)
-            {
-                updateErrors = new List<ValidateError>();
-                foreach (var failure in validate.Errors)
-                {
-                    var error = new ValidateError();
-                    error.PropertyName = failure.PropertyName;
-                    error.Error = failure.ErrorMessage;
-                    updateErrors.Add(error);
-                }
-            }
-            return updateErrors;
         }
     }
 }

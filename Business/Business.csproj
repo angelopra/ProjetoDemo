@@ -14,7 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="CartBusiness\CartComponent.cs" />
+    <Compile Remove="CartBusiness\CartItemComponent.cs" />
+    <Compile Remove="CategoryBusiness\CategoryComponent.cs" />
     <Compile Remove="Class1.cs" />
+    <Compile Remove="CustomerBusiness\CustomerComponent.cs" />
     <Compile Remove="ProductBusiness\Post\ProductManagerAdd.cs" />
     <Compile Remove="ProductBusiness\Subscriber\MessageSubscriber.cs" />
     <Compile Remove="ProductBusiness\Subscriber\ProductMessagerSubscriber.cs" />

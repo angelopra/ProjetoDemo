@@ -20,20 +20,18 @@ namespace Business.CustomerBusiness.Post
 {
     public class PostCustomer : ServiceManagerBase, IRequestHandler<PostCustomerRequest, CustomerResponse>
     {
-        private readonly IValidator<CustomerRequest> _validator;
         private List<ValidateError> errors;
 
-        public PostCustomer(IUnityOfWork uow, IValidator<CustomerRequest> validator)
+        public PostCustomer(IUnityOfWork uow)
             : base(uow)
         {
-            _validator = validator;
         }
 
         public async Task<CustomerResponse> Handle(PostCustomerRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                errors = ValidadeCustomerRequest(request.Map<CustomerRequest>());
+                errors = ValidateObj<CustomerRequest>(request);
                 if (errors != null)
                 {
                     throw new Exception();
@@ -56,46 +54,6 @@ namespace Business.CustomerBusiness.Post
                 MapperException(err, errors);
                 throw;
             }
-        }
-
-        private List<ValidateError> ValidadeCustomerRequest(CustomerRequest request)
-        {
-            errors = null;
-            var validate = _validator.Validate(request);
-            if (!validate.IsValid)
-            {
-                errors = new List<ValidateError>();
-                foreach (var failure in validate.Errors)
-                {
-                    var error = new ValidateError();
-                    error.PropertyName = failure.PropertyName;
-                    error.Error = failure.ErrorMessage;
-                    errors.Add(error);
-                }
-            }
-            return errors;
-        }
-
-        private Byte[] GenerateSalt()
-        {
-            byte[] salt = new byte[128 / 8];
-            using (var rngCsp = new RNGCryptoServiceProvider())
-            {
-                rngCsp.GetNonZeroBytes(salt);
-            }
-            return salt;
-        }
-
-        private String HashPassword(String password, Byte[] salt)
-        {
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-            password: password,
-            salt: salt,
-            prf: KeyDerivationPrf.HMACSHA256,
-            iterationCount: 100000,
-            numBytesRequested: 256 / 8));
-
-            return hashed;
         }
     }
 }

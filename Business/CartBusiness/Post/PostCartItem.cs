@@ -16,14 +16,11 @@ namespace Business.CartBusiness.Post
 {
     public class PostCartItem : ServiceManagerBase, IRequestHandler<PostCartItemRequest, CartItemModelResponse>
     {
-        private readonly IValidator<CartItemRequest> _validator;
         private ICartBusinessMethods _cartBusinessMethods;
         private List<ValidateError> errors;
         public PostCartItem(IUnityOfWork uow
-            ,IValidator<CartItemRequest> validator
             ,ICartBusinessMethods cartBusinessMethods) : base(uow)
         {
-            _validator = validator;
             _cartBusinessMethods = cartBusinessMethods;
         }
 
@@ -31,7 +28,7 @@ namespace Business.CartBusiness.Post
         {
             try
             {
-                errors = ValidadeCartItemRequest(request.Map<CartItemRequest>());
+                errors = ValidateObj<CartItemRequest>(request);
                 if (errors != null)
                 {
                     throw new Exception();
@@ -79,23 +76,6 @@ namespace Business.CartBusiness.Post
 
                 throw err;
             }
-        }
-        private List<ValidateError> ValidadeCartItemRequest(CartItemRequest request)
-        {
-            errors = null;
-            var validate = _validator.Validate(request);
-            if (!validate.IsValid)
-            {
-                errors = new List<ValidateError>();
-                foreach (var failure in validate.Errors)
-                {
-                    var error = new ValidateError();
-                    error.PropertyName = failure.PropertyName;
-                    error.Error = failure.ErrorMessage;
-                    errors.Add(error);
-                }
-            }
-            return errors;
         }
     }
 }

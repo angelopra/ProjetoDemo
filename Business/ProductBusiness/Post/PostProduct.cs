@@ -18,19 +18,16 @@ namespace Business.ProductBusiness.Create
 {
     public class PostProduct : ServiceManagerBase, IRequestHandler<PostProductRequest, Product>
     {
-        private readonly IValidator<ProductRequest> _validator;
         private List<ValidateError> errors;
         private IMessengerBusClient _messenger;
         private readonly ProductAddQueue _productAddQueue;
 
         public PostProduct(
             IUnityOfWork uow
-            ,IValidator<ProductRequest> validator
             ,IMessengerBusClient messenger
             ,ProductAddQueue productAddQueue)
             : base(uow)
         {
-            _validator = validator;
             _messenger = messenger;
             _productAddQueue = productAddQueue;
         }
@@ -39,7 +36,7 @@ namespace Business.ProductBusiness.Create
         {
             try
             {
-                errors = ValidadeProductRequest(request.Map<ProductRequest>());
+                errors = ValidateObj<ProductRequest>(request);
                 if (errors != null)
                 {
                     throw new Exception();
@@ -68,24 +65,6 @@ namespace Business.ProductBusiness.Create
                 MapperException(err, errors);
                 throw;
             }
-        }
-
-        private List<ValidateError> ValidadeProductRequest(ProductRequest request)
-        {
-            errors = null;
-            var validate = _validator.Validate(request);
-            if (!validate.IsValid)
-            {
-                errors = new List<ValidateError>();
-                foreach (var failure in validate.Errors)
-                {
-                    var error = new ValidateError();
-                    error.PropertyName = failure.PropertyName;
-                    error.Error = failure.ErrorMessage;
-                    errors.Add(error);
-                }
-            }
-            return errors;
         }
     }
 }

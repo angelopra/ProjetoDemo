@@ -19,11 +19,9 @@ namespace Business.CustomerBusiness.Post
 {
     public class CustomerLogin : ServiceManagerBase, IRequestHandler<LoginCustomerRequest, CustomerResponse>
     {
-        private readonly IValidator<CustomerLoginRequest> _validator;
         private List<ValidateError> errors;
-        public CustomerLogin(IUnityOfWork uow, IValidator<CustomerLoginRequest> validator) : base(uow)
+        public CustomerLogin(IUnityOfWork uow) : base(uow)
         {
-            _validator = validator;
         }
 
         public async Task<CustomerResponse> Handle(LoginCustomerRequest request, CancellationToken cancellationToken)
@@ -32,7 +30,7 @@ namespace Business.CustomerBusiness.Post
             {
                 // busco o id pelo email do customer para depois fazer um mapeamento do request para o tipo Customer
                 // após isso busco o Salt do user com o id buscado e uso ele pra fazer o hashing da password que o usuário inseriu
-                errors = ValidadeCustomerLoginRequest(request.Map<CustomerLoginRequest>());
+                errors = ValidateObj<CustomerLoginRequest>(request);
                 if (errors != null)
                 {
                     throw new Exception();
@@ -74,36 +72,6 @@ namespace Business.CustomerBusiness.Post
                 MapperException(err, errors);
                 throw;
             }
-        }
-
-        private List<ValidateError> ValidadeCustomerLoginRequest(CustomerLoginRequest request)
-        {
-            errors = null;
-            var validate = _validator.Validate(request);
-            if (!validate.IsValid)
-            {
-                errors = new List<ValidateError>();
-                foreach (var failure in validate.Errors)
-                {
-                    var error = new ValidateError();
-                    error.PropertyName = failure.PropertyName;
-                    error.Error = failure.ErrorMessage;
-                    errors.Add(error);
-                }
-            }
-            return errors;
-        }
-
-        private String HashPassword(String password, Byte[] salt)
-        {
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-            password: password,
-            salt: salt,
-            prf: KeyDerivationPrf.HMACSHA256,
-            iterationCount: 100000,
-            numBytesRequested: 256 / 8));
-
-            return hashed;
         }
     }
 }

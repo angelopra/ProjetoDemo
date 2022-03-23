@@ -17,18 +17,16 @@ namespace Business.CartBusiness.Post
 {
     public class PostCart : ServiceManagerBase, IRequestHandler<PostCartRequest, int>
     {
-        private readonly IValidator<CartRequest> _validator;
         private List<ValidateError> errors;
-        public PostCart(IUnityOfWork uow, IValidator<CartRequest> validator) : base(uow)
+        public PostCart(IUnityOfWork uow) : base(uow)
         {
-            _validator = validator;
         }
 
         public async Task<int> Handle(PostCartRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                errors = ValidadeCartRequest(request.Map<CartRequest>());
+                errors = ValidateObj<CartRequest>(request);
                 if (errors != null)
                 {
                     throw new Exception();
@@ -45,23 +43,6 @@ namespace Business.CartBusiness.Post
                 MapperException(err, errors);
                 throw;
             }
-        }
-        private List<ValidateError> ValidadeCartRequest(CartRequest request)
-        {
-            errors = null;
-            var validate = _validator.Validate(request);
-            if (!validate.IsValid)
-            {
-                errors = new List<ValidateError>();
-                foreach (var failure in validate.Errors)
-                {
-                    var error = new ValidateError();
-                    error.PropertyName = failure.PropertyName;
-                    error.Error = failure.ErrorMessage;
-                    errors.Add(error);
-                }
-            }
-            return errors;
         }
     }
 }

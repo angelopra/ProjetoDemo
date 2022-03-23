@@ -21,18 +21,14 @@ namespace Business.ProductBusiness.Update
     public class UpdateProduct : ServiceManagerBase, IRequestHandler<UpdateProductRequest, Product>
     {
         private List<ValidateError> errors;
-        private ProductUpdateQueue _productUpdateQueue;
-        private readonly IValidator<ProductRequest> _validator;
         private readonly ProductUpdateQueue _productUpdQueue;
         private IMessengerBusClient _messenger;
 
         public UpdateProduct(
             IUnityOfWork uow
-            ,IValidator<ProductRequest> validator
             ,IMessengerBusClient messenger
             ,ProductUpdateQueue productUpdQueue) : base(uow)
         {
-            _validator = validator;
             _messenger = messenger;
             _productUpdQueue = productUpdQueue;
         }
@@ -41,7 +37,7 @@ namespace Business.ProductBusiness.Update
         {
             try
             {
-                errors = ValidadeProductRequest(request.Map<ProductRequest>());
+                errors = ValidateObj<ProductRequest>(request);
                 if (errors != null)
                 {
                     throw new Exception();
@@ -68,23 +64,6 @@ namespace Business.ProductBusiness.Update
                 MapperException(err, errors);
                 throw;
             }
-        }
-        private List<ValidateError> ValidadeProductRequest(ProductRequest request)
-        {
-            errors = null;
-            var validate = _validator.Validate(request);
-            if (!validate.IsValid)
-            {
-                errors = new List<ValidateError>();
-                foreach (var failure in validate.Errors)
-                {
-                    var error = new ValidateError();
-                    error.PropertyName = failure.PropertyName;
-                    error.Error = failure.ErrorMessage;
-                    errors.Add(error);
-                }
-            }
-            return errors;
         }
     }
 }

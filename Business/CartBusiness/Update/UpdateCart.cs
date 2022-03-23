@@ -19,19 +19,17 @@ namespace Business.CartBusiness.Update
     public class UpdateCart : ServiceManagerBase, IRequestHandler<UpdateCartRequest, CartResponse>
     {
         private List<ValidateError> errors;
-        private readonly IValidator<CartRequest> _validator;
         private ICartBusinessMethods _cbm;
-        public UpdateCart(IUnityOfWork uow, IValidator<CartRequest> validator, ICartBusinessMethods cbm) : base(uow)
+        public UpdateCart(IUnityOfWork uow, ICartBusinessMethods cbm) : base(uow)
         {
             _cbm = cbm;
-            _validator = validator;
         }
 
         public async Task<CartResponse> Handle(UpdateCartRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                errors = ValidadeCartRequest(request.Map<CartRequest>());
+                errors = ValidateObj<CartRequest>(request);
                 if (errors != null)
                 {
                     throw new Exception();
@@ -53,24 +51,6 @@ namespace Business.CartBusiness.Update
                 MapperException(err, errors);
                 throw;
             }
-        }
-
-        private List<ValidateError> ValidadeCartRequest(CartRequest request)
-        {
-            errors = null;
-            var validate = _validator.Validate(request);
-            if (!validate.IsValid)
-            {
-                errors = new List<ValidateError>();
-                foreach (var failure in validate.Errors)
-                {
-                    var error = new ValidateError();
-                    error.PropertyName = failure.PropertyName;
-                    error.Error = failure.ErrorMessage;
-                    errors.Add(error);
-                }
-            }
-            return errors;
         }
     }
 }
