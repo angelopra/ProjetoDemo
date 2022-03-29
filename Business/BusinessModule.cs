@@ -41,12 +41,12 @@ namespace Business
             services.AddHangfire(x => x.UseInMemoryStorage(inMemoryStorageOptions));
 
             services.AddHangfireServer();
-            services.AddScoped<ProductAddSubscriber>();
-            services.AddScoped<ProductUpdateSubscriber>();
-            services.AddScoped<ProductDeleteSubscriber>();
-            services.AddScoped<CategoryAddSubscriber>();
-            services.AddScoped<CategoryUpdateSubscriber>();
-            services.AddScoped<CategoryDeleteSubscriber>();
+            //services.AddScoped<ProductAddSubscriber>();
+            //services.AddScoped<ProductUpdateSubscriber>();
+            //services.AddScoped<ProductDeleteSubscriber>();
+            //services.AddScoped<CategoryAddSubscriber>();
+            //services.AddScoped<CategoryUpdateSubscriber>();
+            //services.AddScoped<CategoryDeleteSubscriber>();
             #endregion
         }
     }

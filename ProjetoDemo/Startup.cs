@@ -95,12 +95,13 @@ namespace ProjetoDemo
             ,IWebHostEnvironment env
             ,IBackgroundJobClient backgroundJobs
             ,IdentityInitializer identityInitializer
-            ,ProductAddSubscriber productAddSubscriber
-            ,ProductUpdateSubscriber productUpdSubscriber
-            ,ProductDeleteSubscriber productDeleteSubscriber
-            ,CategoryAddSubscriber categoryAddSubscriber
-            ,CategoryUpdateSubscriber categoryUpdSubscriber
-            ,CategoryDeleteSubscriber categoryDeleteSubscriber)
+            //,ProductAddSubscriber productAddSubscriber
+            //,ProductUpdateSubscriber productUpdSubscriber
+            //,ProductDeleteSubscriber productDeleteSubscriber
+            //,CategoryAddSubscriber categoryAddSubscriber
+            //,CategoryUpdateSubscriber categoryUpdSubscriber
+            //,CategoryDeleteSubscriber categoryDeleteSubscriber
+            )
         {
             if (env.IsDevelopment())
             {
@@ -125,12 +126,12 @@ namespace ProjetoDemo
 
             #region Load Methods
             identityInitializer.Initialize();
-            backgroundJobs.Enqueue(() => productAddSubscriber.Execute());
-            backgroundJobs.Enqueue(() => productUpdSubscriber.Execute());
-            backgroundJobs.Enqueue(() => productDeleteSubscriber.Execute());
-            backgroundJobs.Enqueue(() => categoryAddSubscriber.Execute());
-            backgroundJobs.Enqueue(() => categoryUpdSubscriber.Execute());
-            backgroundJobs.Enqueue(() => categoryDeleteSubscriber.Execute());
+            backgroundJobs.Enqueue<ProductAddSubscriber>(x => x.Execute());
+            //backgroundJobs.Enqueue(() => productUpdSubscriber.Execute());
+            //backgroundJobs.Enqueue(() => productDeleteSubscriber.Execute());
+            //backgroundJobs.Enqueue(() => categoryAddSubscriber.Execute());
+            //backgroundJobs.Enqueue(() => categoryUpdSubscriber.Execute());
+            //backgroundJobs.Enqueue(() => categoryDeleteSubscriber.Execute());
             #endregion
 
             app.UseEndpoints(endpoints =>
