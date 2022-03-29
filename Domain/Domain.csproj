@@ -6,8 +6,11 @@
 
   <ItemGroup>
     <Compile Remove="Entities\Request\**" />
+    <Compile Remove="Middlewares\**" />
     <EmbeddedResource Remove="Entities\Request\**" />
+    <EmbeddedResource Remove="Middlewares\**" />
     <None Remove="Entities\Request\**" />
+    <None Remove="Middlewares\**" />
   </ItemGroup>
 
   <ItemGroup>
